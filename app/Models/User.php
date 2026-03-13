@@ -7,42 +7,161 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Modelo que representa a los usuarios del sistema.
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Nombre de la tabla asociada.
+     */
+    protected $table = 'usuarios';
+
+    /**
+     * Clave primaria de la tabla.
+     */
+    protected $primaryKey = 'id_usuario';
+
+    /**
+     * Laravel no gestionará timestamps automáticos.
+     */
+    public $timestamps = false;
+
+    /**
+     * Campos asignables de forma masiva.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nombre',
         'email',
-        'password',
+        'password_hash',
+        'telefono',
+        'moneda_preferida',
+        'idioma_preferido',
+        'estado_cuenta',
+        'fecha_registro',
+        'ultimo_acceso',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Campos ocultos en serialización.
      *
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password_hash',
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Conversión automática de tipos.
      *
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'fecha_registro' => 'datetime',
+            'ultimo_acceso' => 'datetime',
         ];
+    }
+
+    /**
+     * Devuelve el campo de contraseña usado por Laravel.
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
+    }
+
+    /**
+     * Relación con la configuración del usuario.
+     */
+    public function configuracion()
+    {
+        return $this->hasOne(ConfiguracionUsuario::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con las categorías creadas por el usuario.
+     */
+    public function categorias()
+    {
+        return $this->hasMany(Categoria::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con las cuentas financieras del usuario.
+     */
+    public function cuentas()
+    {
+        return $this->hasMany(CuentaFinanciera::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con las transacciones del usuario.
+     */
+    public function transacciones()
+    {
+        return $this->hasMany(Transaccion::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con los presupuestos mensuales del usuario.
+     */
+    public function presupuestos()
+    {
+        return $this->hasMany(PresupuestoMensual::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con las facturas del usuario.
+     */
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con las metas financieras del usuario.
+     */
+    public function metas()
+    {
+        return $this->hasMany(MetaFinanciera::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con los chats del asistente.
+     */
+    public function chats()
+    {
+        return $this->hasMany(ChatAsistente::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con los grupos compartidos creados por el usuario.
+     */
+    public function gruposCreados()
+    {
+        return $this->hasMany(GrupoCompartido::class, 'creado_por', 'id_usuario');
+    }
+
+    /**
+     * Relación con las participaciones del usuario en grupos.
+     */
+    public function grupoMiembros()
+    {
+        return $this->hasMany(GrupoMiembro::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con los gastos compartidos pagados por el usuario.
+     */
+    public function gastosCompartidosPagados()
+    {
+        return $this->hasMany(GastoCompartido::class, 'id_usuario_pagador', 'id_usuario');
     }
 }
