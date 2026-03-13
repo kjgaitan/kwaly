@@ -1,20 +1,41 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\TransaccionController;
+use App\Http\Controllers\MetaFinancieraController;
+use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\ConfiguracionController;
 
+// Ruta principal
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Rutas protegidas
+Route::middleware(['auth'])->group(function () {
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Dashboard principal
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Transacciones
+    Route::resource('transacciones', TransaccionController::class);
+
+    // Presupuestos
+    Route::resource('presupuestos', PresupuestoController::class);
+
+    // Metas financieras
+    Route::resource('metas', MetaFinancieraController::class);
+
+    // Facturas
+    Route::resource('facturas', FacturaController::class);
+
+    // Configuración del usuario
+    Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+    Route::post('/configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+
 });
 
+// Rutas de autenticación 
 require __DIR__.'/auth.php';
