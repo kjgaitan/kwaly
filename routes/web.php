@@ -7,6 +7,11 @@ use App\Http\Controllers\TransaccionController;
 use App\Http\Controllers\MetaFinancieraController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\AsistenteController;
+use App\Http\Controllers\EducacionController;
+use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\CompartidoController;
 
 // Ruta principal
 Route::get('/', function () {
@@ -31,11 +36,25 @@ Route::middleware(['auth'])->group(function () {
     // Facturas
     Route::resource('facturas', FacturaController::class);
 
+    // Asistente financiero
+    Route::get('/asistente', [AsistenteController::class, 'index'])->name('asistente.index');
+
+    // Educación financiera
+    Route::get('/educacion', [EducacionController::class, 'index'])->name('educacion.index');
+
+    // Calendario financiero
+    Route::get('/calendario', [CalendarioController::class, 'index'])->name('calendario.index');
+
+    // Reportes
+    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+
+    // Cuenta compartida
+    Route::get('/compartido', [CompartidoController::class, 'index'])->name('compartido.index');
+
     // Configuración del usuario
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
     Route::post('/configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
-
 });
 
-// Rutas de autenticación 
-require __DIR__.'/auth.php';
+// Rutas de autenticación
+require __DIR__ . '/auth.php';

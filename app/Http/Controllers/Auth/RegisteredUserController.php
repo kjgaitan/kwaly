@@ -12,10 +12,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+/**
+ * Controlador encargado del registro de nuevos usuarios.
+ *
+ * Muestra el formulario de registro y guarda un nuevo usuario
+ * en la tabla personalizada del sistema.
+ */
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Muestra la vista de registro.
      */
     public function create(): View
     {
@@ -23,26 +29,35 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Gestiona la solicitud de registro de un nuevo usuario.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
+        // Validación de los datos enviados desde el formulario
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:150', 'unique:usuarios,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Creación del nuevo usuario en la tabla personalizada
         $user = User::create([
-            'name' => $request->name,
+            'nombre' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password_hash' => Hash::make($request->password),
+            'telefono' => null,
+            'moneda_preferida' => 'EUR',
+            'idioma_preferido' => 'es',
+            'estado_cuenta' => 'activo',
+            'fecha_registro' => now(),
+            'ultimo_acceso' => null,
         ]);
 
         event(new Registered($user));
 
+        // Inicio de sesión automático tras el registro
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
