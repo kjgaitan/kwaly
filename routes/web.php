@@ -12,6 +12,8 @@ use App\Http\Controllers\EducacionController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CompartidoController;
+use App\Http\Controllers\PresupuestoDetalleCategoriaController;
+
 
 // Ruta principal
 Route::get('/', function () {
@@ -30,6 +32,22 @@ Route::middleware(['auth'])->group(function () {
     // Presupuestos
     Route::resource('presupuestos', PresupuestoController::class);
 
+    // Sobres personalizados
+    Route::get('/presupuestos/{presupuesto}/sobres/create', [PresupuestoDetalleCategoriaController::class, 'create'])
+        ->name('presupuestos.sobres.create');
+
+    Route::post('/presupuestos/{presupuesto}/sobres', [PresupuestoDetalleCategoriaController::class, 'store'])
+        ->name('presupuestos.sobres.store');
+
+    Route::get('/sobres/{detalle}/edit', [PresupuestoDetalleCategoriaController::class, 'edit'])
+        ->name('sobres.edit');
+
+    Route::put('/sobres/{detalle}', [PresupuestoDetalleCategoriaController::class, 'update'])
+        ->name('sobres.update');
+
+    Route::delete('/sobres/{detalle}', [PresupuestoDetalleCategoriaController::class, 'destroy'])
+        ->name('sobres.destroy');
+        
     // Metas financieras
     Route::resource('metas', MetaFinancieraController::class);
 
