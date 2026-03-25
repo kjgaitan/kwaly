@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\CuentaFinanciera\StoreCuentaFinancieraRequest;
+use App\Http\Requests\CuentaFinanciera\UpdateCuentaFinancieraRequest;
 use App\Models\CuentaFinanciera;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Controlador encargado de gestionar las cuentas financieras.
- * 
+ *
  * Permite al usuario autenticado crear, visualizar,
  * editar y eliminar sus cuentas financieras.
  */
@@ -37,17 +39,8 @@ class CuentaFinancieraController extends Controller
     /**
      * Guarda una nueva cuenta financiera en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StoreCuentaFinancieraRequest $request)
     {
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'tipo_cuenta' => 'nullable|in:efectivo,banco,tarjeta,ahorro,otro',
-            'saldo_actual' => 'nullable|numeric|min:0',
-            'moneda' => 'nullable|string|max:3',
-        ]);
-
-        // Creación de la cuenta financiera asociada al usuario autenticado
         CuentaFinanciera::create([
             'id_usuario' => Auth::user()->id_usuario,
             'nombre' => $request->nombre,
@@ -56,8 +49,9 @@ class CuentaFinancieraController extends Controller
             'moneda' => $request->moneda ?? 'EUR',
         ]);
 
-        return redirect()->route('cuentas-financieras.index')
-            ->with('success', 'Cuenta financiera creada correctamente.');
+        return redirect()
+            ->route('cuentas-financieras.index')
+            ->with('success', MensajeHelper::creado('Cuenta financiera'));
     }
 
     /**
@@ -65,8 +59,7 @@ class CuentaFinancieraController extends Controller
      */
     public function show(string $id)
     {
-        $cuenta = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $cuenta = $this->obtenerCuentaUsuario($id);
 
         return view('cuentas_financieras.show', compact('cuenta'));
     }
@@ -76,8 +69,7 @@ class CuentaFinancieraController extends Controller
      */
     public function edit(string $id)
     {
-        $cuenta = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $cuenta = $this->obtenerCuentaUsuario($id);
 
         return view('cuentas_financieras.edit', compact('cuenta'));
     }
@@ -85,29 +77,20 @@ class CuentaFinancieraController extends Controller
     /**
      * Actualiza los datos de una cuenta financiera.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCuentaFinancieraRequest $request, string $id)
     {
-        $cuenta = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $cuenta = $this->obtenerCuentaUsuario($id);
 
-        // Validación de los datos del formulario
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'tipo_cuenta' => 'nullable|in:efectivo,banco,tarjeta,ahorro,otro',
-            'saldo_actual' => 'nullable|numeric|min:0',
-            'moneda' => 'nullable|string|max:3',
+        $cuenta->update([
+            'nombre' => $request->nombre,
+            'tipo_cuenta' => $request->tipo_cuenta,
+            'saldo_actual' => $request->saldo_actual ?? 0,
+            'moneda' => $request->moneda ?? 'EUR',
         ]);
 
-        // Actualización de la cuenta financiera
-        $cuenta->update($request->only([
-            'nombre',
-            'tipo_cuenta',
-            'saldo_actual',
-            'moneda',
-        ]));
-
-        return redirect()->route('cuentas-financieras.index')
-            ->with('success', 'Cuenta financiera actualizada correctamente.');
+        return redirect()
+            ->route('cuentas-financieras.index')
+            ->with('success', MensajeHelper::actualizado('Cuenta financiera'));
     }
 
     /**
@@ -115,13 +98,21 @@ class CuentaFinancieraController extends Controller
      */
     public function destroy(string $id)
     {
-        $cuenta = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $cuenta = $this->obtenerCuentaUsuario($id);
 
-        // Eliminación de la cuenta financiera
         $cuenta->delete();
 
-        return redirect()->route('cuentas-financieras.index')
-            ->with('success', 'Cuenta financiera eliminada correctamente.');
+        return redirect()
+            ->route('cuentas-financieras.index')
+            ->with('success', MensajeHelper::eliminado('Cuenta financiera'));
+    }
+
+    /**
+     * Obtiene una cuenta financiera perteneciente al usuario autenticado.
+     */
+    private function obtenerCuentaUsuario(string $id): CuentaFinanciera
+    {
+        return CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
+            ->findOrFail($id);
     }
 }

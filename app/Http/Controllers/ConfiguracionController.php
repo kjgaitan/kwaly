@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\Configuracion\UpdateConfiguracionRequest;
 use App\Models\ConfiguracionUsuario;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -25,17 +26,10 @@ class ConfiguracionController extends Controller
     /**
      * Actualiza la configuración del usuario.
      */
-    public function update(Request $request)
+    public function update(UpdateConfiguracionRequest $request)
     {
-        $request->validate([
-            'tema' => 'nullable|string|max:50',
-            'notificaciones_email' => 'nullable|boolean',
-            'notificaciones_push' => 'nullable|boolean',
-            'moneda_preferida' => 'nullable|string|max:3',
-        ]);
-
         $configuracion = ConfiguracionUsuario::firstOrCreate([
-            'id_usuario' => Auth::user()->id_usuario
+            'id_usuario' => Auth::user()->id_usuario,
         ]);
 
         $configuracion->update([
@@ -45,7 +39,8 @@ class ConfiguracionController extends Controller
             'moneda_preferida' => $request->moneda_preferida ?? 'EUR',
         ]);
 
-        return redirect()->route('configuracion.index')
-            ->with('success', 'Configuración actualizada correctamente.');
+        return redirect()
+            ->route('configuracion.index')
+            ->with('success', MensajeHelper::actualizado('Configuración'));
     }
 }

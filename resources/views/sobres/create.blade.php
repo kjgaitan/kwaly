@@ -1,5 +1,4 @@
 @php $detalle = null; @endphp
-
 <x-app-layout>
     <div class="w-full rounded-[24px] border border-[#26352d] bg-[#171c19] shadow-[0_0_18px_rgba(114,245,154,0.05)]">
         <div class="px-4 py-4 md:px-5 lg:px-6 lg:py-5">
@@ -11,11 +10,6 @@
                         Presupuesto de {{ $presupuesto->mes }}/{{ $presupuesto->anio }}
                     </p>
                 </div>
-
-                <a href="{{ route('presupuestos.index') }}"
-                   class="rounded-xl border border-[#26352d] bg-[#111613] px-4 py-2 text-sm text-white transition hover:bg-[#1a211d]">
-                    Volver
-                </a>
             </div>
 
             @if ($errors->any())
@@ -36,26 +30,30 @@
                         <label for="id_categoria" class="mb-2 block text-sm font-medium text-white">Categoría</label>
                         <select name="id_categoria" id="id_categoria"
                                 class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white">
-                            <option value="">Seleccione una categoría</option>
-                            @foreach($categorias as $categoria)
-                                <option value="{{ $categoria->id_categoria }}" {{ old('id_categoria') == $categoria->id_categoria ? 'selected' : '' }}>
-                                    {{ $categoria->nombre }}
-                                </option>
-                            @endforeach
+                            @if($categorias->isEmpty())
+                                <option value="">No tienes categorías creadas</option>
+                            @else
+                                <option value="">Seleccione una categoría</option>
+                                @foreach($categorias as $categoria)
+                                    <option value="{{ $categoria->id_categoria }}"
+                                        {{ old('id_categoria') == $categoria->id_categoria ? 'selected' : '' }}>
+                                        {{ $categoria->nombre }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
+
+                        @if($categorias->isEmpty())
+                            <p class="mt-2 text-sm text-yellow-400">
+                                No tienes categorías. Debes crear al menos una antes de continuar.
+                            </p>
+                        @endif
                     </div>
 
                     <div>
                         <label for="limite_monto" class="mb-2 block text-sm font-medium text-white">Límite de monto</label>
                         <input type="number" step="0.01" name="limite_monto" id="limite_monto"
                                value="{{ old('limite_monto') }}"
-                               class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white">
-                    </div>
-
-                    <div>
-                        <label for="monto_gastado" class="mb-2 block text-sm font-medium text-white">Monto gastado</label>
-                        <input type="number" step="0.01" name="monto_gastado" id="monto_gastado"
-                               value="{{ old('monto_gastado', 0) }}"
                                class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white">
                     </div>
                 </div>
@@ -67,7 +65,8 @@
                     </a>
 
                     <button type="submit"
-                            class="rounded-xl bg-[#72f59a] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#5ee38a]">
+                            {{ $categorias->isEmpty() ? 'disabled' : '' }}
+                            class="rounded-xl bg-[#72f59a] px-5 py-3 text-sm font-semibold text-black transition {{ $categorias->isEmpty() ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#5ee38a]' }}">
                         Guardar sobre
                     </button>
                 </div>

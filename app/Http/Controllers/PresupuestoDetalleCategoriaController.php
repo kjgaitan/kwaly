@@ -2,46 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\PresupuestoDetalleCategoria;
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\PresupuestoDetalleCategoria\StorePresupuestoDetalleCategoriaRequest;
+use App\Http\Requests\PresupuestoDetalleCategoria\UpdatePresupuestoDetalleCategoriaRequest;
 use App\Models\Categoria;
+use App\Models\PresupuestoDetalleCategoria;
 use App\Models\PresupuestoMensual;
+use Illuminate\Support\Facades\Auth;
 
 class PresupuestoDetalleCategoriaController extends Controller
 {
     public function create($presupuesto)
     {
-        $presupuesto = PresupuestoMensual::findOrFail($presupuesto);
+        $usuarioId = Auth::user()->id_usuario;
 
-        $categorias = Categoria::where('id_usuario', Auth::id())
+        $presupuesto = $this->obtenerPresupuestoUsuario($presupuesto, $usuarioId);
+
+        $categorias = Categoria::where('id_usuario', $usuarioId)
             ->orderBy('nombre')
             ->get();
 
         return view('sobres.create', compact('presupuesto', 'categorias'));
     }
 
-    public function store(Request $request, $presupuesto)
+    public function store(StorePresupuestoDetalleCategoriaRequest $request, $presupuesto)
     {
-        $request->validate([
-            'id_categoria'  => 'required|exists:categorias,id_categoria',
-            'limite_monto'  => 'required|numeric|min:0',
-            'monto_gastado' => 'nullable|numeric|min:0',
-        ], [
-            'id_categoria.required' => 'Debes seleccionar una categoría.',
-            'id_categoria.exists'   => 'La categoría seleccionada no es válida.',
-            'limite_monto.required' => 'Debes introducir el límite de monto.',
-            'limite_monto.numeric'  => 'El límite de monto debe ser numérico.',
-            'limite_monto.min'      => 'El límite de monto no puede ser negativo.',
-            'monto_gastado.numeric' => 'El monto gastado debe ser numérico.',
-            'monto_gastado.min'     => 'El monto gastado no puede ser negativo.',
-        ]);
+        $usuarioId = Auth::user()->id_usuario;
 
-        $presupuesto = PresupuestoMensual::findOrFail($presupuesto);
-
-        $categoria = Categoria::where('id_categoria', $request->id_categoria)
-            ->where('id_usuario', Auth::id())
-            ->firstOrFail();
+        $presupuesto = $this->obtenerPresupuestoUsuario($presupuesto, $usuarioId);
+        $categoria = $this->obtenerCategoriaUsuario($request->id_categoria, $usuarioId);
 
         $existe = PresupuestoDetalleCategoria::where('id_presupuesto', $presupuesto->id_presupuesto)
             ->where('id_categoria', $categoria->id_categoria)
@@ -55,51 +44,41 @@ class PresupuestoDetalleCategoriaController extends Controller
                 ]);
         }
 
-        PresupuestoDetalleCategoria::create([
+        $detalle = PresupuestoDetalleCategoria::create([
             'id_presupuesto' => $presupuesto->id_presupuesto,
-            'id_categoria'   => $categoria->id_categoria,
-            'limite_monto'   => $request->limite_monto,
-            'monto_gastado'  => $request->filled('monto_gastado') ? $request->monto_gastado : 0,
+            'id_categoria' => $categoria->id_categoria,
+            'limite_monto' => $request->limite_monto,
+            'monto_gastado' => 0,
         ]);
+
+        $detalle->recalcularMontoGastado();
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Sobre creado correctamente.');
+            ->with('success', MensajeHelper::creado('Sobre'));
     }
 
     public function edit($detalle)
     {
-        $detalle = PresupuestoDetalleCategoria::findOrFail($detalle);
-        $presupuesto = PresupuestoMensual::findOrFail($detalle->id_presupuesto);
+        $usuarioId = Auth::user()->id_usuario;
 
-        $categorias = Categoria::where('id_usuario', Auth::id())
+        $detalle = $this->obtenerDetalleUsuario($detalle, $usuarioId);
+
+        $presupuesto = $this->obtenerPresupuestoUsuario($detalle->id_presupuesto, $usuarioId);
+
+        $categorias = Categoria::where('id_usuario', $usuarioId)
             ->orderBy('nombre')
             ->get();
 
         return view('sobres.edit', compact('detalle', 'presupuesto', 'categorias'));
     }
 
-    public function update(Request $request, $detalle)
+    public function update(UpdatePresupuestoDetalleCategoriaRequest $request, $detalle)
     {
-        $request->validate([
-            'id_categoria'  => 'required|exists:categorias,id_categoria',
-            'limite_monto'  => 'required|numeric|min:0',
-            'monto_gastado' => 'nullable|numeric|min:0',
-        ], [
-            'id_categoria.required' => 'Debes seleccionar una categoría.',
-            'id_categoria.exists'   => 'La categoría seleccionada no es válida.',
-            'limite_monto.required' => 'Debes introducir el límite de monto.',
-            'limite_monto.numeric'  => 'El límite de monto debe ser numérico.',
-            'limite_monto.min'      => 'El límite de monto no puede ser negativo.',
-            'monto_gastado.numeric' => 'El monto gastado debe ser numérico.',
-            'monto_gastado.min'     => 'El monto gastado no puede ser negativo.',
-        ]);
+        $usuarioId = Auth::user()->id_usuario;
 
-        $detalle = PresupuestoDetalleCategoria::findOrFail($detalle);
-
-        $categoria = Categoria::where('id_categoria', $request->id_categoria)
-            ->where('id_usuario', Auth::id())
-            ->firstOrFail();
+        $detalle = $this->obtenerDetalleUsuario($detalle, $usuarioId);
+        $categoria = $this->obtenerCategoriaUsuario($request->id_categoria, $usuarioId);
 
         $existe = PresupuestoDetalleCategoria::where('id_presupuesto', $detalle->id_presupuesto)
             ->where('id_categoria', $categoria->id_categoria)
@@ -115,23 +94,47 @@ class PresupuestoDetalleCategoriaController extends Controller
         }
 
         $detalle->update([
-            'id_categoria'  => $categoria->id_categoria,
-            'limite_monto'  => $request->limite_monto,
-            'monto_gastado' => $request->filled('monto_gastado') ? $request->monto_gastado : 0,
+            'id_categoria' => $categoria->id_categoria,
+            'limite_monto' => $request->limite_monto,
         ]);
+
+        $detalle->recalcularMontoGastado();
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Sobre actualizado correctamente.');
+            ->with('success', MensajeHelper::actualizado('Sobre'));
     }
 
     public function destroy($detalle)
     {
-        $detalle = PresupuestoDetalleCategoria::findOrFail($detalle);
+        $usuarioId = Auth::user()->id_usuario;
+
+        $detalle = $this->obtenerDetalleUsuario($detalle, $usuarioId);
+
         $detalle->delete();
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Sobre eliminado correctamente.');
+            ->with('success', MensajeHelper::eliminado('Sobre'));
+    }
+
+    private function obtenerPresupuestoUsuario($idPresupuesto, int $usuarioId): PresupuestoMensual
+    {
+        return PresupuestoMensual::where('id_usuario', $usuarioId)
+            ->findOrFail($idPresupuesto);
+    }
+
+    private function obtenerCategoriaUsuario($idCategoria, int $usuarioId): Categoria
+    {
+        return Categoria::where('id_categoria', $idCategoria)
+            ->where('id_usuario', $usuarioId)
+            ->firstOrFail();
+    }
+
+    private function obtenerDetalleUsuario($idDetalle, int $usuarioId): PresupuestoDetalleCategoria
+    {
+        return PresupuestoDetalleCategoria::whereHas('presupuesto', function ($query) use ($usuarioId) {
+            $query->where('id_usuario', $usuarioId);
+        })->findOrFail($idDetalle);
     }
 }

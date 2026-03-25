@@ -1,10 +1,7 @@
 <div class="grid gap-6 md:grid-cols-2">
     <div>
         <label class="mb-2 block text-sm text-gray-300">Categoría</label>
-        <select
-            name="id_categoria"
-            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#72f59a]"
-        >
+        <select name="id_categoria" class="budget-input">
             <option value="">Selecciona una categoría</option>
             @foreach($categorias as $categoria)
                 <option value="{{ $categoria->id_categoria }}"
@@ -22,7 +19,7 @@
             step="0.01"
             name="limite_monto"
             value="{{ old('limite_monto', $detalle->limite_monto ?? '') }}"
-            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#72f59a]"
+            class="budget-input"
             placeholder="Ej. 300.00"
         >
     </div>
@@ -34,7 +31,7 @@
             step="0.01"
             name="monto_gastado"
             value="{{ old('monto_gastado', $detalle->monto_gastado ?? 0) }}"
-            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#72f59a]"
+            class="budget-input"
             placeholder="Ej. 120.00"
         >
     </div>

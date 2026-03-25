@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\Presupuesto\StorePresupuestoRequest;
+use App\Http\Requests\Presupuesto\UpdatePresupuestoRequest;
 use App\Models\PresupuestoMensual;
-use Illuminate\Http\Request;
+use App\Services\PresupuestoService;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -14,14 +17,13 @@ class PresupuestoController extends Controller
     /**
      * Muestra el listado de presupuestos mensuales del usuario.
      */
-    public function index()
+    public function index(PresupuestoService $presupuestoService)
     {
-        $presupuestos = PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
-            ->orderByDesc('anio')
-            ->orderByDesc('mes')
-            ->get();
+        $usuarioId = Auth::user()->id_usuario;
 
-        return view('presupuestos.index', compact('presupuestos'));
+        $datos = $presupuestoService->obtenerDatosIndex($usuarioId);
+
+        return view('presupuestos.index', $datos);
     }
 
     /**
@@ -35,17 +37,8 @@ class PresupuestoController extends Controller
     /**
      * Guarda un nuevo presupuesto mensual en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StorePresupuestoRequest $request)
     {
-        $request->validate([
-            'anio' => 'required|integer|min:2000|max:2100',
-            'mes' => 'required|integer|min:1|max:12',
-            'ingreso_estimado' => 'nullable|numeric|min:0',
-            'porcentaje_necesidades' => 'nullable|numeric|min:0|max:100',
-            'porcentaje_deseos' => 'nullable|numeric|min:0|max:100',
-            'porcentaje_ahorro' => 'nullable|numeric|min:0|max:100',
-        ]);
-
         PresupuestoMensual::create([
             'id_usuario' => Auth::user()->id_usuario,
             'anio' => $request->anio,
@@ -58,7 +51,7 @@ class PresupuestoController extends Controller
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Presupuesto creado correctamente.');
+            ->with('success', MensajeHelper::creado('Presupuesto'));
     }
 
     /**
@@ -66,8 +59,7 @@ class PresupuestoController extends Controller
      */
     public function show(int $id)
     {
-        $presupuesto = PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $presupuesto = $this->obtenerPresupuestoUsuario($id);
 
         return view('presupuestos.show', compact('presupuesto'));
     }
@@ -77,8 +69,7 @@ class PresupuestoController extends Controller
      */
     public function edit(int $id)
     {
-        $presupuesto = PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $presupuesto = $this->obtenerPresupuestoUsuario($id);
 
         return view('presupuestos.edit', compact('presupuesto'));
     }
@@ -86,32 +77,22 @@ class PresupuestoController extends Controller
     /**
      * Actualiza los datos de un presupuesto mensual.
      */
-    public function update(Request $request, int $id)
+    public function update(UpdatePresupuestoRequest $request, int $id)
     {
-        $presupuesto = PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
-
-        $request->validate([
-            'anio' => 'required|integer|min:2000|max:2100',
-            'mes' => 'required|integer|min:1|max:12',
-            'ingreso_estimado' => 'nullable|numeric|min:0',
-            'porcentaje_necesidades' => 'nullable|numeric|min:0|max:100',
-            'porcentaje_deseos' => 'nullable|numeric|min:0|max:100',
-            'porcentaje_ahorro' => 'nullable|numeric|min:0|max:100',
-        ]);
+        $presupuesto = $this->obtenerPresupuestoUsuario($id);
 
         $presupuesto->update([
             'anio' => $request->anio,
             'mes' => $request->mes,
             'ingreso_estimado' => $request->ingreso_estimado,
-            'porcentaje_necesidades' => $request->porcentaje_necesidades,
-            'porcentaje_deseos' => $request->porcentaje_deseos,
-            'porcentaje_ahorro' => $request->porcentaje_ahorro,
+            'porcentaje_necesidades' => $request->porcentaje_necesidades ?? 50,
+            'porcentaje_deseos' => $request->porcentaje_deseos ?? 30,
+            'porcentaje_ahorro' => $request->porcentaje_ahorro ?? 20,
         ]);
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Presupuesto actualizado correctamente.');
+            ->with('success', MensajeHelper::actualizado('Presupuesto'));
     }
 
     /**
@@ -119,13 +100,21 @@ class PresupuestoController extends Controller
      */
     public function destroy(int $id)
     {
-        $presupuesto = PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $presupuesto = $this->obtenerPresupuestoUsuario($id);
 
         $presupuesto->delete();
 
         return redirect()
             ->route('presupuestos.index')
-            ->with('success', 'Presupuesto eliminado correctamente.');
+            ->with('success', MensajeHelper::eliminado('Presupuesto'));
+    }
+
+    /**
+     * Obtiene un presupuesto perteneciente al usuario autenticado.
+     */
+    private function obtenerPresupuestoUsuario(int $id): PresupuestoMensual
+    {
+        return PresupuestoMensual::where('id_usuario', Auth::user()->id_usuario)
+            ->findOrFail($id);
     }
 }

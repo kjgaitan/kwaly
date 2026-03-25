@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\Categoria\StoreCategoriaRequest;
+use App\Http\Requests\Categoria\UpdateCategoriaRequest;
 use App\Models\Categoria;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Controlador encargado de gestionar las categorías del usuario.
- * 
+ *
  * Permite listar, crear, visualizar, editar y eliminar categorías
  * asociadas al usuario autenticado.
  */
@@ -22,7 +24,7 @@ class CategoriaController extends Controller
     {
         $categorias = Categoria::where(function ($query) {
                 $query->whereNull('id_usuario')
-                      ->orWhere('id_usuario', Auth::user()->id_usuario);
+                    ->orWhere('id_usuario', Auth::user()->id_usuario);
             })
             ->orderBy('nombre')
             ->get();
@@ -41,17 +43,8 @@ class CategoriaController extends Controller
     /**
      * Guarda una nueva categoría en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StoreCategoriaRequest $request)
     {
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'tipo_categoria' => 'required|in:ingreso,gasto',
-            'icono' => 'nullable|string|max:100',
-            'color_hex' => 'nullable|string|max:7',
-        ]);
-
-        // Creación de la categoría asociada al usuario autenticado
         Categoria::create([
             'id_usuario' => Auth::user()->id_usuario,
             'nombre' => $request->nombre,
@@ -60,8 +53,9 @@ class CategoriaController extends Controller
             'color_hex' => $request->color_hex,
         ]);
 
-        return redirect()->route('categorias.index')
-            ->with('success', 'Categoría creada correctamente.');
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', MensajeHelper::creado('Categoría'));
     }
 
     /**
@@ -88,20 +82,11 @@ class CategoriaController extends Controller
     /**
      * Actualiza los datos de una categoría en la base de datos.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoriaRequest $request, string $id)
     {
         $categoria = Categoria::where('id_usuario', Auth::user()->id_usuario)
             ->findOrFail($id);
 
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'tipo_categoria' => 'required|in:ingreso,gasto',
-            'icono' => 'nullable|string|max:100',
-            'color_hex' => 'nullable|string|max:7',
-        ]);
-
-        // Actualización de los campos de la categoría
         $categoria->update($request->only([
             'nombre',
             'tipo_categoria',
@@ -109,8 +94,9 @@ class CategoriaController extends Controller
             'color_hex',
         ]));
 
-        return redirect()->route('categorias.index')
-            ->with('success', 'Categoría actualizada correctamente.');
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', MensajeHelper::actualizado('Categoría'));
     }
 
     /**
@@ -121,10 +107,10 @@ class CategoriaController extends Controller
         $categoria = Categoria::where('id_usuario', Auth::user()->id_usuario)
             ->findOrFail($id);
 
-        // Eliminación de la categoría
         $categoria->delete();
 
-        return redirect()->route('categorias.index')
-            ->with('success', 'Categoría eliminada correctamente.');
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', MensajeHelper::eliminado('Categoría'));
     }
 }

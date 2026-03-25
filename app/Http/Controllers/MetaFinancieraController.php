@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\MetaFinanciera\StoreMetaFinancieraRequest;
+use App\Http\Requests\MetaFinanciera\UpdateMetaFinancieraRequest;
 use App\Models\MetaFinanciera;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Controlador encargado de gestionar las metas financieras.
- * 
+ *
  * Permite al usuario crear, visualizar, editar y eliminar
  * metas financieras asociadas a su cuenta.
  */
@@ -37,17 +39,8 @@ class MetaFinancieraController extends Controller
     /**
      * Guarda una nueva meta financiera en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StoreMetaFinancieraRequest $request)
     {
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'nombre_meta' => 'required|string|max:150',
-            'monto_objetivo' => 'required|numeric|min:0',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'nullable|date',
-        ]);
-
-        // Creación de la meta asociada al usuario autenticado
         MetaFinanciera::create([
             'id_usuario' => Auth::user()->id_usuario,
             'nombre_meta' => $request->nombre_meta,
@@ -56,8 +49,9 @@ class MetaFinancieraController extends Controller
             'fecha_fin' => $request->fecha_fin,
         ]);
 
-        return redirect()->route('metas.index')
-            ->with('success', 'Meta financiera creada correctamente.');
+        return redirect()
+            ->route('metas.index')
+            ->with('success', MensajeHelper::creado('Meta financiera'));
     }
 
     /**
@@ -65,8 +59,7 @@ class MetaFinancieraController extends Controller
      */
     public function show(string $id)
     {
-        $meta = MetaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $meta = $this->obtenerMetaUsuario($id);
 
         return view('metas.show', compact('meta'));
     }
@@ -76,8 +69,7 @@ class MetaFinancieraController extends Controller
      */
     public function edit(string $id)
     {
-        $meta = MetaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $meta = $this->obtenerMetaUsuario($id);
 
         return view('metas.edit', compact('meta'));
     }
@@ -85,29 +77,20 @@ class MetaFinancieraController extends Controller
     /**
      * Actualiza los datos de una meta financiera.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateMetaFinancieraRequest $request, string $id)
     {
-        $meta = MetaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $meta = $this->obtenerMetaUsuario($id);
 
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'nombre_meta' => 'required|string|max:150',
-            'monto_objetivo' => 'required|numeric|min:0',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'nullable|date',
+        $meta->update([
+            'nombre_meta' => $request->nombre_meta,
+            'monto_objetivo' => $request->monto_objetivo,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
         ]);
 
-        // Actualización de los datos de la meta financiera
-        $meta->update($request->only([
-            'nombre_meta',
-            'monto_objetivo',
-            'fecha_inicio',
-            'fecha_fin',
-        ]));
-
-        return redirect()->route('metas.index')
-            ->with('success', 'Meta financiera actualizada correctamente.');
+        return redirect()
+            ->route('metas.index')
+            ->with('success', MensajeHelper::actualizado('Meta financiera'));
     }
 
     /**
@@ -115,13 +98,21 @@ class MetaFinancieraController extends Controller
      */
     public function destroy(string $id)
     {
-        $meta = MetaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $meta = $this->obtenerMetaUsuario($id);
 
-        // Eliminación de la meta financiera
         $meta->delete();
 
-        return redirect()->route('metas.index')
-            ->with('success', 'Meta eliminada correctamente.');
+        return redirect()
+            ->route('metas.index')
+            ->with('success', MensajeHelper::eliminado('Meta financiera'));
+    }
+
+    /**
+     * Obtiene una meta financiera perteneciente al usuario autenticado.
+     */
+    private function obtenerMetaUsuario(string $id): MetaFinanciera
+    {
+        return MetaFinanciera::where('id_usuario', Auth::user()->id_usuario)
+            ->findOrFail($id);
     }
 }

@@ -2,66 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\Transaccion\FiltrarTransaccionRequest;
+use App\Http\Requests\Transaccion\StoreTransaccionRequest;
+use App\Http\Requests\Transaccion\UpdateTransaccionRequest;
 use App\Models\Categoria;
 use App\Models\CuentaFinanciera;
 use App\Models\Transaccion;
-use Illuminate\Http\Request;
+use App\Services\TransaccionService;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Controlador encargado de gestionar las transacciones del usuario.
- */
 class TransaccionController extends Controller
 {
-    /**
-     * Muestra el listado de transacciones.
-     */
-    public function index()
+    public function index(FiltrarTransaccionRequest $request, TransaccionService $transaccionService)
     {
-        $transacciones = Transaccion::with(['categoria', 'cuenta'])
-            ->where('id_usuario', Auth::user()->id_usuario)
-            ->orderByDesc('fecha_transaccion')
-            ->get();
+        $idUsuario = Auth::user()->id_usuario;
 
-        return view('transacciones.index', compact('transacciones'));
+        $datos = $transaccionService->obtenerDatosIndex(
+            $idUsuario,
+            $request->input('buscar'),
+            $request->input('tipo')
+        );
+
+        return view('transacciones.index', $datos);
     }
 
-    /**
-     * Muestra el formulario de creación.
-     */
     public function create()
     {
-        $categorias = Categoria::where(function ($query) {
-                $query->whereNull('id_usuario')
-                      ->orWhere('id_usuario', Auth::user()->id_usuario);
-            })
-            ->orderBy('nombre')
-            ->get();
+        $idUsuario = Auth::user()->id_usuario;
 
-        $cuentas = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->orderBy('nombre')
-            ->get();
+        $categorias = $this->obtenerCategoriasUsuario($idUsuario);
+        $cuentas = $this->obtenerCuentasUsuario($idUsuario);
 
         return view('transacciones.create', compact('categorias', 'cuentas'));
     }
 
-    /**
-     * Guarda una nueva transacción.
-     */
-    public function store(Request $request)
+    public function store(StoreTransaccionRequest $request, TransaccionService $transaccionService)
     {
-        $request->validate([
-            'id_cuenta' => 'nullable|exists:cuentas_financieras,id_cuenta',
-            'id_categoria' => 'nullable|exists:categorias,id_categoria',
-            'tipo_movimiento' => 'required|in:ingreso,gasto',
-            'titulo' => 'nullable|string|max:150',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:0',
-            'fecha_transaccion' => 'required|date',
-            'metodo_pago' => 'nullable|string|max:50',
-        ]);
-
-        Transaccion::create([
+        $transaccion = Transaccion::create([
             'id_usuario' => Auth::user()->id_usuario,
             'id_cuenta' => $request->id_cuenta,
             'id_categoria' => $request->id_categoria,
@@ -73,13 +51,13 @@ class TransaccionController extends Controller
             'metodo_pago' => $request->metodo_pago,
         ]);
 
-        return redirect()->route('transacciones.index')
-            ->with('success', 'Transacción registrada correctamente.');
+        $transaccionService->recalcularSobresRelacionados($transaccion);
+
+        return redirect()
+            ->route('transacciones.index')
+            ->with('success', MensajeHelper::creado('Transacción'));
     }
 
-    /**
-     * Muestra una transacción concreta.
-     */
     public function show(string $id)
     {
         $transaccion = Transaccion::with(['categoria', 'cuenta'])
@@ -89,73 +67,92 @@ class TransaccionController extends Controller
         return view('transacciones.show', compact('transaccion'));
     }
 
-    /**
-     * Muestra el formulario de edición.
-     */
     public function edit(string $id)
     {
-        $transaccion = Transaccion::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $idUsuario = Auth::user()->id_usuario;
 
-        $categorias = Categoria::where(function ($query) {
-                $query->whereNull('id_usuario')
-                      ->orWhere('id_usuario', Auth::user()->id_usuario);
-            })
-            ->orderBy('nombre')
-            ->get();
-
-        $cuentas = CuentaFinanciera::where('id_usuario', Auth::user()->id_usuario)
-            ->orderBy('nombre')
-            ->get();
+        $transaccion = $this->obtenerTransaccionUsuario($id);
+        $categorias = $this->obtenerCategoriasUsuario($idUsuario);
+        $cuentas = $this->obtenerCuentasUsuario($idUsuario);
 
         return view('transacciones.edit', compact('transaccion', 'categorias', 'cuentas'));
     }
 
-    /**
-     * Actualiza una transacción existente.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateTransaccionRequest $request, string $id, TransaccionService $transaccionService)
     {
-        $transaccion = Transaccion::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $transaccion = $this->obtenerTransaccionUsuario($id);
 
-        $request->validate([
-            'id_cuenta' => 'nullable|exists:cuentas_financieras,id_cuenta',
-            'id_categoria' => 'nullable|exists:categorias,id_categoria',
-            'tipo_movimiento' => 'required|in:ingreso,gasto',
-            'titulo' => 'nullable|string|max:150',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:0',
-            'fecha_transaccion' => 'required|date',
-            'metodo_pago' => 'nullable|string|max:50',
+        $categoriaAnterior = $transaccion->id_categoria;
+        $fechaAnterior = $transaccion->fecha_transaccion;
+        $tipoAnterior = $transaccion->tipo_movimiento;
+
+        $transaccion->update([
+            'id_cuenta' => $request->id_cuenta,
+            'id_categoria' => $request->id_categoria,
+            'tipo_movimiento' => $request->tipo_movimiento,
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'monto' => $request->monto,
+            'fecha_transaccion' => $request->fecha_transaccion,
+            'metodo_pago' => $request->metodo_pago,
         ]);
 
-        $transaccion->update($request->only([
-            'id_cuenta',
-            'id_categoria',
-            'tipo_movimiento',
-            'titulo',
-            'descripcion',
-            'monto',
-            'fecha_transaccion',
-            'metodo_pago',
-        ]));
+        $transaccionService->recalcularSobresRelacionados($transaccion);
 
-        return redirect()->route('transacciones.index')
-            ->with('success', 'Transacción actualizada correctamente.');
+        if (
+            $categoriaAnterior != $transaccion->id_categoria ||
+            $fechaAnterior != $transaccion->fecha_transaccion ||
+            $tipoAnterior != $transaccion->tipo_movimiento
+        ) {
+            $transaccionService->recalcularSobresPorDatosAnteriores(
+                Auth::user()->id_usuario,
+                $categoriaAnterior,
+                $fechaAnterior
+            );
+        }
+
+        return redirect()
+            ->route('transacciones.index')
+            ->with('success', MensajeHelper::actualizado('Transacción'));
     }
 
-    /**
-     * Elimina una transacción.
-     */
-    public function destroy(string $id)
+    public function destroy(string $id, TransaccionService $transaccionService)
     {
-        $transaccion = Transaccion::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $transaccion = $this->obtenerTransaccionUsuario($id);
+
+        $usuarioId = $transaccion->id_usuario;
+        $categoriaId = $transaccion->id_categoria;
+        $fecha = $transaccion->fecha_transaccion;
 
         $transaccion->delete();
 
-        return redirect()->route('transacciones.index')
-            ->with('success', 'Transacción eliminada correctamente.');
+        $transaccionService->recalcularSobresPorDatosAnteriores($usuarioId, $categoriaId, $fecha);
+
+        return redirect()
+            ->route('transacciones.index')
+            ->with('success', MensajeHelper::eliminado('Transacción'));
+    }
+
+    private function obtenerTransaccionUsuario(string $id): Transaccion
+    {
+        return Transaccion::where('id_usuario', Auth::user()->id_usuario)
+            ->findOrFail($id);
+    }
+
+    private function obtenerCategoriasUsuario(int $idUsuario)
+    {
+        return Categoria::where(function ($query) use ($idUsuario) {
+                $query->whereNull('id_usuario')
+                    ->orWhere('id_usuario', $idUsuario);
+            })
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    private function obtenerCuentasUsuario(int $idUsuario)
+    {
+        return CuentaFinanciera::where('id_usuario', $idUsuario)
+            ->orderBy('nombre')
+            ->get();
     }
 }

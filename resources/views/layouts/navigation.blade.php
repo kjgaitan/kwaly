@@ -20,20 +20,16 @@
             Presupuestos
         </a>
 
-        <a href="{{ route('facturas.index') }}"
+        <a href="{{ route('calendario.index') }}"
            class="flex items-center px-4 py-3 rounded-xl transition {{ request()->routeIs('facturas.*') ? 'bg-green-500/20 text-green-400 border border-green-500/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-            Facturas
+            Calendario
         </a>
 
-        <a href="{{ route('metas.index') }}"
+        <a href="{{ route('reportes.index') }}"
            class="flex items-center px-4 py-3 rounded-xl transition {{ request()->routeIs('metas.*') ? 'bg-green-500/20 text-green-400 border border-green-500/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-            Metas
+            Reportes
         </a>
 
-        <a href="{{ route('configuracion.index') }}"
-           class="flex items-center px-4 py-3 rounded-xl transition {{ request()->routeIs('configuracion.*') ? 'bg-green-500/20 text-green-400 border border-green-500/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-            Configuración
-        </a>
     </nav>
 
     <div class="px-4 py-4 border-t border-white/5">

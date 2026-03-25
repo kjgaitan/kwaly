@@ -1,4 +1,9 @@
+@import './components/calendario.css';
+@import './components/presupuestos.css';
+@import './components/reportes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @plugin "daisyui";

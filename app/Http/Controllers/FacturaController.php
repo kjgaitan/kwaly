@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MensajeHelper;
+use App\Http\Requests\Factura\StoreFacturaRequest;
+use App\Http\Requests\Factura\UpdateFacturaRequest;
 use App\Models\Factura;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * Controlador encargado de gestionar las facturas del usuario.
- * 
+ *
  * Permite crear, visualizar, editar y eliminar facturas
  * asociadas al usuario autenticado.
  */
@@ -37,18 +39,8 @@ class FacturaController extends Controller
     /**
      * Guarda una nueva factura en la base de datos.
      */
-    public function store(Request $request)
+    public function store(StoreFacturaRequest $request)
     {
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'titulo' => 'required|string|max:150',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:0',
-            'fecha_emision' => 'required|date',
-            'estado' => 'nullable|string|max:50',
-        ]);
-
-        // Creación de la factura asociada al usuario autenticado
         Factura::create([
             'id_usuario' => Auth::user()->id_usuario,
             'titulo' => $request->titulo,
@@ -58,8 +50,9 @@ class FacturaController extends Controller
             'estado' => $request->estado ?? 'pendiente',
         ]);
 
-        return redirect()->route('facturas.index')
-            ->with('success', 'Factura registrada correctamente.');
+        return redirect()
+            ->route('facturas.index')
+            ->with('success', MensajeHelper::creado('Factura'));
     }
 
     /**
@@ -67,8 +60,7 @@ class FacturaController extends Controller
      */
     public function show(string $id)
     {
-        $factura = Factura::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $factura = $this->obtenerFacturaUsuario($id);
 
         return view('facturas.show', compact('factura'));
     }
@@ -78,8 +70,7 @@ class FacturaController extends Controller
      */
     public function edit(string $id)
     {
-        $factura = Factura::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $factura = $this->obtenerFacturaUsuario($id);
 
         return view('facturas.edit', compact('factura'));
     }
@@ -87,31 +78,21 @@ class FacturaController extends Controller
     /**
      * Actualiza los datos de una factura.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateFacturaRequest $request, string $id)
     {
-        $factura = Factura::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $factura = $this->obtenerFacturaUsuario($id);
 
-        // Validación de los datos del formulario
-        $request->validate([
-            'titulo' => 'required|string|max:150',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:0',
-            'fecha_emision' => 'required|date',
-            'estado' => 'nullable|string|max:50',
+        $factura->update([
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'monto' => $request->monto,
+            'fecha_emision' => $request->fecha_emision,
+            'estado' => $request->estado ?? 'pendiente',
         ]);
 
-        // Actualización de los datos de la factura
-        $factura->update($request->only([
-            'titulo',
-            'descripcion',
-            'monto',
-            'fecha_emision',
-            'estado',
-        ]));
-
-        return redirect()->route('facturas.index')
-            ->with('success', 'Factura actualizada correctamente.');
+        return redirect()
+            ->route('facturas.index')
+            ->with('success', MensajeHelper::actualizado('Factura'));
     }
 
     /**
@@ -119,13 +100,21 @@ class FacturaController extends Controller
      */
     public function destroy(string $id)
     {
-        $factura = Factura::where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
+        $factura = $this->obtenerFacturaUsuario($id);
 
-        // Eliminación de la factura
         $factura->delete();
 
-        return redirect()->route('facturas.index')
-            ->with('success', 'Factura eliminada correctamente.');
+        return redirect()
+            ->route('facturas.index')
+            ->with('success', MensajeHelper::eliminado('Factura'));
+    }
+
+    /**
+     * Obtiene una factura perteneciente al usuario autenticado.
+     */
+    private function obtenerFacturaUsuario(string $id): Factura
+    {
+        return Factura::where('id_usuario', Auth::user()->id_usuario)
+            ->findOrFail($id);
     }
 }
