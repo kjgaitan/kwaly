@@ -35,11 +35,11 @@ class CalendarioService
         $eventosPorDia = $this->agruparEventosPorDia($transacciones, $facturas);
 
         $ingresosPrevistos = $transacciones
-            ->where('tipo', 'ingreso')
+            ->where('tipo_movimiento', 'ingreso')
             ->sum('monto');
 
         $gastosPrevistos = $transacciones
-            ->where('tipo', 'gasto')
+            ->where('tipo_movimiento', 'gasto')
             ->sum('monto') + $facturas->sum('monto_total');
 
         $balancePrevisto = $ingresosPrevistos - $gastosPrevistos;
@@ -92,7 +92,7 @@ class CalendarioService
 
             $eventosPorDia[$clave][] = [
                 'titulo' => $transaccion->titulo ?? 'Transacción',
-                'tipo' => $transaccion->tipo ?? 'recordatorio',
+                'tipo' => $transaccion->tipo_movimiento ?? 'recordatorio',
             ];
         }
 

@@ -33,11 +33,6 @@
     </nav>
 
     <div class="px-4 py-4 border-t border-white/5">
-        <div class="mb-4">
-            <p class="text-sm font-medium text-white">{{ Auth::user()->nombre }}</p>
-            <p class="text-xs text-gray-400">{{ Auth::user()->email }}</p>
-        </div>
-
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"

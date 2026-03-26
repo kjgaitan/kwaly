@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Presupuesto;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePresupuestoRequest extends FormRequest
 {
@@ -11,11 +12,36 @@ class UpdatePresupuestoRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $ingresoEstimado = $this->input('ingreso_estimado');
+
+        if ($ingresoEstimado !== null && $ingresoEstimado !== '') {
+            $ingresoEstimado = str_replace('.', '', $ingresoEstimado);
+            $ingresoEstimado = str_replace(',', '.', $ingresoEstimado);
+        }
+
+        $this->merge([
+            'ingreso_estimado' => $ingresoEstimado,
+        ]);
+    }
+
     public function rules(): array
     {
+        $idPresupuesto = $this->route('presupuesto') ?? $this->route('id');
+
         return [
             'anio' => 'required|integer|min:2000|max:2100',
-            'mes' => 'required|integer|min:1|max:12',
+            'mes' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:12',
+                Rule::unique('presupuestos_mensuales')->where(function ($query) {
+                    return $query->where('id_usuario', auth()->user()->id_usuario)
+                        ->where('anio', $this->anio);
+                })->ignore($idPresupuesto, 'id_presupuesto'),
+            ],
             'ingreso_estimado' => 'nullable|numeric|min:0',
             'porcentaje_necesidades' => 'nullable|numeric|min:0|max:100',
             'porcentaje_deseos' => 'nullable|numeric|min:0|max:100',
@@ -34,6 +60,7 @@ class UpdatePresupuestoRequest extends FormRequest
             'mes.integer' => 'El mes debe ser un número entero.',
             'mes.min' => 'El mes debe estar entre 1 y 12.',
             'mes.max' => 'El mes debe estar entre 1 y 12.',
+            'mes.unique' => 'Ya existe un presupuesto para ese mes y año.',
             'ingreso_estimado.numeric' => 'El ingreso estimado debe ser un número válido.',
             'ingreso_estimado.min' => 'El ingreso estimado no puede ser negativo.',
             'porcentaje_necesidades.numeric' => 'El porcentaje de necesidades debe ser numérico.',

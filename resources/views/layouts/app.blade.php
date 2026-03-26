@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    <!-- BOOTSTRAP ICONS (ESTO ES LO QUE TE FALTABA) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-[#020806] text-white">
@@ -17,11 +20,13 @@
         @include('layouts.navigation')
 
         <main class="md:ml-64 min-h-screen bg-[#020806]">
+
             <!-- HEADER SUPERIOR GLOBAL -->
             <div class="flex items-center justify-end gap-4 border-b border-[#26352d] bg-[#020806] px-4 py-4 md:px-6">
+
                 <!-- NOTIFICACIONES -->
                 <button class="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#26352d] bg-[#111613] transition hover:bg-[#1a211d]">
-                    🔔
+                    <i class="bi bi-bell text-lg"></i>
                     <span class="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-[#72f59a]"></span>
                 </button>
 

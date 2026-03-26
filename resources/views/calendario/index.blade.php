@@ -66,25 +66,23 @@
                                 {{ $dia->day }}
                             </div>
 
-                            @if(isset($eventosPorDia))
-                                @php
-                                    $clave = $dia->format('Y-m-d');
-                                    $eventos = $eventosPorDia[$clave] ?? [];
-                                @endphp
+                            @php
+                                $clave = $dia->format('Y-m-d');
+                                $eventos = $eventosPorDia[$clave] ?? [];
+                            @endphp
 
-                                @foreach($eventos as $evento)
-                                    <div class="mb-1 truncate rounded-md px-2 py-1 text-[11px]
-                                        @if(($evento['tipo'] ?? '') === 'ingreso')
-                                            bg-green-500/15 text-green-300 border border-green-500/20
-                                        @elseif(($evento['tipo'] ?? '') === 'gasto')
-                                            bg-red-500/15 text-red-300 border border-red-500/20
-                                        @else
-                                            bg-blue-500/15 text-blue-300 border border-blue-500/20
-                                        @endif">
-                                        {{ $evento['titulo'] ?? 'Evento' }}
-                                    </div>
-                                @endforeach
-                            @endif
+                            @foreach($eventos as $evento)
+                                <div class="mb-1 truncate rounded-md px-2 py-1 text-[11px]
+                                    @if(($evento['tipo'] ?? '') === 'ingreso')
+                                        border border-green-500/20 bg-green-500/15 text-green-300
+                                    @elseif(($evento['tipo'] ?? '') === 'gasto')
+                                        border border-red-500/20 bg-red-500/15 text-red-300
+                                    @else
+                                        border border-blue-500/20 bg-blue-500/15 text-blue-300
+                                    @endif">
+                                    {{ $evento['titulo'] ?? 'Evento' }}
+                                </div>
+                            @endforeach
                         </div>
                     @endforeach
                 </div>

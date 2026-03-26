@@ -16,20 +16,6 @@
                             <option>Últimos 3 meses</option>
                             <option>Este Año</option>
                         </select>
-
-                        <button class="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#26352d] bg-[#111613] transition-all duration-200 hover:bg-[#1a211d]">
-                            
-                            <span class="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-[#72f59a]"></span>
-                        </button>
-
-                        <div class="flex items-center gap-3 rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#72f59a] font-bold text-black">
-                                {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->nombre ?? 'U', 0, 1)) }}
-                            </div>
-                            <div class="hidden sm:block">
-                                <p class="text-sm font-medium">{{ Auth::user()->name ?? Auth::user()->nombre ?? 'Usuario' }}</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -41,8 +27,8 @@
                                 <p class="text-sm text-gray-400">Ingresos del Mes</p>
                                 <h3 class="mt-1 text-2xl font-bold text-[#72f59a]">3500€</h3>
                             </div>
-                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#72f59a]/15 text-lg text-[#72f59a] shadow-[0_0_18px_rgba(114,245,154,0.18)]">
-                                ↑
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#72f59a]/15 text-[#72f59a] shadow-[0_0_18px_rgba(114,245,154,0.18)]">
+                                <i class="bi bi-arrow-up text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -54,7 +40,7 @@
                                 <h3 class="mt-1 text-2xl font-bold text-red-400">2340€</h3>
                             </div>
                             <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-red-400/15 text-lg text-red-400 shadow-[0_0_18px_rgba(248,113,113,0.16)]">
-                                ↓
+                                <i class="bi bi-arrow-down text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -66,7 +52,7 @@
                                 <h3 class="mt-1 text-2xl font-bold text-[#8bffab]">1160€</h3>
                             </div>
                             <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#72f59a]/15 text-lg text-[#8bffab] shadow-[0_0_18px_rgba(114,245,154,0.14)]">
-                                
+                                <i class="bi bi-wallet2 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -76,7 +62,7 @@
                 <div class="mb-4 rounded-2xl border border-[#26352d] bg-[#171c19] p-4 shadow-[0_0_18px_rgba(114,245,154,0.05)]">
                     <div class="flex items-start gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72f59a]/15 text-[#72f59a]">
-                            
+                            <i class="bi bi-lightbulb text-lg"></i>
                         </div>
                         <div>
                             <h3 class="text-base font-semibold">¿Vas por buen camino?</h3>
@@ -249,7 +235,7 @@
                         <div class="rounded-2xl border border-[#26352d] bg-[#1b211d] p-4">
                             <div class="flex items-start gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72f59a]/15 text-[#72f59a]">
-                                  
+                                    <i class="bi bi-piggy-bank text-lg"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-white">Ahorro Mensual</h4>
@@ -261,7 +247,7 @@
                         <div class="rounded-2xl border border-[#26352d] bg-[#1b211d] p-4">
                             <div class="flex items-start gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72f59a]/15 text-[#72f59a]">
-                                    
+                                    <i class="bi bi-check-circle text-lg"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-white">Presupuesto Cumplido</h4>
@@ -273,7 +259,7 @@
                         <div class="rounded-2xl border border-[#26352d] bg-[#1b211d] p-4">
                             <div class="flex items-start gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-200/10 text-gray-300">
-                                    
+                                    <i class="bi bi-fire text-lg"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-white">Racha de 7 días</h4>
@@ -295,7 +281,7 @@
                         <div class="flex items-center justify-between rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3">
                             <div class="flex items-center gap-4">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-400/15 text-red-400">
-                                    ↓
+                                    <i class="bi bi-arrow-down text-lg"></i>
                                 </div>
                                 <div>
                                     <p class="font-medium">Supermercado</p>
@@ -311,7 +297,7 @@
                         <div class="flex items-center justify-between rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3">
                             <div class="flex items-center gap-4">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#72f59a]/15 text-[#72f59a]">
-                                    ↑
+                                    <i class="bi bi-arrow-up text-lg"></i>
                                 </div>
                                 <div>
                                     <p class="font-medium">Nómina</p>
@@ -327,7 +313,7 @@
                         <div class="flex items-center justify-between rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3">
                             <div class="flex items-center gap-4">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-400/15 text-red-400">
-                                    ↓
+                                    <i class="bi bi-arrow-down text-lg"></i>
                                 </div>
                                 <div>
                                     <p class="font-medium">Gasolina</p>
@@ -343,7 +329,7 @@
                         <div class="flex items-center justify-between rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3">
                             <div class="flex items-center gap-4">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-400/15 text-red-400">
-                                    ↓
+                                    <i class="bi bi-arrow-down text-lg"></i>
                                 </div>
                                 <div>
                                     <p class="font-medium">Netflix</p>

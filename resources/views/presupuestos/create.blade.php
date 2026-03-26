@@ -7,10 +7,6 @@
                     <h2 class="text-3xl font-bold tracking-tight text-white">Crear Presupuesto</h2>
                     <p class="mt-1 text-sm text-gray-400">Configura tu presupuesto mensual</p>
                 </div>
-
-                <a href="{{ route('presupuestos.index') }}" class="budget-btn-secondary">
-                    Volver
-                </a>
             </div>
 
             @include('presupuestos.partials.form', [
