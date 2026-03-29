@@ -44,6 +44,8 @@ class CalendarioService
 
         $balancePrevisto = $ingresosPrevistos - $gastosPrevistos;
 
+        $hayDatos = $transacciones->isNotEmpty() || $facturas->isNotEmpty();
+
         return [
             'fecha' => $fecha,
             'dias' => $dias,
@@ -51,7 +53,8 @@ class CalendarioService
             'ingresosPrevistos' => $ingresosPrevistos,
             'gastosPrevistos' => $gastosPrevistos,
             'balancePrevisto' => $balancePrevisto,
-            'consejo' => CalendarioHelper::obtenerConsejoFinanciero($balancePrevisto),
+            'hayDatos' => $hayDatos,
+            'consejo' => CalendarioHelper::obtenerConsejoFinanciero($balancePrevisto, $hayDatos),
         ];
     }
 

@@ -18,8 +18,12 @@ class CalendarioHelper
         return ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
     }
 
-    public static function obtenerConsejoFinanciero(float $balancePrevisto): string
+    public static function obtenerConsejoFinanciero(float $balancePrevisto, bool $hayDatos): string
     {
+        if (!$hayDatos) {
+            return 'No hay datos suficientes para generar una previsión financiera. Comienza registrando tus ingresos, gastos o facturas.';
+        }
+
         if ($balancePrevisto > 0) {
             return 'Este mes vas por buen camino. Aprovecha el saldo positivo para reforzar tu ahorro o adelantar pagos importantes.';
         }

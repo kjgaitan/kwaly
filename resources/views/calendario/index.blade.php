@@ -109,20 +109,27 @@
                 </div>
             </div>
 
-            <div class="mt-4 rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4 shadow-[0_0_18px_rgba(114,245,154,0.05)]">
-                <div class="flex items-start gap-4">
-                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/10 text-lg font-bold text-green-400">
-                        !
-                    </div>
-
-                    <div>
-                        <h4 class="text-base font-semibold text-white">Consejo Financiero</h4>
-                        <p class="mt-1 text-sm text-gray-400">
-                            {{ $consejo }}
-                        </p>
-                    </div>
-                </div>
+      <div class="mt-4 rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4 shadow-[0_0_18px_rgba(114,245,154,0.05)]">
+        <div class="flex items-start gap-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold
+                @if(!$hayDatos)
+                    border border-yellow-500/30 bg-yellow-500/10 text-yellow-400
+                @elseif($balancePrevisto < 0)
+                    border border-red-500/30 bg-red-500/10 text-red-400
+                @else
+                    border border-green-500/30 bg-green-500/10 text-green-400
+                @endif">
+                !
             </div>
+
+            <div>
+                <h4 class="text-base font-semibold text-white">Consejo Financiero</h4>
+                <p class="mt-1 text-sm text-gray-400">
+                    {{ $consejo }}
+                </p>
+            </div>
+        </div>
+    </div>
 
         </div>
     </div>
