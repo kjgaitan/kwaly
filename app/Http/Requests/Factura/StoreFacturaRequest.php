@@ -6,42 +6,45 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFacturaRequest extends FormRequest
 {
-    /**
-     * Determina si el usuario está autorizado para realizar esta petición.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Reglas de validación para crear una factura.
-     */
     public function rules(): array
     {
         return [
-            'titulo' => 'required|string|max:150',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:0',
-            'fecha_emision' => 'required|date',
-            'estado' => 'nullable|string|max:50',
+            'proveedor' => 'required|string|max:150',
+            'concepto' => 'required|string|max:150',
+            'descripcion' => 'nullable|string|max:1000',
+            'monto_total' => 'required|numeric|min:0.01|max:999999.99',
+            'fecha_vencimiento' => 'required|date',
+            'estado' => 'nullable|in:pendiente,pagado',
+            'frecuencia' => 'nullable|in:unico,recurrente',
         ];
     }
 
-    /**
-     * Mensajes personalizados de validación.
-     */
     public function messages(): array
     {
         return [
-            'titulo.required' => 'El título de la factura es obligatorio.',
-            'titulo.max' => 'El título no puede superar los 150 caracteres.',
-            'monto.required' => 'El monto es obligatorio.',
-            'monto.numeric' => 'El monto debe ser un número válido.',
-            'monto.min' => 'El monto no puede ser negativo.',
-            'fecha_emision.required' => 'La fecha de emisión es obligatoria.',
-            'fecha_emision.date' => 'La fecha de emisión no es válida.',
-            'estado.max' => 'El estado no puede superar los 50 caracteres.',
+            'proveedor.required' => 'El proveedor es obligatorio.',
+            'proveedor.max' => 'El proveedor no puede superar los 150 caracteres.',
+
+            'concepto.required' => 'El concepto es obligatorio.',
+            'concepto.max' => 'El concepto no puede superar los 150 caracteres.',
+
+            'descripcion.max' => 'La descripción no puede superar los 1000 caracteres.',
+
+            'monto_total.required' => 'El monto total es obligatorio.',
+            'monto_total.numeric' => 'El monto total debe ser numérico.',
+            'monto_total.min' => 'El monto total debe ser mayor que 0.',
+            'monto_total.max' => 'El monto total es demasiado alto.',
+
+            'fecha_vencimiento.required' => 'La fecha de vencimiento es obligatoria.',
+            'fecha_vencimiento.date' => 'La fecha de vencimiento no es válida.',
+
+            'estado.in' => 'El estado seleccionado no es válido.',
+            'frecuencia.in' => 'La frecuencia seleccionada no es válida.',
         ];
     }
 }

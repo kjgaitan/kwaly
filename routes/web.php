@@ -54,6 +54,9 @@ Route::middleware(['auth'])->group(function () {
     // Facturas
     Route::resource('facturas', FacturaController::class);
 
+    Route::patch('/facturas/{id}/pagar', [FacturaController::class, 'marcarPagada'])
+    ->name('facturas.pagar');
+
     // Asistente financiero
     Route::get('/asistente', [AsistenteController::class, 'index'])->name('asistente.index');
 

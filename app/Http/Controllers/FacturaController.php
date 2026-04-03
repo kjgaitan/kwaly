@@ -8,12 +8,6 @@ use App\Http\Requests\Factura\UpdateFacturaRequest;
 use App\Models\Factura;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Controlador encargado de gestionar las facturas del usuario.
- *
- * Permite crear, visualizar, editar y eliminar facturas
- * asociadas al usuario autenticado.
- */
 class FacturaController extends Controller
 {
     /**
@@ -22,10 +16,50 @@ class FacturaController extends Controller
     public function index()
     {
         $facturas = Factura::where('id_usuario', Auth::user()->id_usuario)
-            ->orderByDesc('fecha_emision')
+            ->orderBy('fecha_vencimiento', 'asc')
             ->get();
 
-        return view('facturas.index', compact('facturas'));
+        $hoy = now()->toDateString();
+
+        foreach ($facturas as $factura) {
+            if ($factura->estado !== 'pagado' && $factura->fecha_vencimiento < $hoy) {
+                $factura->estado_visual = 'vencido';
+            } else {
+                $factura->estado_visual = $factura->estado;
+            }
+        }
+
+        $facturasPendientes = $facturas->filter(function ($factura) {
+            return $factura->estado_visual === 'pendiente' || $factura->estado_visual === 'vencido';
+        });
+
+        $facturasPagadas = $facturas->filter(function ($factura) {
+            return $factura->estado_visual === 'pagado';
+        });
+
+        $totalPendiente = $facturasPendientes->sum('monto_total');
+        $cantidadPendientes = $facturasPendientes->count();
+
+        $totalPagado = $facturasPagadas->sum('monto_total');
+        $cantidadPagadas = $facturasPagadas->count();
+
+        $totalGeneral = $facturas->sum('monto_total');
+        $cantidadTotal = $facturas->count();
+
+        $porcentajePagado = $totalGeneral > 0
+            ? round(($totalPagado / $totalGeneral) * 100, 1)
+            : 0;
+
+        return view('facturas.index', compact(
+            'facturas',
+            'totalPendiente',
+            'cantidadPendientes',
+            'totalPagado',
+            'cantidadPagadas',
+            'totalGeneral',
+            'cantidadTotal',
+            'porcentajePagado'
+        ));
     }
 
     /**
@@ -43,11 +77,14 @@ class FacturaController extends Controller
     {
         Factura::create([
             'id_usuario' => Auth::user()->id_usuario,
-            'titulo' => $request->titulo,
+            'proveedor' => $request->proveedor,
+            'concepto' => $request->concepto,
             'descripcion' => $request->descripcion,
-            'monto' => $request->monto,
-            'fecha_emision' => $request->fecha_emision,
+            'monto_total' => $request->monto_total,
+            'fecha_vencimiento' => $request->fecha_vencimiento,
+            'fecha_pago' => $request->estado === 'pagado' ? now()->toDateString() : null,
             'estado' => $request->estado ?? 'pendiente',
+            'frecuencia' => $request->frecuencia ?? 'unico',
         ]);
 
         return redirect()
@@ -82,17 +119,44 @@ class FacturaController extends Controller
     {
         $factura = $this->obtenerFacturaUsuario($id);
 
-        $factura->update([
-            'titulo' => $request->titulo,
+        $datosActualizar = [
+            'proveedor' => $request->proveedor,
+            'concepto' => $request->concepto,
             'descripcion' => $request->descripcion,
-            'monto' => $request->monto,
-            'fecha_emision' => $request->fecha_emision,
+            'monto_total' => $request->monto_total,
+            'fecha_vencimiento' => $request->fecha_vencimiento,
             'estado' => $request->estado ?? 'pendiente',
-        ]);
+            'frecuencia' => $request->frecuencia ?? 'unico',
+        ];
+
+        if (($request->estado ?? 'pendiente') === 'pagado') {
+            $datosActualizar['fecha_pago'] = now()->toDateString();
+        } else {
+            $datosActualizar['fecha_pago'] = null;
+        }
+
+        $factura->update($datosActualizar);
 
         return redirect()
             ->route('facturas.index')
             ->with('success', MensajeHelper::actualizado('Factura'));
+    }
+
+    /**
+     * Marca una factura como pagada.
+     */
+    public function marcarPagada(string $id)
+    {
+        $factura = $this->obtenerFacturaUsuario($id);
+
+        $factura->update([
+            'estado' => 'pagado',
+            'fecha_pago' => now()->toDateString(),
+        ]);
+
+        return redirect()
+            ->route('facturas.index')
+            ->with('success', 'Factura marcada como pagada correctamente.');
     }
 
     /**
@@ -110,7 +174,7 @@ class FacturaController extends Controller
     }
 
     /**
-     * Obtiene una factura perteneciente al usuario autenticado.
+     * Obtiene una factura del usuario autenticado.
      */
     private function obtenerFacturaUsuario(string $id): Factura
     {
