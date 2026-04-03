@@ -9,6 +9,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\EducacionController;
+use App\Http\Controllers\LeccionEducativaController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CompartidoController;
@@ -62,6 +63,31 @@ Route::middleware(['auth'])->group(function () {
 
     // Educación financiera
     Route::get('/educacion', [EducacionController::class, 'index'])->name('educacion.index');
+
+    Route::post('/educacion/completar/{id}', [EducacionController::class, 'completar'])
+    ->name('educacion.completar');
+
+    Route::resource('modulos-educativos', ModuloEducativoController::class)
+    ->except(['show']);
+
+      // Leccion Educativa
+    Route::get('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'index'])
+    ->name('modulos-educativos.lecciones.index');
+
+    Route::get('/modulos-educativos/{modulo}/lecciones/create', [LeccionEducativaController::class, 'create'])
+        ->name('modulos-educativos.lecciones.create');
+
+    Route::post('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'store'])
+        ->name('modulos-educativos.lecciones.store');
+
+    Route::get('/modulos-educativos/{modulo}/lecciones/{leccion}/edit', [LeccionEducativaController::class, 'edit'])
+        ->name('modulos-educativos.lecciones.edit');
+
+    Route::put('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'update'])
+        ->name('modulos-educativos.lecciones.update');
+
+    Route::delete('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'destroy'])
+        ->name('modulos-educativos.lecciones.destroy');
 
     // Calendario financiero
     Route::get('/calendario', [CalendarioController::class, 'index'])->name('calendario.index');
