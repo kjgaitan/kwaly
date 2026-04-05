@@ -1,6 +1,7 @@
 @import './components/calendario.css';
 @import './components/presupuestos.css';
 @import './components/reportes.css';
+@import './components/metas.css';
 
 @tailwind base;
 @tailwind components;

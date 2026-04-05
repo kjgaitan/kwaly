@@ -6,42 +6,49 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreMetaFinancieraRequest extends FormRequest
 {
-    /**
-     * Determina si el usuario está autorizado para realizar esta petición.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Reglas de validación para crear una meta financiera.
-     */
     public function rules(): array
     {
         return [
-            'nombre_meta' => 'required|string|max:150',
-            'monto_objetivo' => 'required|numeric|min:0',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'nullable|date|after_or_equal:fecha_inicio',
+            'titulo' => ['required', 'string', 'max:150'],
+            'descripcion' => ['nullable', 'string'],
+            'monto_objetivo' => ['required', 'numeric', 'min:0.01'],
+            'monto_actual' => ['nullable', 'numeric', 'min:0'],
+            'fecha_inicio' => ['required', 'date'],
+            'fecha_limite' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
+            'prioridad' => ['required', 'in:baja,media,alta'],
+            'estado' => ['required', 'in:activa,completada,pausada'],
         ];
     }
 
-    /**
-     * Mensajes personalizados de validación.
-     */
     public function messages(): array
     {
         return [
-            'nombre_meta.required' => 'El nombre de la meta es obligatorio.',
-            'nombre_meta.max' => 'El nombre de la meta no puede superar los 150 caracteres.',
+            'titulo.required' => 'El título de la meta es obligatorio.',
+            'titulo.max' => 'El título no puede superar los 150 caracteres.',
+
             'monto_objetivo.required' => 'El monto objetivo es obligatorio.',
             'monto_objetivo.numeric' => 'El monto objetivo debe ser un número válido.',
-            'monto_objetivo.min' => 'El monto objetivo no puede ser negativo.',
+            'monto_objetivo.min' => 'El monto objetivo debe ser mayor que 0.',
+
+            'monto_actual.numeric' => 'El monto actual debe ser un número válido.',
+            'monto_actual.min' => 'El monto actual no puede ser negativo.',
+
             'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
             'fecha_inicio.date' => 'La fecha de inicio no es válida.',
-            'fecha_fin.date' => 'La fecha de fin no es válida.',
-            'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser anterior a la fecha de inicio.',
+
+            'fecha_limite.date' => 'La fecha límite no es válida.',
+            'fecha_limite.after_or_equal' => 'La fecha límite no puede ser anterior a la fecha de inicio.',
+
+            'prioridad.required' => 'La prioridad es obligatoria.',
+            'prioridad.in' => 'La prioridad seleccionada no es válida.',
+
+            'estado.required' => 'El estado es obligatorio.',
+            'estado.in' => 'El estado seleccionado no es válido.',
         ];
     }
 }
