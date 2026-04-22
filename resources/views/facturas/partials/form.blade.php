@@ -8,7 +8,7 @@
             name="proveedor"
             value="{{ old('proveedor', $factura->proveedor ?? '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
-            placeholder="Ej. Endesa"
+            placeholder="Endesa"
             required
         >
         @error('proveedor')
@@ -24,7 +24,7 @@
             name="concepto"
             value="{{ old('concepto', $factura->concepto ?? '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
-            placeholder="Ej. Electricidad"
+            placeholder="Electricidad"
             required
         >
         @error('concepto')
@@ -85,12 +85,19 @@
             id="estado"
             name="estado"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
+            required
         >
-            <option value="pendiente" {{ old('estado', $factura->estado ?? 'pendiente') === 'pendiente' ? 'selected' : '' }}>
+            <option value="" disabled {{ old('estado', $factura->estado ?? '') === '' ? 'selected' : '' }}>
+                Seleccione
+            </option>
+            <option value="pendiente" {{ old('estado', $factura->estado ?? '') === 'pendiente' ? 'selected' : '' }}>
                 Pendiente
             </option>
-            <option value="pagado" {{ old('estado', $factura->estado ?? '') === 'pagado' ? 'selected' : '' }}>
-                Pagado
+            <option value="pagada" {{ old('estado', $factura->estado ?? '') === 'pagada' ? 'selected' : '' }}>
+                Pagada
+            </option>
+            <option value="vencida" {{ old('estado', $factura->estado ?? '') === 'vencida' ? 'selected' : '' }}>
+                Vencida
             </option>
         </select>
         @error('estado')
@@ -104,21 +111,25 @@
             id="frecuencia"
             name="frecuencia"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
+            required
         >
-            <option value="unico" {{ old('frecuencia', $factura->frecuencia ?? 'unico') === 'unico' ? 'selected' : '' }}>
-                Único
+            <option value="" disabled {{ old('frecuencia', $factura->frecuencia ?? '') === '' ? 'selected' : '' }}>
+                Seleccione
             </option>
-            <option value="recurrente" {{ old('frecuencia', $factura->frecuencia ?? '') === 'recurrente' ? 'selected' : '' }}>
-                Recurrente
+            <option value="unica" {{ old('frecuencia', $factura->frecuencia ?? '') === 'unica' ? 'selected' : '' }}>
+                Única
+            </option>
+            <option value="mensual" {{ old('frecuencia', $factura->frecuencia ?? '') === 'mensual' ? 'selected' : '' }}>
+                Mensual
+            </option>
+            <option value="anual" {{ old('frecuencia', $factura->frecuencia ?? '') === 'anual' ? 'selected' : '' }}>
+                Anual
             </option>
         </select>
         @error('frecuencia')
             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
         @enderror
     </div>
-
-</div>
-
 <div class="mt-6 flex items-center gap-3">
     <button
         type="submit"

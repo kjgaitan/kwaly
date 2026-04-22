@@ -9,6 +9,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\EducacionController;
+use App\Http\Controllers\ModuloEducativoController;
 use App\Http\Controllers\LeccionEducativaController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ReporteController;
@@ -96,7 +97,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
     // Cuenta compartida
-    Route::get('/compartido', [CompartidoController::class, 'index'])->name('compartido.index');
+    Route::get('/compartido', [CompartidoController::class, 'index'])
+        ->name('compartido.index');
+
+    Route::post('/compartido/grupo', [CompartidoController::class, 'storeGrupo'])
+        ->name('compartido.grupo.store');
+
+    Route::put('/compartido/grupo/{id}', [CompartidoController::class, 'updateGrupo'])
+        ->name('compartido.grupo.update');
+
+    Route::post('/compartido/miembro', [CompartidoController::class, 'storeMiembro'])
+        ->name('compartido.miembro.store');
+
+    Route::put('/compartido/miembro/{id}', [CompartidoController::class, 'updateMiembro'])
+        ->name('compartido.miembro.update');
+
+    Route::post('/compartido/gasto', [CompartidoController::class, 'storeGasto'])
+        ->name('compartido.gasto.store');
+
+    Route::put('/compartido/gasto/{id}', [CompartidoController::class, 'updateGasto'])
+        ->name('compartido.gasto.update');
 
     // Configuración del usuario
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');

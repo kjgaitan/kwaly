@@ -2,6 +2,7 @@
 @import './components/presupuestos.css';
 @import './components/reportes.css';
 @import './components/metas.css';
+@import './components/compartido.css';
 
 @tailwind base;
 @tailwind components;

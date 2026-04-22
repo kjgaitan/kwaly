@@ -2,36 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Modelo que representa la participación de usuarios en grupos compartidos.
- */
 class GrupoMiembro extends Model
 {
-    use HasFactory;
-
-    /**
-     * Tabla asociada en la base de datos.
-     */
     protected $table = 'grupo_miembros';
-
-    /**
-     * Clave primaria de la tabla.
-     */
     protected $primaryKey = 'id_miembro';
-
-    /**
-     * No se usan timestamps automáticos.
-     */
     public $timestamps = false;
 
-    /**
-     * Campos asignables de forma masiva.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'id_grupo',
         'id_usuario',
@@ -39,11 +18,6 @@ class GrupoMiembro extends Model
         'fecha_union',
     ];
 
-    /**
-     * Conversión automática de tipos.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -52,17 +26,17 @@ class GrupoMiembro extends Model
     }
 
     /**
-     * Relación con el grupo compartido.
+     * Grupo al que pertenece el miembro.
      */
-    public function grupo()
+    public function grupo(): BelongsTo
     {
         return $this->belongsTo(GrupoCompartido::class, 'id_grupo', 'id_grupo');
     }
 
     /**
-     * Relación con el usuario miembro.
+     * Usuario miembro del grupo.
      */
-    public function usuario()
+    public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_usuario', 'id_usuario');
     }

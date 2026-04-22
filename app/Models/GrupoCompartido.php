@@ -2,36 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Modelo que representa grupos de gastos compartidos.
- */
 class GrupoCompartido extends Model
 {
-    use HasFactory;
-
-    /**
-     * Tabla asociada en la base de datos.
-     */
     protected $table = 'grupos_compartidos';
-
-    /**
-     * Clave primaria de la tabla.
-     */
     protected $primaryKey = 'id_grupo';
-
-    /**
-     * No se usan timestamps automáticos.
-     */
     public $timestamps = false;
 
-    /**
-     * Campos asignables de forma masiva.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'nombre_grupo',
         'descripcion',
@@ -39,11 +19,6 @@ class GrupoCompartido extends Model
         'fecha_creacion',
     ];
 
-    /**
-     * Conversión automática de tipos.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -52,25 +27,25 @@ class GrupoCompartido extends Model
     }
 
     /**
-     * Relación con el usuario creador del grupo.
+     * Usuario creador del grupo.
      */
-    public function creador()
+    public function creador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creado_por', 'id_usuario');
     }
 
     /**
-     * Relación con los miembros del grupo.
+     * Miembros del grupo.
      */
-    public function miembros()
+    public function miembros(): HasMany
     {
         return $this->hasMany(GrupoMiembro::class, 'id_grupo', 'id_grupo');
     }
 
     /**
-     * Relación con los gastos compartidos del grupo.
+     * Gastos compartidos del grupo.
      */
-    public function gastos()
+    public function gastos(): HasMany
     {
         return $this->hasMany(GastoCompartido::class, 'id_grupo', 'id_grupo');
     }

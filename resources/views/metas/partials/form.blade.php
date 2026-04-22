@@ -12,7 +12,7 @@
                name="titulo"
                id="titulo"
                value="{{ old('titulo', $metaActual->titulo ?? '') }}"
-               placeholder="Ej: Fondo de emergencia"
+               placeholder="Fondo de emergencia"
                class="metas-input">
     </div>
 

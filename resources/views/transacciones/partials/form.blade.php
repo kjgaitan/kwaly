@@ -8,7 +8,7 @@
             name="titulo"
             value="{{ old('titulo', $transaccion->titulo ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a]"
-            placeholder="Ej. Supermercado"
+            placeholder="Supermercado"
         >
     </div>
 
@@ -96,7 +96,7 @@
             name="metodo_pago"
             value="{{ old('metodo_pago', $transaccion->metodo_pago ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a]"
-            placeholder="Ej. Tarjeta, efectivo..."
+            placeholder="Tarjeta, efectivo..."
         >
     </div>
 
