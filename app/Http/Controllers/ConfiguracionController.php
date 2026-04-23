@@ -2,45 +2,160 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\MensajeHelper;
-use App\Http\Requests\Configuracion\UpdateConfiguracionRequest;
-use App\Models\ConfiguracionUsuario;
+use App\Http\Requests\Configuracion\DeleteAccountRequest;
+use App\Http\Requests\Configuracion\UpdateMonedaRequest;
+use App\Http\Requests\Configuracion\UpdateNotificacionesRequest;
+use App\Http\Requests\Configuracion\UpdatePasswordRequest;
+use App\Http\Requests\Configuracion\UpdatePerfilRequest;
+use App\Services\ConfiguracionService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 /**
- * Controlador encargado de gestionar la configuración del usuario.
+ * Controlador encargado de la configuración del usuario.
  */
 class ConfiguracionController extends Controller
 {
     /**
-     * Muestra la configuración del usuario autenticado.
+     * Constructor del controlador.
      */
-    public function index()
-    {
-        $configuracion = ConfiguracionUsuario::where('id_usuario', Auth::user()->id_usuario)
-            ->first();
-
-        return view('configuracion.index', compact('configuracion'));
+    public function __construct(
+        protected ConfiguracionService $configuracionService
+    ) {
     }
 
     /**
-     * Actualiza la configuración del usuario.
+     * Muestra la vista principal de configuración.
      */
-    public function update(UpdateConfiguracionRequest $request)
+    public function index(): View
     {
-        $configuracion = ConfiguracionUsuario::firstOrCreate([
-            'id_usuario' => Auth::user()->id_usuario,
-        ]);
+        $usuario = Auth::user();
+        $configuracion = $this->configuracionService->obtenerConfiguracion($usuario->id_usuario);
 
-        $configuracion->update([
-            'tema' => $request->tema,
-            'notificaciones_email' => $request->notificaciones_email ?? false,
-            'notificaciones_push' => $request->notificaciones_push ?? false,
-            'moneda_preferida' => $request->moneda_preferida ?? 'EUR',
-        ]);
+        $monedas = [
+            'EUR' => 'EUR - Euro',
+            'USD' => 'USD - Dólar estadounidense',
+            'NIO' => 'NIO - Córdoba nicaragüense',
+        ];
+
+        return view('configuracion.index', compact(
+            'usuario',
+            'configuracion',
+            'monedas'
+        ));
+    }
+
+    /**
+     * Actualiza los datos del perfil.
+     */
+    public function updatePerfil(UpdatePerfilRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+
+        $this->configuracionService->actualizarPerfil($usuario, $request->validated());
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', MensajeHelper::actualizado('Configuración'));
+            ->with('success', 'Perfil actualizado correctamente.');
+    }
+
+    /**
+     * Actualiza la moneda principal del usuario.
+     */
+    public function updateMoneda(UpdateMonedaRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+
+        $this->configuracionService->actualizarMoneda($usuario, $request->validated());
+
+        return redirect()
+            ->route('configuracion.index')
+            ->with('success', 'Moneda actualizada correctamente.');
+    }
+
+    /**
+     * Actualiza únicamente las notificaciones.
+     */
+    public function updateNotificaciones(UpdateNotificacionesRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+        $configuracion = $this->configuracionService->obtenerConfiguracion($usuario->id_usuario);
+
+        $this->configuracionService->actualizarNotificaciones($configuracion, $request->validated());
+
+        return redirect()
+            ->route('configuracion.index')
+            ->with('success', 'Notificaciones actualizadas correctamente.');
+    }
+
+    /**
+     * Actualiza únicamente la configuración de autenticación 2FA.
+     */
+    public function updateSeguridad(UpdateNotificacionesRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+        $configuracion = $this->configuracionService->obtenerConfiguracion($usuario->id_usuario);
+
+        $this->configuracionService->actualizarSeguridad($configuracion, $request->validated());
+
+        return redirect()
+            ->route('configuracion.index')
+            ->with('success', 'Seguridad actualizada correctamente.');
+    }
+
+    /**
+     * Actualiza la contraseña del usuario autenticado.
+     */
+    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+
+        $this->configuracionService->actualizarPassword($usuario, $request->validated());
+
+        return redirect()
+            ->route('configuracion.index')
+            ->with('success', 'Contraseña actualizada correctamente.');
+    }
+
+    /**
+     * Exporta los datos del usuario autenticado en formato JSON.
+     */
+    public function exportarDatos(): Response
+    {
+        $usuario = Auth::user();
+        $datos = $this->configuracionService->obtenerDatosExportacion($usuario);
+
+        $nombreArchivo = 'kwaly-datos-usuario-' . $usuario->id_usuario . '.json';
+
+        return response(
+            json_encode($datos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            200,
+            [
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'Content-Disposition' => 'attachment; filename="' . $nombreArchivo . '"',
+            ]
+        );
+    }
+
+    /**
+     * Elimina la cuenta del usuario autenticado.
+     */
+    public function destroyCuenta(DeleteAccountRequest $request): RedirectResponse
+    {
+        $usuario = Auth::user();
+
+        $this->configuracionService->eliminarCuentaUsuario(
+            $usuario,
+            $request->validated()['password_confirmacion']
+        );
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')
+            ->with('success', 'Tu cuenta ha sido eliminada correctamente.');
     }
 }

@@ -64,14 +64,14 @@
             <i class="bi bi-people text-base"></i>
             <span>Compartido</span>
         </a>
-{{--
+
         <a href="{{ route('configuracion.index') }}"
            class="flex items-center gap-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('configuracion.*') ? 'bg-green-500/20 text-green-400 border border-green-500/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
             <i class="bi bi-gear text-base"></i>
             <span>Configuración</span>
         </a>
     </nav>
---}}
+
     <div class="px-4 py-4 border-t border-white/5">
         <form method="POST" action="{{ route('logout') }}">
             @csrf

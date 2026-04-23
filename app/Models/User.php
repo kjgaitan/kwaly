@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -41,7 +39,6 @@ class User extends Authenticatable
         'password_hash',
         'telefono',
         'moneda_preferida',
-        'idioma_preferido',
         'estado_cuenta',
         'fecha_registro',
         'ultimo_acceso',
@@ -131,6 +128,14 @@ class User extends Authenticatable
     public function metas()
     {
         return $this->hasMany(MetaFinanciera::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Relación con el progreso de lecciones del usuario.
+     */
+    public function progresosLecciones()
+    {
+        return $this->hasMany(ProgresoLeccion::class, 'id_usuario', 'id_usuario');
     }
 
     /**

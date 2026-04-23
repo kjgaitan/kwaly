@@ -118,9 +118,16 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/compartido/gasto/{id}', [CompartidoController::class, 'updateGasto'])
         ->name('compartido.gasto.update');
 
-    // Configuración del usuario
+    // Configuración 
+
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
-    Route::post('/configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+    Route::put('/configuracion/perfil', [ConfiguracionController::class, 'updatePerfil'])->name('configuracion.perfil.update');
+    Route::put('/configuracion/moneda', [ConfiguracionController::class, 'updateMoneda'])->name('configuracion.moneda.update');
+    Route::put('/configuracion/notificaciones', [ConfiguracionController::class, 'updateNotificaciones'])->name('configuracion.notificaciones.update');
+    Route::put('/configuracion/seguridad', [ConfiguracionController::class, 'updateSeguridad'])->name('configuracion.seguridad.update');
+    Route::put('/configuracion/password', [ConfiguracionController::class, 'updatePassword'])->name('configuracion.password.update');
+    Route::get('/configuracion/exportar-datos', [ConfiguracionController::class, 'exportarDatos'])->name('configuracion.exportar');
+    Route::delete('/configuracion/eliminar-cuenta', [ConfiguracionController::class, 'destroyCuenta'])->name('configuracion.destroy');
 });
 
 // Rutas de autenticación

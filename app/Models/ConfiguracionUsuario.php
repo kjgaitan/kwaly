@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Modelo que representa la configuración personalizada del usuario.
+ * Modelo que representa la configuración personalizada de un usuario.
  */
 class ConfiguracionUsuario extends Model
 {
-    use HasFactory;
-
     /**
-     * Tabla asociada en la base de datos.
+     * Nombre de la tabla asociada.
      */
     protected $table = 'configuracion_usuario';
 
@@ -23,14 +21,12 @@ class ConfiguracionUsuario extends Model
     protected $primaryKey = 'id_configuracion';
 
     /**
-     * No se usan timestamps automáticos.
+     * Laravel no gestionará timestamps automáticos.
      */
     public $timestamps = false;
 
     /**
      * Campos asignables de forma masiva.
-     *
-     * @var list<string>
      */
     protected $fillable = [
         'id_usuario',
@@ -42,25 +38,20 @@ class ConfiguracionUsuario extends Model
     ];
 
     /**
-     * Conversión automática de tipos.
-     *
-     * @return array<string, string>
+     * Conversión de tipos.
      */
-    protected function casts(): array
-    {
-        return [
-            'notificacion_email' => 'boolean',
-            'notificacion_push' => 'boolean',
-            'alerta_presupuesto' => 'boolean',
-            'recordatorio_pagos' => 'boolean',
-            'autenticacion_2fa' => 'boolean',
-        ];
-    }
+    protected $casts = [
+        'notificacion_email' => 'boolean',
+        'notificacion_push' => 'boolean',
+        'alerta_presupuesto' => 'boolean',
+        'recordatorio_pagos' => 'boolean',
+        'autenticacion_2fa' => 'boolean',
+    ];
 
     /**
      * Relación con el usuario.
      */
-    public function usuario()
+    public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_usuario', 'id_usuario');
     }

@@ -1,0 +1,275 @@
+.config-wrapper {
+    min-height: 100vh;
+    background: #060b08;
+    padding: 24px 16px 40px;
+}
+
+.config-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.config-header {
+    margin-bottom: 20px;
+}
+
+.config-header h1 {
+    margin: 0 0 4px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.config-header p {
+    margin: 0;
+    color: #8b938f;
+    font-size: 0.95rem;
+}
+
+.config-alert-success {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border: 1px solid rgba(114, 245, 154, 0.25);
+    background: rgba(114, 245, 154, 0.10);
+    color: #b8f7cc;
+    border-radius: 16px;
+}
+
+.config-card {
+    background: linear-gradient(180deg, #1a1a1a 0%, #181818 100%);
+    border: 1px solid #26352d;
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow:
+        0 0 0 1px rgba(114, 245, 154, 0.02),
+        0 0 20px rgba(43, 255, 117, 0.08);
+}
+
+.config-card.danger {
+    border-color: rgba(255, 90, 90, 0.25);
+    box-shadow:
+        0 0 0 1px rgba(255, 90, 90, 0.02),
+        0 0 20px rgba(255, 90, 90, 0.06);
+}
+
+.config-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.config-card-title h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.config-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.config-icon.green {
+    background: rgba(114, 245, 154, 0.12);
+    color: #72f59a;
+}
+
+.config-icon.blue {
+    background: rgba(91, 159, 255, 0.12);
+    color: #69a7ff;
+}
+
+.config-icon.purple {
+    background: rgba(170, 116, 255, 0.12);
+    color: #b17cff;
+}
+
+.config-icon.red {
+    background: rgba(255, 99, 99, 0.12);
+    color: #ff7a7a;
+}
+
+.config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.config-password-form {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #26352d;
+}
+
+.config-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.config-form-group label {
+    font-size: 0.85rem;
+    color: #d8d8d8;
+    font-weight: 500;
+}
+
+.config-form-group input,
+.config-form-group select {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 14px;
+    border: 1px solid #2d2d2d;
+    background: #222222;
+    color: #ffffff;
+    padding: 0 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.config-form-group input:focus,
+.config-form-group select:focus {
+    border-color: rgba(114, 245, 154, 0.45);
+    box-shadow: 0 0 0 3px rgba(114, 245, 154, 0.10);
+}
+
+.config-btn-primary {
+    align-self: flex-start;
+    margin-top: 4px;
+    background: #72f59a;
+    color: #0f1512;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.config-btn-primary:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.config-btn-outline-btn {
+    align-self: flex-start;
+    margin-top: 4px;
+    border: 1px solid rgba(114, 245, 154, 0.28);
+    color: #72f59a;
+    background: transparent;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.config-btn-outline-btn:hover {
+    background: rgba(114, 245, 154, 0.08);
+}
+
+.config-switch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.config-switch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #222222;
+    border: 1px solid #2d2d2d;
+}
+
+.config-switch-item span {
+    display: block;
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.config-switch-item small {
+    color: #8d9490;
+    font-size: 0.78rem;
+}
+
+.config-switch-item input[type="checkbox"] {
+    width: 44px;
+    height: 22px;
+    accent-color: #72f59a;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.config-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.config-btn-danger-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: 0.2s ease;
+    border: 1px solid rgba(255, 108, 108, 0.30);
+    color: #ff7d7d;
+    background: transparent;
+}
+
+.config-btn-danger-outline:hover {
+    background: rgba(255, 108, 108, 0.08);
+}
+
+.config-btn-danger-outline-btn {
+    align-self: flex-start;
+    margin-top: 4px;
+    border: 1px solid rgba(255, 108, 108, 0.30);
+    color: #ff7d7d;
+    background: transparent;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.config-btn-danger-outline-btn:hover {
+    background: rgba(255, 108, 108, 0.08);
+}
+
+.config-error {
+    color: #ff8d8d;
+    font-size: 0.78rem;
+    margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+    .config-card {
+        padding: 18px;
+    }
+
+    .config-switch-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
