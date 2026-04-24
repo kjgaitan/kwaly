@@ -3,8 +3,8 @@
         <div class="config-container">
 
             <div class="config-header">
-                <h1>Configuración</h1>
-                <p>Personaliza tu experiencia en KWALY</p>
+                <h1>{{ __('configuracion.title') }}</h1>
+                <p>{{ __('configuracion.subtitle') }}</p>
             </div>
 
             @if(session('success'))

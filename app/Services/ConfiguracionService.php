@@ -82,7 +82,7 @@ class ConfiguracionService
     {
         if (!Hash::check($datos['password_actual'], $usuario->password_hash)) {
             throw ValidationException::withMessages([
-                'password_actual' => 'La contraseña actual no es correcta.',
+                'password_actual' => __('messages.configuracion.password_actual_incorrecta'),
             ]);
         }
 
@@ -145,7 +145,7 @@ class ConfiguracionService
     {
         if (!Hash::check($passwordConfirmacion, $usuario->password_hash)) {
             throw ValidationException::withMessages([
-                'password_confirmacion' => 'La contraseña no es correcta.',
+                'password_confirmacion' => __('messages.configuracion.password_confirmacion_incorrecta'),
             ]);
         }
 

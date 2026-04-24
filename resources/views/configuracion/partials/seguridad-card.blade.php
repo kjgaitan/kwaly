@@ -3,7 +3,7 @@
         <div class="config-icon green">
             <i class="bi bi-shield-lock"></i>
         </div>
-        <h2>Seguridad</h2>
+        <h2>{{ __('configuracion.seguridad.title') }}</h2>
     </div>
 
     <form action="{{ route('configuracion.seguridad.update') }}" method="POST" class="config-form">
@@ -13,15 +13,15 @@
         <div class="config-switch-list">
             <label class="config-switch-item">
                 <div>
-                    <span>Autenticación de dos factores</span>
-                    <small>Activa una capa extra de protección para tu cuenta.</small>
+                    <span>{{ __('configuracion.seguridad.2fa') }}</span>
+                    <small>{{ __('configuracion.seguridad.2fa_description') }}</small>
                 </div>
                 <input type="checkbox" name="autenticacion_2fa" value="1" {{ old('autenticacion_2fa', $configuracion->autenticacion_2fa) ? 'checked' : '' }}>
             </label>
         </div>
 
         <button type="submit" class="config-btn-primary">
-            Guardar seguridad
+            {{ __('configuracion.seguridad.guardar') }}
         </button>
     </form>
 
@@ -30,7 +30,7 @@
         @method('PUT')
 
         <div class="config-form-group">
-            <label for="password_actual">Contraseña actual</label>
+            <label for="password_actual">{{ __('configuracion.seguridad.password_actual') }}</label>
             <input type="password" id="password_actual" name="password_actual">
             @error('password_actual')
                 <small class="config-error">{{ $message }}</small>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="config-form-group">
-            <label for="password_nueva">Nueva contraseña</label>
+            <label for="password_nueva">{{ __('configuracion.seguridad.password_nueva') }}</label>
             <input type="password" id="password_nueva" name="password_nueva">
             @error('password_nueva')
                 <small class="config-error">{{ $message }}</small>
@@ -46,12 +46,12 @@
         </div>
 
         <div class="config-form-group">
-            <label for="password_nueva_confirmation">Confirmar nueva contraseña</label>
+            <label for="password_nueva_confirmation">{{ __('configuracion.seguridad.password_confirmacion') }}</label>
             <input type="password" id="password_nueva_confirmation" name="password_nueva_confirmation">
         </div>
 
         <button type="submit" class="config-btn-outline-btn">
-            Cambiar contraseña
+            {{ __('configuracion.seguridad.cambiar_password') }}
         </button>
     </form>
-</div>
+</div> 

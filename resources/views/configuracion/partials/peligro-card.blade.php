@@ -3,12 +3,12 @@
         <div class="config-icon red">
             <i class="bi bi-exclamation-triangle"></i>
         </div>
-        <h2>Zona de peligro</h2>
+        <h2>{{ __('configuracion.peligro.title') }}</h2>
     </div>
 
     <div class="config-actions">
         <a href="{{ route('configuracion.exportar') }}" class="config-btn-danger-outline">
-            Exportar todos los datos
+            {{ __('configuracion.peligro.exportar') }}
         </a>
     </div>
 
@@ -17,7 +17,7 @@
         @method('DELETE')
 
         <div class="config-form-group">
-            <label for="password_confirmacion">Confirma tu contraseña para eliminar la cuenta</label>
+            <label for="password_confirmacion">{{ __('configuracion.peligro.confirmar_password') }}</label>
             <input type="password" id="password_confirmacion" name="password_confirmacion">
             @error('password_confirmacion')
                 <small class="config-error">{{ $message }}</small>
@@ -25,7 +25,7 @@
         </div>
 
         <button type="submit" class="config-btn-danger-outline-btn">
-            Eliminar cuenta
+            {{ __('configuracion.peligro.eliminar') }}
         </button>
     </form>
 </div>

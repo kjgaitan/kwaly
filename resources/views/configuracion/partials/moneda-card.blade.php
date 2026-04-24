@@ -3,7 +3,7 @@
         <div class="config-icon blue">
             <i class="bi bi-currency-exchange"></i>
         </div>
-        <h2>Moneda</h2>
+        <h2>{{ __('configuracion.moneda.title') }}</h2>
     </div>
 
     <form action="{{ route('configuracion.moneda.update') }}" method="POST" class="config-form">
@@ -11,7 +11,7 @@
         @method('PUT')
 
         <div class="config-form-group">
-            <label for="moneda_preferida">Moneda principal</label>
+            <label for="moneda_preferida">{{ __('configuracion.moneda.principal') }}</label>
             <select id="moneda_preferida" name="moneda_preferida">
                 @foreach($monedas as $codigo => $nombre)
                     <option value="{{ $codigo }}" {{ old('moneda_preferida', $usuario->moneda_preferida ?? 'EUR') == $codigo ? 'selected' : '' }}>
@@ -25,7 +25,7 @@
         </div>
 
         <button type="submit" class="config-btn-primary">
-            Guardar moneda
+            {{ __('configuracion.moneda.guardar') }}
         </button>
     </form>
 </div>

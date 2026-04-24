@@ -58,7 +58,7 @@ class ConfiguracionController extends Controller
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', 'Perfil actualizado correctamente.');
+            ->with('success', __('messages.configuracion.perfil_actualizado'));
     }
 
     /**
@@ -72,7 +72,7 @@ class ConfiguracionController extends Controller
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', 'Moneda actualizada correctamente.');
+            ->with('success', __('messages.configuracion.moneda_actualizada'));
     }
 
     /**
@@ -87,7 +87,7 @@ class ConfiguracionController extends Controller
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', 'Notificaciones actualizadas correctamente.');
+            ->with('success', __('messages.configuracion.notificaciones_actualizadas'));
     }
 
     /**
@@ -102,7 +102,7 @@ class ConfiguracionController extends Controller
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', 'Seguridad actualizada correctamente.');
+            ->with('success', __('messages.configuracion.seguridad_actualizada'));
     }
 
     /**
@@ -116,7 +116,7 @@ class ConfiguracionController extends Controller
 
         return redirect()
             ->route('configuracion.index')
-            ->with('success', 'Contraseña actualizada correctamente.');
+            ->with('success', __('messages.configuracion.password_actualizada'));
     }
 
     /**
@@ -156,6 +156,6 @@ class ConfiguracionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/')
-            ->with('success', 'Tu cuenta ha sido eliminada correctamente.');
+            ->with('success', __('messages.configuracion.cuenta_eliminada'));
     }
-}
+} 
