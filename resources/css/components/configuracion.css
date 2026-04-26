@@ -158,6 +158,39 @@
     transform: translateY(-1px);
 }
 
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.profile-actions .config-btn-primary {
+    margin-top: 0;
+}
+
+.profile-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 14px;
+    border: 1px solid #2d2d2d;
+    background: #222222;
+    color: #d8d8d8;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.profile-btn-cancel:hover {
+    border-color: rgba(114, 245, 154, 0.28);
+    background: rgba(114, 245, 154, 0.08);
+    color: #ffffff;
+}
+
 .config-btn-outline-btn {
     align-self: flex-start;
     margin-top: 4px;

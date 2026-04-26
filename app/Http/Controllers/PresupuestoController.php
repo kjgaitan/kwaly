@@ -39,15 +39,10 @@ class PresupuestoController extends Controller
      */
     public function store(StorePresupuestoRequest $request)
     {
-        PresupuestoMensual::create([
-            'id_usuario' => Auth::user()->id_usuario,
-            'anio' => $request->anio,
-            'mes' => $request->mes,
-            'ingreso_estimado' => $request->ingreso_estimado,
-            'porcentaje_necesidades' => $request->porcentaje_necesidades ?? 50,
-            'porcentaje_deseos' => $request->porcentaje_deseos ?? 30,
-            'porcentaje_ahorro' => $request->porcentaje_ahorro ?? 20,
-        ]);
+        $datos = $request->validated();
+        $datos['id_usuario'] = Auth::user()->id_usuario;
+
+        PresupuestoMensual::create($datos);
 
         return redirect()
             ->route('presupuestos.index')
@@ -81,14 +76,7 @@ class PresupuestoController extends Controller
     {
         $presupuesto = $this->obtenerPresupuestoUsuario($id);
 
-        $presupuesto->update([
-            'anio' => $request->anio,
-            'mes' => $request->mes,
-            'ingreso_estimado' => $request->ingreso_estimado,
-            'porcentaje_necesidades' => $request->porcentaje_necesidades ?? 50,
-            'porcentaje_deseos' => $request->porcentaje_deseos ?? 30,
-            'porcentaje_ahorro' => $request->porcentaje_ahorro ?? 20,
-        ]);
+        $presupuesto->update($request->validated());
 
         return redirect()
             ->route('presupuestos.index')

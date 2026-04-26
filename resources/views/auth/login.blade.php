@@ -76,18 +76,8 @@
                         @enderror
                     </div>
 
-                    <!-- Remember + Forgot -->
-                    <div class="flex items-center justify-between text-[11px] pt-1">
-                        <label for="remember_me" class="flex items-center gap-2 text-gray-300">
-                            <input
-                                id="remember_me"
-                                type="checkbox"
-                                name="remember"
-                                class="rounded border-gray-600 bg-transparent text-green-500 focus:ring-green-400"
-                            >
-                            <span>{{ __('login.remember') }}</span>
-                        </label>
-
+                    <!-- Forgot -->
+                    <div class="flex justify-end text-[11px] pt-1">
                         @if (Route::has('password.request'))
                             <a href="{{ route('password.request') }}"
                                class="text-green-400 hover:text-green-300 transition">

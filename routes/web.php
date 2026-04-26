@@ -15,6 +15,7 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CompartidoController;
 use App\Http\Controllers\PresupuestoDetalleCategoriaController;
+use App\Http\Controllers\ProfileController;
 
 
 // Ruta principal
@@ -27,6 +28,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard principal
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Perfil de usuario
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     // Transacciones
     Route::resource('transacciones', TransaccionController::class);

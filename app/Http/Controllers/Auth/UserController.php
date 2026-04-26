@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -16,19 +17,22 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'username' => 'required|string|unique:users',
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|max:150|unique:usuarios,email',
+            'telefono' => 'nullable|string|max:20',
             'password' => 'required|confirmed|min:8',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
+            'nombre' => $request->nombre,
             'email' => $request->email,
-            'username' => $request->username,
-            'password' => bcrypt($request->password),
+            'password_hash' => Hash::make($request->password),
+            'telefono' => $request->telefono,
+            'moneda_preferida' => 'EUR',
+            'idioma_preferido' => 'es',
+            'estado_cuenta' => 'activo',
+            'fecha_registro' => now(),
+            'ultimo_acceso' => now(),
         ]);
 
         return redirect()->route('login');

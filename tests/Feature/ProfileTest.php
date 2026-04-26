@@ -10,55 +10,57 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_configuracion_page_is_displayed(): void
     {
         $user = User::factory()->create();
 
         $response = $this
             ->actingAs($user)
-            ->get('/profile');
+            ->get('/configuracion');
 
         $response->assertOk();
     }
 
-    public function test_profile_information_can_be_updated(): void
+    public function test_profile_information_can_be_updated_from_configuracion(): void
     {
         $user = User::factory()->create();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
+            ->put('/configuracion/perfil', [
+                'nombre' => 'Test User',
                 'email' => 'test@example.com',
+                'telefono' => '600123123',
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect(route('configuracion.index', absolute: false));
 
         $user->refresh();
 
-        $this->assertSame('Test User', $user->name);
+        $this->assertSame('Test User', $user->nombre);
         $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame('600123123', $user->telefono);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
+    public function test_profile_information_can_keep_the_same_email(): void
     {
         $user = User::factory()->create();
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
+            ->put('/configuracion/perfil', [
+                'nombre' => 'Test User',
                 'email' => $user->email,
+                'telefono' => null,
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect(route('configuracion.index', absolute: false));
 
-        $this->assertNotNull($user->refresh()->email_verified_at);
+        $this->assertSame($user->email, $user->refresh()->email);
     }
 
     public function test_user_can_delete_their_account(): void
@@ -67,8 +69,8 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
+            ->delete('/configuracion/eliminar-cuenta', [
+                'password_confirmacion' => 'password',
             ]);
 
         $response
@@ -85,14 +87,14 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
+            ->from('/configuracion')
+            ->delete('/configuracion/eliminar-cuenta', [
+                'password_confirmacion' => 'wrong-password',
             ]);
 
         $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
+            ->assertSessionHasErrors('password_confirmacion')
+            ->assertRedirect('/configuracion');
 
         $this->assertNotNull($user->fresh());
     }

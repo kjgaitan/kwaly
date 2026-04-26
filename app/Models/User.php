@@ -24,6 +24,16 @@ class User extends Authenticatable
     protected $primaryKey = 'id_usuario';
 
     /**
+     * Real password column in the usuarios table.
+     */
+    protected $authPasswordName = 'password_hash';
+
+    /**
+     * The usuarios table does not have a remember_token column.
+     */
+    protected $rememberTokenName = '';
+
+    /**
      * Laravel no gestionará timestamps automáticos.
      */
     public $timestamps = false;
@@ -39,6 +49,7 @@ class User extends Authenticatable
         'password_hash',
         'telefono',
         'moneda_preferida',
+        'idioma_preferido',
         'estado_cuenta',
         'fecha_registro',
         'ultimo_acceso',
@@ -72,6 +83,36 @@ class User extends Authenticatable
     public function getAuthPassword()
     {
         return $this->password_hash;
+    }
+
+    public function getIdAttribute()
+    {
+        return $this->id_usuario;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->nombre;
+    }
+
+    public function getPasswordAttribute()
+    {
+        return $this->password_hash;
+    }
+
+    public function hasVerifiedEmail()
+    {
+        return true;
+    }
+
+    public function markEmailAsVerified()
+    {
+        return true;
+    }
+
+    public function getEmailForVerification()
+    {
+        return $this->email;
     }
 
     /**

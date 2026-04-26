@@ -31,7 +31,8 @@
                 </button>
 
                 <!-- PERFIL -->
-                <div class="flex items-center gap-3 rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2">
+                <a href="{{ route('profile.edit') }}"
+                   class="flex items-center gap-3 rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2 transition hover:border-[#72f59a]/40 hover:bg-[#182019]">
                     <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#72f59a] font-bold text-black">
                         {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->nombre ?? 'U', 0, 1)) }}
                     </div>
@@ -41,7 +42,7 @@
                             {{ Auth::user()->name ?? Auth::user()->nombre ?? 'Usuario' }}
                         </p>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- CONTENIDO -->

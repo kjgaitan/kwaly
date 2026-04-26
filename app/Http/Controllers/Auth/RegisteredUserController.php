@@ -37,22 +37,23 @@ class RegisteredUserController extends Controller
     {
         // Validación de los datos enviados desde el formulario
         $request->validate([
-            'name' => ['required', 'string', 'max:100'],
+            'nombre' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:150', 'unique:usuarios,email'],
+            'telefono' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         // Creación del nuevo usuario en la tabla personalizada
         $user = User::create([
-            'nombre' => $request->name,
+            'nombre' => $request->nombre,
             'email' => $request->email,
             'password_hash' => Hash::make($request->password),
-            'telefono' => null,
+            'telefono' => $request->telefono,
             'moneda_preferida' => 'EUR',
             'idioma_preferido' => 'es',
             'estado_cuenta' => 'activo',
             'fecha_registro' => now(),
-            'ultimo_acceso' => null,
+            'ultimo_acceso' => now(),
         ]);
 
         event(new Registered($user));

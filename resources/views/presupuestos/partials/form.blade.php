@@ -11,11 +11,20 @@
             <i class="bi bi-exclamation-circle text-yellow-400 text-sm"></i>
         </div>
         <p class="leading-tight">
-            Si no rellenas los porcentajes, se usarán por defecto: 
-            50% necesidades, 30% deseos y 20% ahorro.
+            Para guardar, el presupuesto debe ser 50% necesidades, 30% deseos y 20% ahorro.
         </p>
     </div>
     
+    @error('porcentajes')
+        <div class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {{ $message }}
+        </div>
+    @enderror
+
+    <div id="budget-percent-warning" class="hidden rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
+        La distribucion no es correcta. Necesidades debe ser 50%, deseos 30% y ahorro 20%.
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Año -->
@@ -105,7 +114,7 @@
                 type="number"
                 step="0.01"
                 name="porcentaje_necesidades"
-                value="{{ old('porcentaje_necesidades', isset($presupuesto) ? $presupuesto->porcentaje_necesidades : '') }}"
+                value="{{ old('porcentaje_necesidades', isset($presupuesto) ? $presupuesto->porcentaje_necesidades : 50) }}"
                 placeholder="50"
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
@@ -122,7 +131,7 @@
                 type="number"
                 step="0.01"
                 name="porcentaje_deseos"
-                value="{{ old('porcentaje_deseos', isset($presupuesto) ? $presupuesto->porcentaje_deseos : '') }}"
+                value="{{ old('porcentaje_deseos', isset($presupuesto) ? $presupuesto->porcentaje_deseos : 30) }}"
                 placeholder="30"
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
@@ -139,7 +148,7 @@
                 type="number"
                 step="0.01"
                 name="porcentaje_ahorro"
-                value="{{ old('porcentaje_ahorro', isset($presupuesto) ? $presupuesto->porcentaje_ahorro : '') }}"
+                value="{{ old('porcentaje_ahorro', isset($presupuesto) ? $presupuesto->porcentaje_ahorro : 20) }}"
                 placeholder="20"
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
@@ -161,7 +170,8 @@
 
         <button
         type="submit"
-        class="px-6 py-2 rounded-lg bg-[#72f59a] hover:bg-[#5fe085] text-black font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+        id="budget-submit-button"
+        class="px-6 py-2 rounded-lg bg-[#72f59a] hover:bg-[#5fe085] text-black font-semibold transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
     >
         {{ $submitText }}
     </button>
@@ -183,6 +193,44 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('ingreso_estimado');
+        const warning = document.getElementById('budget-percent-warning');
+        const submitButton = document.getElementById('budget-submit-button');
+        const necesidades = document.querySelector('[name="porcentaje_necesidades"]');
+        const deseos = document.querySelector('[name="porcentaje_deseos"]');
+        const ahorro = document.querySelector('[name="porcentaje_ahorro"]');
+
+        function numeroCampo(campo) {
+            if (!campo || campo.value === '') {
+                return null;
+            }
+
+            const valor = Number.parseFloat(campo.value);
+
+            return Number.isNaN(valor) ? null : valor;
+        }
+
+        function actualizarAvisoPorcentajes() {
+            if (!warning) return;
+
+            const distribucionCorrecta =
+                numeroCampo(necesidades) === 50 &&
+                numeroCampo(deseos) === 30 &&
+                numeroCampo(ahorro) === 20;
+
+            warning.classList.toggle('hidden', distribucionCorrecta);
+
+            if (submitButton) {
+                submitButton.disabled = !distribucionCorrecta;
+            }
+        }
+
+        [necesidades, deseos, ahorro].forEach(function (campo) {
+            if (campo) {
+                campo.addEventListener('input', actualizarAvisoPorcentajes);
+            }
+        });
+
+        actualizarAvisoPorcentajes();
 
         if (!input) return;
 

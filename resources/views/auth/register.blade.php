@@ -19,21 +19,21 @@
                     @csrf
 
                     <div>
-                        <label for="name" class="block text-[11px] text-gray-300 mb-2">
+                        <label for="nombre" class="block text-[11px] text-gray-300 mb-2">
                             Nombre completo
                         </label>
                         <input
-                            id="name"
+                            id="nombre"
                             type="text"
-                            name="name"
-                            value="{{ old('name') }}"
+                            name="nombre"
+                            value="{{ old('nombre') }}"
                             required
                             autofocus
                             autocomplete="name"
                             placeholder="Introduce tu nombre completo"
                             class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-green-400 focus:outline-none focus:ring-0 appearance-none shadow-none"
                         />
-                        @error('name')
+                        @error('nombre')
                             <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
                         @enderror
                     </div>
@@ -53,6 +53,24 @@
                             class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-green-400 focus:outline-none focus:ring-0 appearance-none shadow-none"
                         />
                         @error('email')
+                            <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="telefono" class="block text-[11px] text-gray-300 mb-2">
+                            Teléfono
+                        </label>
+                        <input
+                            id="telefono"
+                            type="text"
+                            name="telefono"
+                            value="{{ old('telefono') }}"
+                            autocomplete="tel"
+                            placeholder="Introduce tu teléfono"
+                            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-green-400 focus:outline-none focus:ring-0 appearance-none shadow-none"
+                        />
+                        @error('telefono')
                             <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
                         @enderror
                     </div>

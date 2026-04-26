@@ -16,6 +16,7 @@ class MetaFinanciera extends Model
         'titulo',
         'descripcion',
         'monto_objetivo',
+        'monto_actual',
         'fecha_inicio',
         'fecha_limite',
         'prioridad',
@@ -24,6 +25,7 @@ class MetaFinanciera extends Model
 
     protected $casts = [
         'monto_objetivo' => 'decimal:2',
+        'monto_actual' => 'decimal:2',
         'fecha_inicio' => 'date',
         'fecha_limite' => 'date',
     ];
