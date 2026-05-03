@@ -19,9 +19,8 @@
         <div class="config-form-group">
             <label for="password_confirmacion">{{ __('configuracion.peligro.confirmar_password') }}</label>
             <input type="password" id="password_confirmacion" name="password_confirmacion">
-            @error('password_confirmacion')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('password_confirmacion')" />
+
         </div>
 
         <button type="submit" class="config-btn-danger-outline-btn">

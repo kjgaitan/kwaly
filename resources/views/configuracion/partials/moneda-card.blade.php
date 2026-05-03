@@ -19,9 +19,8 @@
                     </option>
                 @endforeach
             </select>
-            @error('moneda_preferida')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('moneda_preferida')" />
+
         </div>
 
         <button type="submit" class="config-btn-primary">

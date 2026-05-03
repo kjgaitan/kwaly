@@ -11,7 +11,7 @@ use App\Http\Requests\Compartido\UpdateMiembroGrupoRequest;
 use App\Models\GastoCompartido;
 use App\Models\GrupoCompartido;
 use App\Models\GrupoMiembro;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

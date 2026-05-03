@@ -14,15 +14,6 @@
                 </a>
             </div>
 
-            @if ($errors->any())
-                <div class="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <form method="POST" action="{{ route('transacciones.update', $transaccion->id_transaccion) }}" class="space-y-6">
                 @csrf

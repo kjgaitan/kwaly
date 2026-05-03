@@ -133,16 +133,20 @@
                             Editar
                         </a>
 
-                        <form action="{{ route('facturas.destroy', $factura->id_factura) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar esta factura?')">
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                type="submit"
+                        <button type="button"
+                                onclick="openDeleteModal('deleteModal-factura-{{ $factura->id_factura }}')"
                                 class="rounded-full border border-red-500/20 px-3 py-1.5 text-[11px] font-semibold text-red-300 transition hover:bg-red-500/10"
-                            >
-                                Eliminar
-                            </button>
-                        </form>
+                        >
+                            Eliminar
+                        </button>
+
+                        <x-delete-modal
+                            id="deleteModal-factura-{{ $factura->id_factura }}"
+                            title="¿Eliminar factura?"
+                            message="Esta factura se eliminará permanentemente. Esta operación es irreversible."
+                            :action="route('facturas.destroy', $factura->id_factura)"
+                            method="DELETE"
+                        />
                     </div>
                 </div>
 

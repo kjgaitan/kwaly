@@ -12,15 +12,19 @@
             <span>Editar</span>
         </a>
 
-        <form action="{{ route('modulos-educativos.destroy', $modulo) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este módulo?');">
-            @csrf
-            @method('DELETE')
+        <button type="button"
+                onclick="openDeleteModal('deleteModal-modulo-{{ $modulo->id_modulo_educativo }}')"
+                class="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/20">
+            <i class="bi bi-trash3"></i>
+            <span>Eliminar</span>
+        </button>
 
-            <button type="submit"
-                    class="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/20">
-                <i class="bi bi-trash3"></i>
-                <span>Eliminar</span>
-            </button>
-        </form>
+        <x-delete-modal
+            id="deleteModal-modulo-{{ $modulo->id_modulo_educativo }}"
+            title="¿Eliminar módulo educativo?"
+            message="Este módulo y sus lecciones asociadas se eliminarán permanentemente. Esta operación es irreversible."
+            :action="route('modulos-educativos.destroy', $modulo)"
+            method="DELETE"
+        />
     </div>
 </td>

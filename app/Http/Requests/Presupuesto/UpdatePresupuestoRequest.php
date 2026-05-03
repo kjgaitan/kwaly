@@ -32,7 +32,7 @@ class UpdatePresupuestoRequest extends FormRequest
         $idPresupuesto = $this->route('presupuesto') ?? $this->route('id');
 
         return [
-            'anio' => 'required|integer|min:2000|max:2100',
+            'anio' => 'required|integer|min:' . date('Y') . '|max:2100',
             'mes' => [
                 'required',
                 'integer',
@@ -83,7 +83,7 @@ class UpdatePresupuestoRequest extends FormRequest
         return [
             'anio.required' => 'El año es obligatorio.',
             'anio.integer' => 'El año debe ser un número entero.',
-            'anio.min' => 'El año no es válido.',
+            'anio.min' => 'No se pueden crear presupuestos para años anteriores al actual.',
             'anio.max' => 'El año no es válido.',
             'mes.required' => 'El mes es obligatorio.',
             'mes.integer' => 'El mes debe ser un número entero.',

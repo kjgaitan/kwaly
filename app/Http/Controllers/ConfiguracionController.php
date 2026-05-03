@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Configuracion\DeleteAccountRequest;
 use App\Http\Requests\Configuracion\UpdateMonedaRequest;
 use App\Http\Requests\Configuracion\UpdateNotificacionesRequest;
-use App\Http\Requests\Configuracion\UpdatePasswordRequest;
+use App\Http\Requests\Configuracion\UpdateContrasenaRequest;
 use App\Http\Requests\Configuracion\UpdatePerfilRequest;
 use App\Services\ConfiguracionService;
 use Illuminate\Http\RedirectResponse;
@@ -108,7 +108,7 @@ class ConfiguracionController extends Controller
     /**
      * Actualiza la contraseña del usuario autenticado.
      */
-    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
+    public function updatePassword(UpdateContrasenaRequest $request): RedirectResponse
     {
         $usuario = Auth::user();
 

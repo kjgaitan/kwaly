@@ -18,12 +18,6 @@
                     </a>
                 </div>
 
-                @if(session('success'))
-                    <div class="mb-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
                 @include('facturas.partials.resumen')
 
                 @include('facturas.partials.proximos-pagos')

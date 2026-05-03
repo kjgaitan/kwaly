@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\ConfiguracionUsuario;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;

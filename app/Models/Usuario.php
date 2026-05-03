@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 /**
  * Modelo que representa a los usuarios del sistema.
  */
-class User extends Authenticatable
+class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 

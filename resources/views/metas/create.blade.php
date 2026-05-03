@@ -14,20 +14,6 @@
                     </div>
                 </div>
 
-                @if ($errors->any())
-                    <div class="metas-alert-error mb-6">
-                        <div class="mb-2 flex items-center gap-2 text-sm font-semibold text-red-300">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            Revisa los campos del formulario
-                        </div>
-
-                        <ul class="space-y-1 text-sm text-red-200">
-                            @foreach ($errors->all() as $error)
-                                <li>• {{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form action="{{ route('metas.store') }}" method="POST" class="space-y-6">
                     @csrf

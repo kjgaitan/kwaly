@@ -7,12 +7,6 @@
                 <p>{{ __('configuracion.subtitle') }}</p>
             </div>
 
-            @if(session('success'))
-                <div class="config-alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             @include('configuracion.partials.perfil-card')
             @include('configuracion.partials.moneda-card')
             @include('configuracion.partials.notificaciones-card')

@@ -4,8 +4,6 @@
 
             @include('presupuestos.partials.index-header')
 
-            @include('presupuestos.partials.flash-messages')
-
             @if(!$presupuestoActual)
                 @include('presupuestos.partials.empty-state')
             @else

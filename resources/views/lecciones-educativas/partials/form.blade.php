@@ -8,9 +8,8 @@
             value="{{ old('titulo', $leccion->titulo ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
             placeholder="Ej. Qué es un fondo de emergencia">
-        @error('titulo')
-            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('titulo')" />
+
     </div>
 
     <div>
@@ -21,9 +20,8 @@
             rows="8"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
             placeholder="Escribe aquí el contenido de la lección...">{{ old('contenido', $leccion->contenido ?? '') }}</textarea>
-        @error('contenido')
-            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('contenido')" />
+
     </div>
 
     <div>
@@ -36,9 +34,8 @@
             value="{{ old('duracion_minutos', $leccion->duracion_minutos ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
             placeholder="Ej. 5">
-        @error('duracion_minutos')
-            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('duracion_minutos')" />
+
     </div>
 
     <div class="flex flex-col gap-3 pt-2 sm:flex-row">

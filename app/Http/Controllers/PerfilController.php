@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Configuracion\UpdatePasswordRequest;
+use App\Http\Requests\Configuracion\UpdateContrasenaRequest;
 use App\Http\Requests\Configuracion\UpdatePerfilRequest;
 use App\Services\ConfiguracionService;
 use Illuminate\Http\RedirectResponse;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class ProfileController extends Controller
+class PerfilController extends Controller
 {
     public function __construct(
         protected ConfiguracionService $configuracionService
@@ -62,7 +62,7 @@ class ProfileController extends Controller
                 : 'Perfil actualizado correctamente.');
     }
 
-    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
+    public function updatePassword(UpdateContrasenaRequest $request): RedirectResponse
     {
         $this->configuracionService->actualizarPassword(Auth::user(), $request->validated());
 

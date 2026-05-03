@@ -47,6 +47,7 @@
 
             <!-- CONTENIDO -->
             <div class="px-3 py-4 md:px-4 lg:px-5">
+                <x-flash-messages />
                 {{ $slot }}
             </div>
         </main>

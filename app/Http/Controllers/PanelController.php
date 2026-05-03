@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
  * Este controlador reúne la información más relevante del usuario
  * para mostrarla en el dashboard.
  */
-class DashboardController extends Controller
+class PanelController extends Controller
 {
     /**
      * Muestra el resumen general del usuario autenticado.

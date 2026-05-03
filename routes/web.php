@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\TransaccionController;
 use App\Http\Controllers\MetaFinancieraController;
@@ -15,7 +15,7 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CompartidoController;
 use App\Http\Controllers\PresupuestoDetalleCategoriaController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PerfilController;
 
 
 // Ruta principal
@@ -27,12 +27,12 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard principal
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [PanelController::class, 'index'])->name('dashboard');
 
     // Perfil de usuario
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/profile', [PerfilController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [PerfilController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [PerfilController::class, 'updatePassword'])->name('profile.password.update');
 
     // Transacciones
     Route::resource('transacciones', TransaccionController::class);
@@ -137,4 +137,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Rutas de autenticación
-require __DIR__ . '/auth.php';
+require __DIR__ . '/autenticacion.php';

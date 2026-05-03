@@ -178,11 +178,21 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+'custom' => [
+    'email' => [
+        'not_regex' => 'The email address is incorrect.',
     ],
+    'telefono' => [
+        'regex' => 'The phone number only accepts numeric values.',
+    ],
+],
+
+'attributes' => [
+    'nombre' => 'full name',
+    'email' => 'email address',
+    'telefono' => 'phone number',
+    'password' => 'password',
+],
 
     /*
     |--------------------------------------------------------------------------

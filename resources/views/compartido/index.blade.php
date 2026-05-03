@@ -16,29 +16,6 @@
                 @endif
             </div>
 
-            @if(session('success'))
-                <div class="compartido-alert compartido-alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="compartido-alert compartido-alert-error">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="compartido-alert compartido-alert-error">
-                    <p class="font-semibold mb-2">Hay errores en el formulario:</p>
-                    <ul class="list-disc pl-5 space-y-1 text-sm">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             @if(!$grupo)
                 @include('compartido.partials.empty-state')
             @else

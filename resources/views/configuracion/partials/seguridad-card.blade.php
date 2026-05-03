@@ -32,17 +32,15 @@
         <div class="config-form-group">
             <label for="password_actual">{{ __('configuracion.seguridad.password_actual') }}</label>
             <input type="password" id="password_actual" name="password_actual">
-            @error('password_actual')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('password_actual')" />
+
         </div>
 
         <div class="config-form-group">
             <label for="password_nueva">{{ __('configuracion.seguridad.password_nueva') }}</label>
             <input type="password" id="password_nueva" name="password_nueva">
-            @error('password_nueva')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('password_nueva')" />
+
         </div>
 
         <div class="config-form-group">

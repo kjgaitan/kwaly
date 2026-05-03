@@ -6,20 +6,20 @@
             </div>
 
             <div>
-                <h2 class="text-xl font-semibold text-white">Aún no tienes grupo compartido</h2>
+                <h2 class="text-xl font-semibold text-white">No hay grupos compartidos creados</h2>
                 <p class="text-sm text-gray-400 mt-1">
-                    Crea uno para comenzar a repartir gastos con otras personas.
+                    Crea un grupo para empezar a compartir gastos con otras personas.
                 </p>
             </div>
         </div>
 
         <div class="compartido-empty-box">
-            <h3 class="compartido-empty-box-title">Qué podrás hacer</h3>
+            <h3 class="compartido-empty-box-title">¿Qué podrás hacer?</h3>
             <ul class="compartido-empty-list">
-                <li>• Registrar gastos del grupo</li>
-                <li>• Invitar miembros</li>
-                <li>• Ver balances automáticos</li>
-                <li>• Controlar cuánto aportó cada persona</li>
+                <li>• Registrar gastos grupales</li>
+                <li>• Invitar a miembros</li>
+                <li>• Ver saldos automáticos</li>
+                <li>• Controlar aportaciones de cada persona</li>
             </ul>
         </div>
     </div>

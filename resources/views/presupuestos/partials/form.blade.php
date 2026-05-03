@@ -15,11 +15,8 @@
         </p>
     </div>
     
-    @error('porcentajes')
-        <div class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {{ $message }}
-        </div>
-    @enderror
+    <x-input-error :messages="$errors->get('porcentajes')" />
+
 
     <div id="budget-percent-warning" class="hidden rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
         La distribucion no es correcta. Necesidades debe ser 50%, deseos 30% y ahorro 20%.
@@ -38,9 +35,8 @@
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
 
-            @error('anio')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('anio')" />
+
         </div>
 
         <!-- Mes -->
@@ -79,9 +75,8 @@
                 @endforeach
             </select>
 
-            @error('mes')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('mes')" />
+
         </div>
 
         <!-- Ingreso estimado -->
@@ -102,9 +97,8 @@
                 >
             </div>
 
-            @error('ingreso_estimado')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('ingreso_estimado')" />
+
         </div>
 
         <!-- Porcentaje necesidades -->
@@ -119,9 +113,8 @@
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
 
-            @error('porcentaje_necesidades')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('porcentaje_necesidades')" />
+
         </div>
 
         <!-- Porcentaje deseos -->
@@ -136,9 +129,8 @@
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
 
-            @error('porcentaje_deseos')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('porcentaje_deseos')" />
+
         </div>
 
         <!-- Porcentaje ahorro -->
@@ -153,9 +145,8 @@
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400"
             >
 
-            @error('porcentaje_ahorro')
-                <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('porcentaje_ahorro')" />
+
         </div>
 
     </div>

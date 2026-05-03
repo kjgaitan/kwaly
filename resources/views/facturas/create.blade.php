@@ -7,11 +7,6 @@
             </div>
 
             <div class="px-6 py-6">
-                @if($errors->any())
-                    <div class="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                        Revisa los campos del formulario.
-                    </div>
-                @endif
 
                 <form action="{{ route('facturas.store') }}" method="POST">
                     @csrf

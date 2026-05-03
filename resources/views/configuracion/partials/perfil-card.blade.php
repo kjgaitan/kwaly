@@ -13,25 +13,22 @@
         <div class="config-form-group">
             <label for="nombre">{{ __('configuracion.perfil.nombre') }}</label>
             <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $usuario->nombre) }}">
-            @error('nombre')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('nombre')" />
+
         </div>
 
         <div class="config-form-group">
             <label for="email">{{ __('configuracion.perfil.email') }}</label>
             <input type="email" id="email" name="email" value="{{ old('email', $usuario->email) }}">
-            @error('email')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('email')" />
+
         </div>
 
         <div class="config-form-group">
             <label for="telefono">{{ __('configuracion.perfil.telefono') }}</label>
             <input type="text" id="telefono" name="telefono" value="{{ old('telefono', $usuario->telefono) }}">
-            @error('telefono')
-                <small class="config-error">{{ $message }}</small>
-            @enderror
+            <x-input-error :messages="$errors->get('telefono')" />
+
         </div>
 
         <button type="submit" class="config-btn-primary">

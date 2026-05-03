@@ -28,12 +28,6 @@
                 </div>
             </div>
 
-            @if(session('success'))
-                <div class="mb-4 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-400">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             @if($lecciones->isEmpty())
                 <div class="rounded-[20px] border border-[#26352d] bg-[#0d1310] p-8 text-center">
                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-green-500/10 text-green-400">
@@ -83,16 +77,20 @@
                                                     <span>Editar</span>
                                                 </a>
 
-                                                <form action="{{ route('modulos-educativos.lecciones.destroy', [$modulo, $leccion]) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar esta lección?');">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                <button type="button"
+                                                        onclick="openDeleteModal('deleteModal-leccion-{{ $leccion->id_leccion_educativa }}')"
+                                                        class="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/20">
+                                                    <i class="bi bi-trash3"></i>
+                                                    <span>Eliminar</span>
+                                                </button>
 
-                                                    <button type="submit"
-                                                            class="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400 transition hover:bg-red-500/20">
-                                                        <i class="bi bi-trash3"></i>
-                                                        <span>Eliminar</span>
-                                                    </button>
-                                                </form>
+                                                <x-delete-modal
+                                                    id="deleteModal-leccion-{{ $leccion->id_leccion_educativa }}"
+                                                    title="¿Eliminar lección?"
+                                                    message="Esta lección se eliminará permanentemente. Esta operación es irreversible."
+                                                    :action="route('modulos-educativos.lecciones.destroy', [$modulo, $leccion])"
+                                                    method="DELETE"
+                                                />
                                             </div>
                                         </td>
                                     </tr>

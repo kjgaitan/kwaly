@@ -16,9 +16,8 @@
             value="{{ old('titulo', $modulo->titulo ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
             placeholder="Ej. Fondo de emergencia">
-        @error('titulo')
-            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('titulo')" />
+
     </div>
 
     <div>
@@ -29,9 +28,8 @@
             rows="4"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
             placeholder="Describe brevemente el contenido del módulo">{{ old('descripcion', $modulo->descripcion ?? '') }}</textarea>
-        @error('descripcion')
-            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('descripcion')" />
+
     </div>
 
     <div class="grid gap-5 md:grid-cols-2">
@@ -48,9 +46,8 @@
                     </option>
                 @endforeach
             </select>
-            @error('nivel')
-                <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('nivel')" />
+
         </div>
 
         <div>
@@ -63,9 +60,8 @@
                 value="{{ old('duracion_minutos', $modulo->duracion_minutos ?? '') }}"
                 class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
                 placeholder="Ej. 10">
-            @error('duracion_minutos')
-                <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-            @enderror
+            <x-input-error :messages="$errors->get('duracion_minutos')" />
+
         </div>
     </div>
 

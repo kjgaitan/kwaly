@@ -22,18 +22,6 @@
                     </div>
                 </div>
 
-                @if (session('success'))
-                    <div class="mb-5 rounded-2xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-300">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 @include('metas.partials.resumen')
                 @include('metas.partials.metas-activas')
                 @include('metas.partials.logros')

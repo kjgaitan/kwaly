@@ -11,9 +11,8 @@
             placeholder="Endesa"
             required
         >
-        @error('proveedor')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('proveedor')" />
+
     </div>
 
     <div>
@@ -27,9 +26,8 @@
             placeholder="Electricidad"
             required
         >
-        @error('concepto')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('concepto')" />
+
     </div>
 
     <div class="md:col-span-2">
@@ -41,9 +39,8 @@
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
             placeholder="Añade una descripción opcional"
         >{{ old('descripcion', $factura->descripcion ?? '') }}</textarea>
-        @error('descripcion')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('descripcion')" />
+
     </div>
 
     <div>
@@ -59,9 +56,8 @@
             placeholder="0.00"
             required
         >
-        @error('monto_total')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('monto_total')" />
+
     </div>
 
     <div>
@@ -74,9 +70,8 @@
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
             required
         >
-        @error('fecha_vencimiento')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('fecha_vencimiento')" />
+
     </div>
 
     <div>
@@ -100,9 +95,8 @@
                 Vencida
             </option>
         </select>
-        @error('estado')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('estado')" />
+
     </div>
 
     <div>
@@ -126,9 +120,8 @@
                 Anual
             </option>
         </select>
-        @error('frecuencia')
-            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-        @enderror
+        <x-input-error :messages="$errors->get('frecuencia')" />
+
     </div>
 <div class="mt-6 flex items-center gap-3">
     <button

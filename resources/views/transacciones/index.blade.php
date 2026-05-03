@@ -137,16 +137,19 @@
                                             Editar
                                         </a>
 
-                                        <form action="{{ route('transacciones.destroy', $transaccion->id_transaccion) }}" method="POST"
-                                              onsubmit="return confirm('¿Seguro que quieres eliminar esta transacción?')">
-                                            @csrf
-                                            @method('DELETE')
+                                        <button type="button"
+                                                onclick="openDeleteModal('deleteModal-{{ $transaccion->id_transaccion }}')"
+                                                class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition hover:bg-red-500/20">
+                                            Eliminar
+                                        </button>
 
-                                            <button type="submit"
-                                                    class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition hover:bg-red-500/20">
-                                                Eliminar
-                                            </button>
-                                        </form>
+                                        <x-delete-modal
+                                            id="deleteModal-{{ $transaccion->id_transaccion }}"
+                                            title="¿Eliminar transacción?"
+                                            message="Esta transacción se eliminará permanentemente. Esta operación es irreversible."
+                                            :action="route('transacciones.destroy', $transaccion->id_transaccion)"
+                                            method="DELETE"
+                                        />
                                     </div>
                                 </div>
                             </div>

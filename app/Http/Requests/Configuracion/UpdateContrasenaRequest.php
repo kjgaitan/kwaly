@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * Request para validar el cambio de contraseña.
  */
-class UpdatePasswordRequest extends FormRequest
+class UpdateContrasenaRequest extends FormRequest
 {
     /**
      * Determina si el usuario está autorizado.
