@@ -93,7 +93,7 @@
                                 : 'border-red-500/40 bg-red-500/10 text-red-400';
 
                             $simbolo = $esIngreso ? '↑' : '↓';
-                            $categoria = $transaccion->categoria->nombre ?? 'Sin categoría';
+                            $categoria = $transaccion->categoria;
                             $fecha = \Carbon\Carbon::parse($transaccion->fecha_transaccion)->translatedFormat('j \d\e F');
                         @endphp
 
@@ -111,8 +111,11 @@
                                         </p>
 
                                         <div class="mt-4 flex flex-wrap items-center gap-4">
-                                            <span class="inline-flex rounded-full border border-[#2d6f4f] bg-[#1f3a2c] px-5 py-2 text-[18px] leading-none text-[#55d98a]">
-                                                {{ $categoria }}
+                                            <span class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-[18px] leading-none" style="border: 1px solid {{ $categoria->color_hex ?? '#72f59a' }}; background-color: {{ $categoria->color_hex ?? '#72f59a' }}20; color: {{ $categoria->color_hex ?? '#72f59a' }}">
+                                                @if($categoria?->icono)
+                                                    <i class="bi {{ $categoria->icono }}"></i>
+                                                @endif
+                                                {{ $categoria?->nombre ?? 'Sin categoría' }}
                                             </span>
 
                                             <span class="text-[18px] text-gray-400">

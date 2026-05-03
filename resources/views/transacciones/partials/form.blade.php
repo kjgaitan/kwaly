@@ -54,6 +54,9 @@
             @foreach ($categorias as $categoria)
                 <option value="{{ $categoria->id_categoria }}"
                     {{ old('id_categoria', $transaccion->id_categoria ?? '') == $categoria->id_categoria ? 'selected' : '' }}>
+                    @if($categoria->icono)
+                        {{ $categoria->icono }}
+                    @endif
                     {{ $categoria->nombre }}
                 </option>
             @endforeach
