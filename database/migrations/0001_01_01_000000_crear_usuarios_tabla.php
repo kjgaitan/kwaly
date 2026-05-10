@@ -11,24 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->id('id_usuario');
-            $table->string('nombre', 100);
-            $table->string('email', 150)->unique();
-            $table->string('password_hash', 255);
-            $table->string('telefono', 20)->nullable();
-            $table->char('moneda_preferida', 3)->default('EUR');
-            $table->string('idioma_preferido', 10)->default('es');
-            $table->enum('estado_cuenta', ['activo', 'inactivo', 'bloqueado'])->default('activo');
-            $table->dateTime('fecha_registro')->nullable();
-            $table->dateTime('ultimo_acceso')->nullable();
-        });
+        if (!Schema::hasTable('usuarios')) {
+            Schema::create('usuarios', function (Blueprint $table) {
+                $table->id('id_usuario');
+                $table->string('nombre', 100);
+                $table->string('email', 150)->unique();
+                $table->string('password_hash', 255);
+                $table->string('telefono', 20)->nullable();
+                $table->char('moneda_preferida', 3)->default('EUR');
+                $table->string('idioma_preferido', 10)->default('es');
+                $table->enum('estado_cuenta', ['activo', 'inactivo', 'bloqueado'])->default('activo');
+                $table->dateTime('fecha_registro')->nullable();
+                $table->dateTime('ultimo_acceso')->nullable();
+            });
+        }
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        if (!Schema::hasTable('password_reset_tokens')) {
+            Schema::create('password_reset_tokens', function (Blueprint $table) {
+                $table->string('email')->primary();
+                $table->string('token');
+                $table->timestamp('created_at')->nullable();
+            });
+        }
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
