@@ -48,7 +48,6 @@ class CategoriaController extends Controller
         Categoria::create([
             'id_usuario' => Auth::user()->id_usuario,
             'nombre' => $request->nombre,
-            'tipo_categoria' => $request->tipo_categoria,
             'icono' => $request->icono,
             'color_hex' => $request->color_hex,
         ]);
@@ -89,7 +88,6 @@ class CategoriaController extends Controller
 
         $categoria->update($request->only([
             'nombre',
-            'tipo_categoria',
             'icono',
             'color_hex',
         ]));

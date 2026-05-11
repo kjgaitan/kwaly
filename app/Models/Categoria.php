@@ -35,7 +35,6 @@ class Categoria extends Model
     protected $fillable = [
         'id_usuario',
         'nombre',
-        'tipo_categoria',
         'icono',
         'color_hex',
     ];

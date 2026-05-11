@@ -16,7 +16,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\CompartidoController;
 use App\Http\Controllers\PresupuestoDetalleCategoriaController;
 use App\Http\Controllers\PerfilController;
-
+use App\Http\Controllers\CategoriaController;
 
 // Ruta principal
 Route::get('/', function () {
@@ -101,6 +101,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Reportes
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+
+    // Categorías
+    Route::resource('categorias', CategoriaController::class);
 
     // Cuenta compartida
     Route::get('/compartido', [CompartidoController::class, 'index'])
