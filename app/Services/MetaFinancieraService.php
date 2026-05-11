@@ -14,48 +14,56 @@ class MetaFinancieraService
             ->get();
 
         $metasProcesadas = $metas->map(function ($meta) {
-
-            $montoActual = $meta->aportaciones->sum('monto');
+            $aportacionesSum = $meta->aportaciones->sum('monto');
+            $montoActual = ($meta->monto_actual ?? 0) + $aportacionesSum;
 
             $progreso = $meta->monto_objetivo > 0
                 ? ($montoActual / $meta->monto_objetivo) * 100
                 : 0;
 
             $progreso = min($progreso, 100);
-
             $faltante = max($meta->monto_objetivo - $montoActual, 0);
 
             $diasRestantes = null;
-
             if ($meta->fecha_limite) {
                 $diasRestantes = Carbon::now()
                     ->diffInDays($meta->fecha_limite, false);
             }
 
+            $completada = $meta->estado === 'completada' || $progreso >= 100;
+
             return [
                 'id_meta' => $meta->id_meta,
                 'titulo' => $meta->titulo,
                 'descripcion' => $meta->descripcion,
-                'objetivo' => $meta->monto_objetivo,
-                'ahorrado' => $montoActual,
+                'monto_objetivo' => $meta->monto_objetivo,
+                'monto_actual' => $montoActual,
                 'faltante' => $faltante,
                 'progreso' => round($progreso, 2),
                 'estado' => $meta->estado,
                 'prioridad' => $meta->prioridad,
+                'fecha_inicio' => isset($meta->fecha_inicio) ? Carbon::parse($meta->fecha_inicio)->format('d/m/Y') : null,
+                'fecha_limite' => isset($meta->fecha_limite) ? Carbon::parse($meta->fecha_limite)->format('d/m/Y') : null,
                 'dias_restantes' => $diasRestantes,
-                'completada' => $progreso >= 100,
+                'completada' => $completada,
             ];
         });
+
+        $logros = $this->obtenerLogros($metasProcesadas);
 
         return [
             'metas' => $metasProcesadas,
             'metasActivas' => $metasProcesadas->where('estado', 'activa'),
+            'metasPausadas' => $metasProcesadas->where('estado', 'pausada'),
             'metasCompletadas' => $metasProcesadas->where('completada', true),
             'resumen' => [
-                'completadas' => $metasProcesadas->where('completada', true)->count(),
-                'activas' => $metasProcesadas->where('estado', 'activa')->count(),
-                'total' => $metasProcesadas->count(),
-            ]
+                'metas_completadas' => $metasProcesadas->where('completada', true)->count(),
+                'metas_activas' => $metasProcesadas->where('estado', 'activa')->count(),
+                'metas_pausadas' => $metasProcesadas->where('estado', 'pausada')->count(),
+                'logros_desbloqueados' => collect($logros)->where('desbloqueado', true)->count(),
+                'total_logros' => count($logros),
+            ],
+            'logros' => $logros,
         ];
     }
 
