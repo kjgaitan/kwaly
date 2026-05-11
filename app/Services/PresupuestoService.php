@@ -105,7 +105,6 @@ class PresupuestoService
     private function sumarPorTipo(Collection $detalles, string $tipoCategoria, string $campo): float
     {
         return (float) $detalles
-            ->filter(fn($detalle) => ($detalle->categoria->tipo_categoria ?? null) === $tipoCategoria)
             ->sum($campo);
     }
 

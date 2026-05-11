@@ -26,8 +26,10 @@
             </div>
         @endif
 
-        <a href="{{ route('presupuestos.create') }}" class="budget-btn-primary">
-            + Crear Presupuesto
+     <a href="{{ route('presupuestos.create') }}"
+        class="budget-btn-primary inline-flex items-center gap-2">
+            <i class="bi bi-plus-lg"></i>
+            Crear Presupuesto
         </a>
     </div>
 </div>
