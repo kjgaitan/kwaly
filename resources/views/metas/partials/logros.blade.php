@@ -29,6 +29,10 @@
                         <span class="mt-4 inline-flex items-center rounded-full border border-green-400/20 bg-green-500/10 px-3 py-1 text-[11px] font-medium text-[#72f59a]">
                             Desbloqueado
                         </span>
+                    @else
+                        <span class="mt-4 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-gray-400">
+                            Bloqueado
+                        </span>
                     @endif
                 </div>
             @endforeach

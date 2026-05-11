@@ -11,15 +11,7 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex items-start gap-3">
                                 <div class="flex h-14 w-14 items-center justify-center rounded-xl border border-green-400/20 bg-green-500/10 text-[#72f59a]">
-                                    @php
-                                        $icono = match($meta['prioridad'] ?? 'media') {
-                                            'alta' => 'bi bi-airplane',
-                                            'media' => 'bi bi-shield',
-                                            'baja' => 'bi bi-laptop',
-                                            default => 'bi bi-bullseye'
-                                        };
-                                    @endphp
-                                    <i class="{{ $icono }} text-2xl"></i>
+                                    <i class="bi bi-check-circle text-2xl"></i>
                                 </div>
 
                                 <div>
@@ -94,6 +86,33 @@
                             </div>
                         </div>
 
+                        <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                            <a href="{{ route('metas.edit', $meta['id_meta']) }}"
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white">
+                                <i class="bi bi-pencil"></i>
+                                Editar
+                            </a>
+
+                            <button type="button"
+                                    onclick="openDeleteModal('deleteModalMeta{{ $meta['id_meta'] }}')"
+                                    class="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/20">
+                                <i class="bi bi-trash"></i>
+                                Eliminar
+                            </button>
+                        </div>
+
+                        <x-delete-modal id="deleteModalMeta{{ $meta['id_meta'] }}"
+                                       title="¿Eliminar esta meta?"
+                                       message="Una vez eliminada, no podrás recuperar esta meta ni su historial de aportaciones." />
+
+                        <form id="delete-form-deleteModalMeta{{ $meta['id_meta'] }}"
+                              action="{{ route('metas.destroy', $meta['id_meta']) }}"
+                              method="POST"
+                              class="hidden">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+
                         @if(($meta['completada'] ?? false) === true)
                             <div class="rounded-xl border border-green-400/20 bg-gradient-to-r from-green-500/25 to-green-400/10 px-4 py-3 text-center text-sm font-semibold text-green-200">
                                 Felicidades - Alcanzaste tu meta
@@ -117,11 +136,6 @@
                 Empieza creando tu primera meta financiera para seguir tu progreso.
             </p>
 
-            <a href="{{ route('metas.create') }}"
-               class="mt-5 inline-flex items-center gap-2 rounded-2xl border border-green-400/20 bg-[#63d38a] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#72f59a]">
-                <i class="bi bi-plus-lg"></i>
-                Crear primera meta
-            </a>
-        </div>
+                    </div>
     @endif
 </div>

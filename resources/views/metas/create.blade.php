@@ -15,7 +15,7 @@
                 </div>
 
 
-                <form action="{{ route('metas.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('metas.store') }}" method="POST" class="space-y-6" novalidate>
                     @csrf
 
                     @include('metas.partials.form')

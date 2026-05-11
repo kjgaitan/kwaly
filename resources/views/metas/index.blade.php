@@ -15,7 +15,7 @@
 
                     <div class="flex items-center">
                         <a href="{{ route('metas.create') }}"
-                           class="inline-flex items-center gap-2 rounded-2xl border border-green-400/20 bg-[#63d38a] px-5 py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(114,245,154,0.18)] transition hover:scale-[1.01] hover:bg-[#72f59a]">
+                           class="inline-flex items-center gap-2 rounded-2xl border border-green-400/20 bg-[#63d38a] px-5 py-3 text-sm font-semibold text-black shadow-[0_0_20px_rgba(114,245,154,0.18)] transition hover:scale-[1.01] hover:bg-[#72f59a]">
                             <i class="bi bi-plus-lg text-sm"></i>
                             <span>Nueva Meta</span>
                         </a>
@@ -24,27 +24,9 @@
 
                 @include('metas.partials.resumen')
                 @include('metas.partials.metas-activas')
+                @include('metas.partials.metas-pausadas')
+                @include('metas.partials.metas-completadas')
                 @include('metas.partials.logros')
-
-                <div class="rounded-2xl border border-[#1f4d35] bg-[#1b1b1d] p-5 shadow-[0_0_20px_rgba(33,120,73,0.35)]">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-                        <div class="flex h-14 w-14 items-center justify-center rounded-xl border border-green-400/20 bg-green-500/10 text-[#72f59a]">
-                            <i class="bi bi-trophy text-2xl"></i>
-                        </div>
-
-                        <div>
-                            <h3 class="text-xl font-semibold text-white">
-                                Excelente progreso
-                            </h3>
-
-                            <p class="mt-1 text-sm text-gray-400">
-                                Has completado
-                                <span class="font-semibold text-[#72f59a]">{{ $resumen['metas_completadas'] ?? 0 }} metas</span>
-                                este año. Cada paso te acerca más a tu libertad financiera.
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
