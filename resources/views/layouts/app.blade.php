@@ -22,7 +22,7 @@
         <main class="md:ml-64 min-h-screen bg-[#020806]">
 
             <!-- HEADER SUPERIOR GLOBAL -->
-            <div class="flex items-center justify-end gap-4 border-b border-[#26352d] bg-[#020806] px-4 py-4 md:px-6">
+            <div class="flex items-center justify-end gap-4 border-b border-[#26352d] bg-[#020806] px-1 py-2 sm:px-2 md:px-3 lg:px-6">
 
                 <!-- NOTIFICACIONES -->
                 <button class="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#26352d] bg-[#111613] transition hover:bg-[#1a211d]">
@@ -46,7 +46,7 @@
             </div>
 
             <!-- CONTENIDO -->
-            <div class="px-3 py-4 md:px-4 lg:px-5">
+            <div class="px-1 py-2 sm:px-2 md:px-3 lg:px-4">
                 <x-flash-messages />
                 {{ $slot }}
             </div>

@@ -6,8 +6,16 @@
 
         <h2 class="mt-4 text-lg font-semibold text-white">Aún no hay lecciones disponibles</h2>
         <p class="mt-2 text-sm text-gray-400">
-            Cuando registres módulos y lecciones en la base de datos, aparecerán aquí.
+            Crea tu primer módulo educativo para comenzar a aprender.
         </p>
+
+        <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href="{{ route('modulos-educativos.create') }}"
+               class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-500 px-6 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
+                <i class="bi bi-plus-circle"></i>
+                Crear Módulo
+            </a>
+        </div>
     </div>
 @else
     <div class="grid gap-4 lg:grid-cols-2">
