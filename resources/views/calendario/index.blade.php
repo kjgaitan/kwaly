@@ -4,7 +4,9 @@
 
             <div class="mb-6">
                 <h2 class="text-3xl font-bold tracking-tight text-white">Calendario Financiero</h2>
-                <p class="mt-1 text-sm text-gray-400">Visualiza tus ingresos y pagos programados</p>
+                <p class="mt-1 text-sm text-gray-400">
+                    Visualiza tus ingresos, gastos y vencimientos de facturas
+                </p>
             </div>
 
             <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -77,8 +79,10 @@
                                         border border-green-500/20 bg-green-500/15 text-green-300
                                     @elseif(($evento['tipo'] ?? '') === 'gasto')
                                         border border-red-500/20 bg-red-500/15 text-red-300
-                                    @else
+                                    @elseif(($evento['tipo'] ?? '') === 'factura')
                                         border border-blue-500/20 bg-blue-500/15 text-blue-300
+                                    @else
+                                        border border-gray-500/20 bg-gray-500/15 text-gray-300
                                     @endif">
                                     {{ $evento['titulo'] ?? 'Evento' }}
                                 </div>
@@ -104,32 +108,32 @@
 
                     <div class="inline-flex items-center gap-2 rounded-xl border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
                         <span class="h-3 w-3 rounded-full bg-blue-400"></span>
-                        Recordatorios
+                        Facturas por vencer
                     </div>
                 </div>
             </div>
 
-      <div class="mt-4 rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4 shadow-[0_0_18px_rgba(114,245,154,0.05)]">
-        <div class="flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold
-                @if(!$hayDatos)
-                    border border-yellow-500/30 bg-yellow-500/10 text-yellow-400
-                @elseif($balancePrevisto < 0)
-                    border border-red-500/30 bg-red-500/10 text-red-400
-                @else
-                    border border-green-500/30 bg-green-500/10 text-green-400
-                @endif">
-                !
-            </div>
+            <div class="mt-4 rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4 shadow-[0_0_18px_rgba(114,245,154,0.05)]">
+                <div class="flex items-start gap-4">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold
+                        @if(!$hayDatos)
+                            border border-yellow-500/30 bg-yellow-500/10 text-yellow-400
+                        @elseif($balancePrevisto < 0)
+                            border border-red-500/30 bg-red-500/10 text-red-400
+                        @else
+                            border border-green-500/30 bg-green-500/10 text-green-400
+                        @endif">
+                        !
+                    </div>
 
-            <div>
-                <h4 class="text-base font-semibold text-white">Consejo Financiero</h4>
-                <p class="mt-1 text-sm text-gray-400">
-                    {{ $consejo }}
-                </p>
+                    <div>
+                        <h4 class="text-base font-semibold text-white">Consejo Financiero</h4>
+                        <p class="mt-1 text-sm text-gray-400">
+                            {{ $consejo }}
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
         </div>
     </div>

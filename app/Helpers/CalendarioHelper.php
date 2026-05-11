@@ -9,7 +9,8 @@ class CalendarioHelper
         return match ($tipo) {
             'ingreso' => 'calendar-event calendar-event--income',
             'gasto' => 'calendar-event calendar-event--expense',
-            default => 'calendar-event calendar-event--reminder',
+            'factura' => 'calendar-event calendar-event--invoice',
+            default => 'calendar-event calendar-event--default',
         };
     }
 

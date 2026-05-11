@@ -95,7 +95,7 @@ class CalendarioService
 
             $eventosPorDia[$clave][] = [
                 'titulo' => $transaccion->titulo ?? 'Transacción',
-                'tipo' => $transaccion->tipo_movimiento ?? 'recordatorio',
+                'tipo' => $transaccion->tipo_movimiento ?? 'evento',
             ];
         }
 
@@ -104,7 +104,7 @@ class CalendarioService
 
             $eventosPorDia[$clave][] = [
                 'titulo' => $factura->titulo ?? $factura->concepto ?? 'Factura',
-                'tipo' => 'recordatorio',
+                'tipo' => 'factura',
             ];
         }
 
