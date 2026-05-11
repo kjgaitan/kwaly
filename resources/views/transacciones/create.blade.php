@@ -14,7 +14,7 @@
                     Volver
                 </a>
             </div>
-            <form method="POST" action="{{ route('transacciones.store') }}" class="space-y-6">
+            <form method="POST" action="{{ route('transacciones.store') }}" class="space-y-6" novalidate>
                 @csrf
 
                 @include('transacciones.partials.form')

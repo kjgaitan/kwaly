@@ -10,9 +10,10 @@
                         <p class="mt-1 text-sm text-gray-400">Gestiona tus ingresos y gastos</p>
                     </div>
 
-                    <a href="{{ route('transacciones.create') }}"
-                       class="inline-flex rounded-xl bg-[#72f59a] px-4 py-2 text-sm font-semibold text-black transition hover:bg-[#5ee38a]">
-                        + Nueva Transacción
+                 <a href="{{ route('transacciones.create') }}"
+                    class="inline-flex items-center gap-2 rounded-xl bg-[#72f59a] px-4 py-2 text-sm font-semibold text-black transition hover:bg-[#5ee38a]">
+                        <i class="bi bi-plus-lg"></i>
+                        Nueva Transacción
                     </a>
                 </div>
 
@@ -160,7 +161,7 @@
                     @empty
                         <div class="rounded-[26px] border border-[#244332] bg-[#1c1f1d] px-6 py-10 text-center shadow-[0_0_30px_rgba(49,196,120,0.10)]">
                             <p class="text-lg font-semibold text-white">No hay transacciones registradas</p>
-                            <p class="mt-2 text-sm text-gray-400">Cuando agregues movimientos, aparecerán aquí.</p>
+                            <p class="mt-2 text-sm text-gray-400">Cuando agregues transacciones, aparecerán aquí.</p>
                         </div>
                     @endforelse
                 </div>

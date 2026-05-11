@@ -15,7 +15,7 @@
             </div>
 
 
-            <form method="POST" action="{{ route('transacciones.update', $transaccion->id_transaccion) }}" class="space-y-6">
+            <form method="POST" action="{{ route('transacciones.update', $transaccion->id_transaccion) }}" class="space-y-6" novalidate>
                 @csrf
                 @method('PUT')
 
