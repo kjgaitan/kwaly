@@ -39,6 +39,23 @@ return [
         'guardar' => 'Guardar seguridad',
     ],
 
+    'categorias' => [
+        'title' => 'Categorías',
+        'editar' => 'Editar categoría',
+        'eliminar' => 'Eliminar categoría',
+        'confirmar_eliminar' => '¿Estás seguro de que quieres eliminar esta categoría?',
+        'global' => 'Global',
+        'vacia' => 'No tienes categorías personalizadas',
+        'nueva' => [
+            'title' => 'Crear nueva categoría',
+            'nombre' => 'Nombre de la categoría',
+            'icono' => 'Icono',
+            'icono_hint' => 'Usa clases de Bootstrap Icons (ej: bi bi-tag)',
+            'color' => 'Color',
+            'guardar' => 'Crear categoría',
+        ],
+    ],
+
     'peligro' => [
         'title' => 'Zona de peligro',
         'exportar' => 'Exportar todos los datos',

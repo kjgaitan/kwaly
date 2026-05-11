@@ -40,10 +40,19 @@ class ConfiguracionController extends Controller
             'NIO' => 'NIO - Córdoba nicaragüense',
         ];
 
+        // Obtener categorías para el usuario (globales y propias)
+        $categorias = \App\Models\Categoria::where(function ($query) use ($usuario) {
+                $query->whereNull('id_usuario')
+                    ->orWhere('id_usuario', $usuario->id_usuario);
+            })
+            ->orderBy('nombre')
+            ->get();
+
         return view('configuracion.index', compact(
             'usuario',
             'configuracion',
-            'monedas'
+            'monedas',
+            'categorias'
         ));
     }
 

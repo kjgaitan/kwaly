@@ -39,6 +39,23 @@ return [
         'guardar' => 'Save security',
     ],
 
+    'categorias' => [
+        'title' => 'Categories',
+        'editar' => 'Edit category',
+        'eliminar' => 'Delete category',
+        'confirmar_eliminar' => 'Are you sure you want to delete this category?',
+        'global' => 'Global',
+        'vacia' => 'You have no custom categories',
+        'nueva' => [
+            'title' => 'Create new category',
+            'nombre' => 'Category name',
+            'icono' => 'Icon',
+            'icono_hint' => 'Use Bootstrap Icons classes (eg: bi bi-tag)',
+            'color' => 'Color',
+            'guardar' => 'Create category',
+        ],
+    ],
+
     'peligro' => [
         'title' => 'Danger zone',
         'exportar' => 'Export all data',

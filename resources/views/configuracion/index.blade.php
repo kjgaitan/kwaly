@@ -11,6 +11,7 @@
             @include('configuracion.partials.moneda-card')
             @include('configuracion.partials.notificaciones-card')
             @include('configuracion.partials.seguridad-card')
+            @include('configuracion.partials.categorias-card', ['categorias' => $categorias])
             @include('configuracion.partials.peligro-card')
 
         </div>
