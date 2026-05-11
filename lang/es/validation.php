@@ -187,6 +187,12 @@ return [
     ],
 ],
 
+// Custom validation messages for categories
+'nombre_required' => 'El nombre de la categoría es obligatorio.',
+'nombre_max' => 'El nombre no puede superar los 100 caracteres.',
+'icono_max' => 'El icono no puede superar los 100 caracteres.',
+'color_hex_max' => 'El color no puede superar los 7 caracteres.',
+
 'attributes' => [
     'nombre' => 'nombre completo',
     'email' => 'correo electrónico',

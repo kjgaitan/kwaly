@@ -187,6 +187,12 @@ return [
     ],
 ],
 
+// Custom validation messages for categories
+'nombre_required' => 'The category name is required.',
+'nombre_max' => 'The name cannot exceed 100 characters.',
+'icono_max' => 'The icon cannot exceed 100 characters.',
+'color_hex_max' => 'The color cannot exceed 7 characters.',
+
 'attributes' => [
     'nombre' => 'full name',
     'email' => 'email address',

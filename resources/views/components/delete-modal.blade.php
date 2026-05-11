@@ -1,6 +1,6 @@
-@props(['id' => 'deleteModal', 'title' => '¿Eliminar registro?', 'message' => 'Esta operación es irreversible. Perderá los datos para siempre.', 'action' => '', 'method' => 'DELETE'])
+@props(['id' => 'deleteModal', 'title' => '¿Eliminar registro?', 'message' => 'Esta operación es irreversible. Perderá los datos para siempre.', 'confirmText' => 'Eliminar', 'cancelText' => 'Cancelar'])
 
-<div id="{{ $id }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+<div id="{{ $id }}" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm">
     <div class="relative w-full max-w-[400px] rounded-2xl border border-red-500/20 bg-[#0d1310] p-6 shadow-2xl">
         <!-- Encabezado -->
         <div class="mb-4 flex items-start gap-4">
@@ -17,46 +17,47 @@
         <div class="mt-6 flex gap-3">
             <button
                 type="button"
-                onclick="document.getElementById('{{ $id }}').classList.add('hidden')"
+                onclick="closeDeleteModal('{{ $id }}')"
                 class="flex-1 rounded-lg border border-gray-500/20 bg-gray-500/10 px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-gray-500/20"
             >
-                Cancelar
+                {{ $cancelText }}
             </button>
 
-            @if ($action && $method)
-                <form action="{{ $action }}" method="POST" class="flex-1">
-                    @csrf
-                    @method($method)
-                    <button
-                        type="submit"
-                        class="w-full rounded-lg border border-red-500/30 bg-red-500/20 px-4 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/30"
-                    >
-                        Eliminar
-                    </button>
-                </form>
-            @else
-                <button
-                    type="button"
-                    onclick="document.getElementById('{{ $id }}').classList.add('hidden')"
-                    class="flex-1 rounded-lg border border-red-500/30 bg-red-500/20 px-4 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/30"
-                >
-                    Eliminar
-                </button>
-            @endif
+            <button
+                type="button"
+                onclick="submitDeleteForm('{{ $id }}')"
+                class="flex-1 rounded-lg border border-red-500/30 bg-red-500/20 px-4 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/30"
+            >
+                {{ $confirmText }}
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Script para abrir el modal -->
+<!-- Scripts para controlar el modal -->
 <script>
     function openDeleteModal(modalId) {
-        document.getElementById(modalId).classList.remove('hidden');
-        document.getElementById(modalId).classList.add('flex');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
     }
 
     function closeDeleteModal(modalId) {
-        document.getElementById(modalId).classList.add('hidden');
-        document.getElementById(modalId).classList.remove('flex');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+
+    function submitDeleteForm(modalId) {
+        const form = document.getElementById(`delete-form-${modalId}`);
+        if (form) {
+            form.submit();
+        }
+        closeDeleteModal(modalId);
     }
 
     // Cerrar al hacer clic fuera del modal
@@ -65,8 +66,7 @@
         modals.forEach(modal => {
             modal.addEventListener('click', function(e) {
                 if (e.target === this) {
-                    this.classList.add('hidden');
-                    this.classList.remove('flex');
+                    closeDeleteModal(this.id);
                 }
             });
         });
