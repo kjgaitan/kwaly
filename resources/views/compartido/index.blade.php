@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="compartido-grid-forms">
-                    @include('compartido.partials.form-miembro')
-                    @include('compartido.partials.form-gasto')
+                    @include('compartido.partials.form-miembro', ['grupo' => $grupo])
+                    @include('compartido.partials.form-gasto', ['grupo' => $grupo])
                 </div>
 
                 @include('compartido.partials.leyenda')
