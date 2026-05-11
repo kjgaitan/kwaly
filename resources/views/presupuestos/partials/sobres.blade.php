@@ -1,7 +1,7 @@
 <div class="mb-4 flex items-center justify-between">
     <div>
         <h3 class="text-xl font-semibold text-white">Sobres Personalizados</h3>
-        <p class="text-sm text-gray-400">Gestiona tus categorías específicas</p>
+        <p class="text-sm text-gray-400">Gestiona los límites de gasto por categoría</p>
     </div>
 
     @if($presupuestoActual)
@@ -18,9 +18,9 @@
             $limite = (float) $detalle->limite_monto;
             $gastado = (float) $detalle->monto_gastado;
             $uso = $limite > 0 ? min(($gastado / $limite) * 100, 100) : 0;
+            $restante = max($limite - $gastado, 0);
 
             $categoriaNombre = $detalle->categoria->nombre ?? 'Categoría';
-            $tipoCategoria = ucfirst($detalle->categoria->tipo_categoria ?? 'General');
             $colorBarra = \App\Helpers\PresupuestoHelper::colorUsoSobre($uso);
         @endphp
 
@@ -28,39 +28,64 @@
             <div class="mb-4 flex items-start justify-between">
                 <div class="flex items-center gap-3">
                     <span class="text-lg text-[#72f59a]">●</span>
+
                     <div>
-                        <h4 class="font-semibold text-white">{{ $categoriaNombre }}</h4>
-                        <p class="text-xs text-gray-500">{{ $tipoCategoria }}</p>
+                        <h4 class="font-semibold text-white">
+                            {{ $categoriaNombre }}
+                        </h4>
+
+                        <p class="text-xs text-gray-500">
+                            Límite mensual asignado
+                        </p>
                     </div>
                 </div>
 
                 <div class="text-right">
-                    <p class="text-sm font-semibold text-white">{{ number_format($gastado, 2, ',', '.') }}€</p>
-                    <p class="text-xs text-gray-500">de {{ number_format($limite, 2, ',', '.') }}€</p>
+                    <p class="text-sm font-semibold text-white">
+                        {{ number_format($gastado, 2, ',', '.') }}€
+                    </p>
+
+                    <p class="text-xs text-gray-500">
+                        de {{ number_format($limite, 2, ',', '.') }}€
+                    </p>
                 </div>
             </div>
 
             <div class="mb-2 flex items-center justify-between text-xs text-gray-400">
                 <span>{{ number_format($uso, 0) }}% utilizado</span>
-                @if($uso >= 80)
-                    <span class="text-yellow-300">⚠ Cerca del límite</span>
-                @endif
+
+                <span>
+                    Restan {{ number_format($restante, 2, ',', '.') }}€
+                </span>
             </div>
 
             <div class="budget-progress-track">
-                <div class="h-full rounded-full {{ $colorBarra }}" style="width: {{ $uso }}%"></div>
+                <div class="h-full rounded-full {{ $colorBarra }}"
+                     style="width: {{ $uso }}%">
+                </div>
             </div>
 
-            @if($uso >= 80)
+            @if($uso >= 80 && $uso < 100)
                 <div class="budget-alert-warning">
                     ⚠ Has gastado el {{ number_format($uso, 0) }}% del presupuesto de {{ strtolower($categoriaNombre) }} este mes.
+                </div>
+            @endif
+
+            @if($uso >= 100)
+                <div class="budget-alert-warning">
+                    ⚠ Has alcanzado o superado el límite del presupuesto de {{ strtolower($categoriaNombre) }}.
                 </div>
             @endif
         </div>
     @empty
         <div class="xl:col-span-2 budget-empty">
-            <p class="text-lg font-semibold text-white">No hay sobres personalizados</p>
-            <p class="mt-2 text-sm text-gray-400">Aún no has añadido categorías al presupuesto actual.</p>
+            <p class="text-lg font-semibold text-white">
+                No hay sobres personalizados
+            </p>
+
+            <p class="mt-2 text-sm text-gray-400">
+                Aún no has añadido categorías al presupuesto actual.
+            </p>
         </div>
     @endforelse
 </div>
