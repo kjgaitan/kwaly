@@ -9,7 +9,6 @@
             value="{{ old('proveedor', $factura->proveedor ?? '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
             placeholder="Endesa"
-            required
         >
         <x-input-error :messages="$errors->get('proveedor')" />
 
@@ -24,7 +23,6 @@
             value="{{ old('concepto', $factura->concepto ?? '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
             placeholder="Electricidad"
-            required
         >
         <x-input-error :messages="$errors->get('concepto')" />
 
@@ -54,7 +52,6 @@
             value="{{ old('monto_total', $factura->monto_total ?? '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
             placeholder="0.00"
-            required
         >
         <x-input-error :messages="$errors->get('monto_total')" />
 
@@ -68,7 +65,6 @@
             name="fecha_vencimiento"
             value="{{ old('fecha_vencimiento', isset($factura) && $factura->fecha_vencimiento ? \Carbon\Carbon::parse($factura->fecha_vencimiento)->format('Y-m-d') : '') }}"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
-            required
         >
         <x-input-error :messages="$errors->get('fecha_vencimiento')" />
 
@@ -81,7 +77,6 @@
             name="estado"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
             required
-        >
             <option value="" disabled {{ old('estado', $factura->estado ?? '') === '' ? 'selected' : '' }}>
                 Seleccione
             </option>
@@ -106,7 +101,6 @@
             name="frecuencia"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
             required
-        >
             <option value="" disabled {{ old('frecuencia', $factura->frecuencia ?? '') === '' ? 'selected' : '' }}>
                 Seleccione
             </option>

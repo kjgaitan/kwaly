@@ -8,8 +8,9 @@
 
             <div class="px-6 py-6">
 
-                <form action="{{ route('facturas.store') }}" method="POST">
+                <form action="{{ route('facturas.store') }}" method="POST" novalidate>
                     @csrf
+
                     @include('facturas.partials.form', [
                         'factura' => null,
                         'boton' => 'Guardar factura'

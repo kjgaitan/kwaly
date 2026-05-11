@@ -8,7 +8,7 @@
 
             <div class="px-6 py-6">
 
-                <form action="{{ route('facturas.update', $factura->id_factura) }}" method="POST">
+                <form action="{{ route('facturas.update', $factura->id_factura) }}" method="POST" novalidate>
                     @csrf
                     @method('PUT')
 
