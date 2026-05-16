@@ -77,6 +77,7 @@
             name="estado"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
             required
+            >
             <option value="" disabled {{ old('estado', $factura->estado ?? '') === '' ? 'selected' : '' }}>
                 Seleccione
             </option>
@@ -101,6 +102,7 @@
             name="frecuencia"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white focus:border-[#72f59a] focus:outline-none"
             required
+            >
             <option value="" disabled {{ old('frecuencia', $factura->frecuencia ?? '') === '' ? 'selected' : '' }}>
                 Seleccione
             </option>

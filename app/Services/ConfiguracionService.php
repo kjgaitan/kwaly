@@ -33,7 +33,7 @@ class ConfiguracionService
     /**
      * Actualiza los datos básicos del perfil.
      */
-    public function actualizarPerfil(User $usuario, array $datos): void
+    public function actualizarPerfil(Usuario $usuario, array $datos): void
     {
         $usuario->update([
             'nombre' => $datos['nombre'],
@@ -45,7 +45,7 @@ class ConfiguracionService
     /**
      * Actualiza la moneda preferida del usuario.
      */
-    public function actualizarMoneda(User $usuario, array $datos): void
+    public function actualizarMoneda(Usuario $usuario, array $datos): void
     {
         $usuario->update([
             'moneda_preferida' => $datos['moneda_preferida'],
@@ -78,7 +78,7 @@ class ConfiguracionService
     /**
      * Actualiza la contraseña del usuario.
      */
-    public function actualizarPassword(User $usuario, array $datos): void
+    public function actualizarPassword(Usuario $usuario, array $datos): void
     {
         if (!Hash::check($datos['password_actual'], $usuario->password_hash)) {
             throw ValidationException::withMessages([
@@ -94,7 +94,7 @@ class ConfiguracionService
     /**
      * Obtiene todos los datos principales del usuario para exportación.
      */
-    public function obtenerDatosExportacion(User $usuario): array
+    public function obtenerDatosExportacion(Usuario $usuario): array
     {
         $usuario->load([
             'configuracion',
@@ -141,7 +141,7 @@ class ConfiguracionService
     /**
      * Elimina por completo la cuenta del usuario y sus datos asociados.
      */
-    public function eliminarCuentaUsuario(User $usuario, string $passwordConfirmacion): void
+    public function eliminarCuentaUsuario(Usuario $usuario, string $passwordConfirmacion): void
     {
         if (!Hash::check($passwordConfirmacion, $usuario->password_hash)) {
             throw ValidationException::withMessages([

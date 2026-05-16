@@ -22,19 +22,19 @@ class FacturaController extends Controller
         $hoy = now()->toDateString();
 
         foreach ($facturas as $factura) {
-            if ($factura->estado !== 'pagado' && $factura->fecha_vencimiento < $hoy) {
-                $factura->estado_visual = 'vencido';
+            if ($factura->estado !== 'pagada' && $factura->fecha_vencimiento < $hoy) {
+                $factura->estado_visual = 'vencida';
             } else {
                 $factura->estado_visual = $factura->estado;
             }
         }
 
         $facturasPendientes = $facturas->filter(function ($factura) {
-            return $factura->estado_visual === 'pendiente' || $factura->estado_visual === 'vencido';
+            return $factura->estado_visual === 'pendiente' || $factura->estado_visual === 'vencida';
         });
 
         $facturasPagadas = $facturas->filter(function ($factura) {
-            return $factura->estado_visual === 'pagado';
+            return $factura->estado_visual === 'pagada';
         });
 
         $totalPendiente = $facturasPendientes->sum('monto_total');
@@ -82,9 +82,9 @@ class FacturaController extends Controller
             'descripcion' => $request->descripcion,
             'monto_total' => $request->monto_total,
             'fecha_vencimiento' => $request->fecha_vencimiento,
-            'fecha_pago' => $request->estado === 'pagado' ? now()->toDateString() : null,
+            'fecha_pago' => $request->estado === 'pagada' ? now()->toDateString() : null,
             'estado' => $request->estado ?? 'pendiente',
-            'frecuencia' => $request->frecuencia ?? 'unico',
+            'frecuencia' => $request->frecuencia ?? 'unica',
         ]);
 
         return redirect()
@@ -126,10 +126,10 @@ class FacturaController extends Controller
             'monto_total' => $request->monto_total,
             'fecha_vencimiento' => $request->fecha_vencimiento,
             'estado' => $request->estado ?? 'pendiente',
-            'frecuencia' => $request->frecuencia ?? 'unico',
+            'frecuencia' => $request->frecuencia ?? 'unica',
         ];
 
-        if (($request->estado ?? 'pendiente') === 'pagado') {
+        if (($request->estado ?? 'pendiente') === 'pagada') {
             $datosActualizar['fecha_pago'] = now()->toDateString();
         } else {
             $datosActualizar['fecha_pago'] = null;
@@ -150,7 +150,7 @@ class FacturaController extends Controller
         $factura = $this->obtenerFacturaUsuario($id);
 
         $factura->update([
-            'estado' => 'pagado',
+            'estado' => 'pagada',
             'fecha_pago' => now()->toDateString(),
         ]);
 

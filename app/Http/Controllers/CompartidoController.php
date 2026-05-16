@@ -175,7 +175,7 @@ class CompartidoController extends Controller
                 ->with('error', 'No tienes permisos para agregar miembros.');
         }
 
-        $usuarioInvitado = User::where('email', $request->validated('email'))->first();
+        $usuarioInvitado = Usuario::where('email', $request->validated('email'))->first();
 
         if (!$usuarioInvitado) {
             return redirect()
@@ -232,7 +232,7 @@ class CompartidoController extends Controller
                 ->with('error', 'No tienes permisos para editar miembros.');
         }
 
-        $usuarioInvitado = User::where('email', $request->validated('email'))->first();
+        $usuarioInvitado = Usuario::where('email', $request->validated('email'))->first();
 
         if (!$usuarioInvitado) {
             return redirect()

@@ -40,6 +40,6 @@ class GastoCompartido extends Model
      */
     public function pagador(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_usuario_pagador', 'id_usuario');
+        return $this->belongsTo(Usuario::class, 'id_usuario_pagador', 'id_usuario');
     }
 }

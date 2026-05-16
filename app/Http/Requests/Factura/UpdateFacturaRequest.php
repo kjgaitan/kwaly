@@ -19,8 +19,8 @@ class UpdateFacturaRequest extends FormRequest
             'descripcion' => 'nullable|string|max:1000',
             'monto_total' => 'required|numeric|min:0.01|max:999999.99',
             'fecha_vencimiento' => 'required|date',
-            'estado' => 'nullable|in:pendiente,pagado',
-            'frecuencia' => 'nullable|in:unico,recurrente',
+            'estado' => 'nullable|in:pendiente,pagada,vencida',
+            'frecuencia' => 'nullable|in:unica,mensual,anual',
         ];
     }
 

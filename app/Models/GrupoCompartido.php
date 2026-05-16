@@ -31,7 +31,7 @@ class GrupoCompartido extends Model
      */
     public function creador(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'creado_por', 'id_usuario');
+        return $this->belongsTo(Usuario::class, 'creado_por', 'id_usuario');
     }
 
     /**
