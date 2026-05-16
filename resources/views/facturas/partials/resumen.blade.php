@@ -15,7 +15,8 @@
                 </div>
             </div>
 
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-yellow-500/20 bg-yellow-500/10 text-yellow-300">
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-yellow-500/20 bg-yellow-500/10 text-yellow-300">
                 <i class="bi bi-hourglass-split text-xl"></i>
             </div>
         </div>
@@ -36,7 +37,8 @@
                 </div>
             </div>
 
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-300">
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-300">
                 <i class="bi bi-wallet2 text-xl"></i>
             </div>
         </div>
@@ -52,12 +54,13 @@
                 </h2>
 
                 <div class="mt-3 flex items-center gap-2 text-sm text-gray-400">
-                    <i class="bi bi-receipt text-[#72f59a]"></i>
+                    <i class="bi bi-file-earmark-text text-[#72f59a]"></i>
                     <span>{{ $cantidadTotal }} facturas</span>
                 </div>
             </div>
 
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#2e5a40] bg-[#1f2b24] text-[#72f59a]">
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#2e5a40] bg-[#1f2b24] text-[#72f59a]">
                 <i class="bi bi-journal-text text-xl"></i>
             </div>
         </div>
@@ -73,10 +76,8 @@
                 </h2>
 
                 <div class="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-[#111613]">
-                    <div
-                        class="h-full rounded-full bg-[#72f59a] transition-all duration-500"
-                        style="width: {{ $porcentajePagado }}%;"
-                    ></div>
+                    <div class="h-full rounded-full bg-[#72f59a] transition-all duration-500"
+                        style="width: {{ $porcentajePagado }}%;"></div>
                 </div>
 
                 <p class="mt-3 text-sm text-gray-400">
@@ -84,7 +85,8 @@
                 </p>
             </div>
 
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300">
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300">
                 <i class="bi bi-bar-chart-line text-xl"></i>
             </div>
         </div>

@@ -152,14 +152,9 @@
                                     </button>
                                     <x-delete-modal id="deleteModal-{{ $transaccion->id_transaccion }}"
                                         title="¿Eliminar transacción?"
-                                        message="Esta transacción se eliminará permanentemente. Esta operación es irreversible." />
-
-                                    <form id="delete-form-deleteModal-{{ $transaccion->id_transaccion }}"
-                                        action="{{ route('transacciones.destroy', $transaccion->id_transaccion) }}"
-                                        method="POST" class="hidden">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
+                                        message="Esta transacción se eliminará permanentemente. Esta operación es irreversible."
+                                        :action="route('transacciones.destroy', $transaccion->id_transaccion)"
+                                        method="DELETE" />
                                 </div>
                             </div>
                         </div>
