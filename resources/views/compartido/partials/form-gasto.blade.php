@@ -11,7 +11,7 @@
                    name="titulo"
                    id="titulo"
                    value="{{ old('titulo') }}"
-                   placeholder="Ej: Compra del supermercado"
+                   placeholder="Compra del supermercado"
                    class="compartido-input {{ $errors->has('titulo') ? 'border-red-500' : '' }}">
             @if($errors->has('titulo'))
                 <p class="mt-2 text-xs text-red-400">{{ $errors->first('titulo') }}</p>
@@ -45,8 +45,10 @@
             @endif
         </div>
 
+        <div class="flex justify-end">
         <button type="submit" class="compartido-btn-submit">
             Guardar gasto
         </button>
+    </div>
     </form>
 </div>

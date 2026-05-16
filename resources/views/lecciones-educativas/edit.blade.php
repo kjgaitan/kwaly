@@ -11,7 +11,7 @@
                 </p>
             </div>
 
-            <form action="{{ route('modulos-educativos.lecciones.update', [$modulo, $leccion]) }}" method="POST">
+            <form action="{{ route('modulos-educativos.lecciones.update', [$modulo, $leccion]) }}" method="POST" novalidate>
                 @csrf
                 @method('PUT')
                 @include('lecciones-educativas.partials.form', ['textoBoton' => 'Actualizar lección'])

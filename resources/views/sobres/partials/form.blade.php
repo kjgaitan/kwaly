@@ -20,7 +20,7 @@
             name="limite_monto"
             value="{{ old('limite_monto', $detalle->limite_monto ?? '') }}"
             class="budget-input"
-            placeholder="Ej. 300.00"
+            placeholder="300.00"
         >
     </div>
 
@@ -32,7 +32,7 @@
             name="monto_gastado"
             value="{{ old('monto_gastado', $detalle->monto_gastado ?? 0) }}"
             class="budget-input"
-            placeholder="Ej. 120.00"
+            placeholder="120.00"
         >
     </div>
 </div>

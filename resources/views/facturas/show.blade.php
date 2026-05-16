@@ -74,13 +74,6 @@
 
             <div class="flex flex-wrap items-center gap-3 border-t border-[#26352d] px-6 py-5">
                 <a
-                    href="{{ route('facturas.index') }}"
-                    class="inline-flex items-center gap-2 rounded-xl border border-[#314238] px-5 py-3 text-sm font-semibold text-gray-300 transition hover:border-[#72f59a] hover:text-white"
-                >
-                    Volver
-                </a>
-
-                <a
                     href="{{ route('facturas.edit', $factura->id_factura) }}"
                     class="inline-flex items-center gap-2 rounded-xl bg-[#72f59a] px-5 py-3 text-sm font-semibold text-[#0d1510] transition hover:brightness-110"
                 >

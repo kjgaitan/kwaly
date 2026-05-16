@@ -1,4 +1,4 @@
-<form action="{{ $action }}" method="POST" class="space-y-6">
+<form action="{{ $action }}" method="POST" class="space-y-6" novalidate>
     @csrf
 
     @if($method !== 'POST')
@@ -151,7 +151,7 @@
 
     </div>
 
-    <div class="flex justify-end gap-3 mt-6">
+    <div class="mt-8 flex justify-end gap-3 border-t border-[#26352d] pt-6 pr-2 pb-2">
         <a
             href="{{ route('presupuestos.index') }}"
             class="px-5 py-2 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-700"

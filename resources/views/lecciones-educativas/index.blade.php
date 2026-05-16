@@ -14,12 +14,6 @@
                 </div>
 
                 <div class="flex flex-col gap-3 sm:flex-row">
-                    <a href="{{ route('modulos-educativos.index') }}"
-                       class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 text-sm font-medium text-white transition hover:bg-white/[0.05]">
-                        <i class="bi bi-arrow-left"></i>
-                        <span>Volver a módulos</span>
-                    </a>
-
                     <a href="{{ route('modulos-educativos.lecciones.create', $modulo) }}"
                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                         <i class="bi bi-plus-lg"></i>

@@ -4,7 +4,7 @@
             <i class="bi bi-journal-bookmark text-2xl"></i>
         </div>
 
-        <h2 class="mt-4 text-lg font-semibold text-white">Aún no hay lecciones disponibles</h2>
+        <h2 class="mt-4 text-lg font-semibold text-white">No hay lecciones disponibles</h2>
         <p class="mt-2 text-sm text-gray-400">
             Crea tu primer módulo educativo para comenzar a aprender.
         </p>

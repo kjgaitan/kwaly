@@ -11,7 +11,7 @@
                    name="email"
                    id="email"
                    value="{{ old('email') }}"
-                   placeholder="correo@ejemplo.com"
+                   placeholder="correo@gmail.com"
                    class="compartido-input {{ $errors->has('email') ? 'border-red-500' : '' }}">
             @if($errors->has('email'))
                 <p class="mt-2 text-xs text-red-400">{{ $errors->first('email') }}</p>

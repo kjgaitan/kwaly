@@ -33,7 +33,7 @@
 
             <p class="mt-2 text-sm leading-6 text-gray-400">
                 @if($cantidadTotal === 0)
-                    Todavía no has registrado facturas. Añade tu primera factura para empezar a controlar pagos, vencimientos y reportes.
+                    No hay registros de facturas. Añade tu primera factura para empezar a controlar pagos, vencimientos y reportes.
                 @else
                     Tienes
                     <span class="font-semibold text-white">{{ $cantidadPendientes }} pagos pendientes</span>

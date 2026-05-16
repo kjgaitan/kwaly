@@ -11,7 +11,7 @@
                 </p>
             </div>
 
-            <form action="{{ route('modulos-educativos.lecciones.store', $modulo) }}" method="POST">
+            <form action="{{ route('modulos-educativos.lecciones.store', $modulo) }}" method="POST" novalidate>
                 @csrf
                 @include('lecciones-educativas.partials.form', ['textoBoton' => 'Guardar lección'])
             </form>

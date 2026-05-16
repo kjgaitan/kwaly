@@ -40,8 +40,10 @@
             </label>
         </div>
 
-        <button type="submit" class="config-btn-primary">
-            {{ __('configuracion.notificaciones.guardar') }}
-        </button>
+       <div class="flex justify-end">
+            <button type="submit" class="config-btn-primary">
+                {{ __('configuracion.notificaciones.guardar') }}
+            </button>
+        </div>
     </form>
 </div>

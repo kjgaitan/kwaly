@@ -13,7 +13,7 @@
             </div>
 
 
-            <form method="POST" action="{{ route('presupuestos.sobres.store', $presupuesto->id_presupuesto) }}" class="space-y-6">
+            <form method="POST" action="{{ route('presupuestos.sobres.store', $presupuesto->id_presupuesto) }}" class="space-y-6" novalidate>
                 @csrf
 
                 <div class="grid gap-5 md:grid-cols-2">

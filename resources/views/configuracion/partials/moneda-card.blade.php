@@ -23,8 +23,10 @@
 
         </div>
 
+     <div class="flex justify-end">
         <button type="submit" class="config-btn-primary">
             {{ __('configuracion.moneda.guardar') }}
         </button>
+    </div>
     </form>
 </div>

@@ -155,8 +155,8 @@
     @empty
         <div class="rounded-[20px] border border-[#244131] bg-[#1b201d] px-4 py-8 text-center shadow-[0_0_24px_rgba(35,190,110,0.10)]">
             <i class="bi bi-receipt text-3xl text-[#72f59a]"></i>
-            <p class="mt-3 text-base font-semibold text-white">Aún no tienes facturas registradas</p>
-            <p class="mt-1 text-sm text-gray-400">Empieza creando tu primera factura para controlar tus próximos pagos.</p>
+            <p class="mt-3 text-base font-semibold text-white">No hay facturas registradas</p>
+            <p class="mt-1 text-sm text-gray-400">Cuando agregues facturas, aparecerán aquí.</p>
         </div>
     @endforelse
 </div>

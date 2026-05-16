@@ -12,7 +12,7 @@
             @include('presupuestos.partials.form', [
                 'action' => route('presupuestos.store'),
                 'method' => 'POST',
-                'submitText' => 'Guardar',
+                'submitText' => 'Guardar presupuesto',
             ])
 
         </div>

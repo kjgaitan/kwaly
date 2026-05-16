@@ -20,15 +20,13 @@
 
                     @include('metas.partials.form')
 
-                    <div class="flex flex-col gap-3 border-t border-white/5 pt-5 sm:flex-row sm:justify-start">
-                        <a href="{{ route('metas.index') }}" class="metas-btn-secondary">
+                    <div class="mt-8 flex flex-col items-end gap-3 pt-5 pr-2 sm:flex-row sm:justify-end">                        <a href="{{ route('metas.index') }}" class="metas-btn-secondary">
                             Cancelar
                         </a>
 
-                        <button type="submit" class="metas-btn-primary">
-                            <i class="bi bi-check-lg"></i>
+                       <button type="submit" class="metas-btn-primary">
                             Guardar meta
-                        </button>
+                       </button>
                     </div>
                 </form>
 

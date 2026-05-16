@@ -129,13 +129,12 @@
             </div>
 
             <h3 class="text-lg font-semibold text-white">
-                Aún no tienes metas activas
+                No hay metas activas
             </h3>
 
             <p class="mt-2 text-sm text-gray-400">
-                Empieza creando tu primera meta financiera para seguir tu progreso.
+                Cuando agregues tu primera meta financiera, aparecerá aquí.
             </p>
-
-                    </div>
+           </div>
     @endif
 </div>

@@ -35,7 +35,7 @@
             name="descripcion"
             rows="4"
             class="w-full rounded-xl border border-[#2b3a32] bg-[#111613] px-4 py-3 text-white placeholder-gray-500 focus:border-[#72f59a] focus:outline-none"
-            placeholder="Añade una descripción opcional"
+            placeholder="Añade una descripción"
         >{{ old('descripcion', $factura->descripcion ?? '') }}</textarea>
         <x-input-error :messages="$errors->get('descripcion')" />
 
@@ -117,19 +117,19 @@
         <x-input-error :messages="$errors->get('frecuencia')" />
 
     </div>
-<div class="mt-6 flex items-center gap-3">
-    <button
-        type="submit"
-        class="inline-flex items-center gap-2 rounded-xl bg-[#72f59a] px-5 py-3 text-sm font-semibold text-[#0d1510] transition hover:brightness-110"
-    >
-        <i class="bi bi-check2-circle"></i>
-        {{ $boton }}
-    </button>
-
+<div class="md:col-span-2 mt-8 flex items-center justify-end gap-3 pt-6 pr-2 pb-2">
     <a
         href="{{ route('facturas.index') }}"
-        class="inline-flex items-center gap-2 rounded-xl border border-[#314238] px-5 py-3 text-sm font-semibold text-gray-300 transition hover:border-[#72f59a] hover:text-white"
+        class="inline-flex items-center rounded-xl border border-[#314238] px-5 py-3 text-sm font-semibold text-gray-300 transition hover:border-[#72f59a] hover:text-white"
     >
         Cancelar
     </a>
+
+    <button
+        type="submit"
+        class="inline-flex items-center rounded-xl bg-[#72f59a] px-5 py-3 text-sm font-semibold text-[#0d1510] transition hover:brightness-110"
+    >
+        {{ $boton }}
+    </button>
+
 </div>

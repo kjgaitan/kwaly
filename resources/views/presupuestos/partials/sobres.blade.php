@@ -84,7 +84,7 @@
             </p>
 
             <p class="mt-2 text-sm text-gray-400">
-                Aún no has añadido categorías al presupuesto actual.
+                No has añadido categorías al presupuesto actual.
             </p>
         </div>
     @endforelse

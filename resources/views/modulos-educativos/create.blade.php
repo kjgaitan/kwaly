@@ -10,7 +10,7 @@
                 </p>
             </div>
 
-            <form action="{{ route('modulos-educativos.store') }}" method="POST">
+            <form action="{{ route('modulos-educativos.store') }}" method="POST" novalidate>
                 @csrf
                 @include('modulos-educativos.partials.form', ['textoBoton' => 'Guardar módulo'])
             </form>

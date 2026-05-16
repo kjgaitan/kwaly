@@ -7,7 +7,7 @@
             name="titulo"
             value="{{ old('titulo', $leccion->titulo ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
-            placeholder="Ej. Qué es un fondo de emergencia">
+            placeholder="Qué es un fondo de emergencia">
         <x-input-error :messages="$errors->get('titulo')" />
 
     </div>
@@ -33,22 +33,20 @@
             min="1"
             value="{{ old('duracion_minutos', $leccion->duracion_minutos ?? '') }}"
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
-            placeholder="Ej. 5">
+            placeholder="5">
         <x-input-error :messages="$errors->get('duracion_minutos')" />
 
     </div>
 
-    <div class="flex flex-col gap-3 pt-2 sm:flex-row">
+    <div class="flex flex-col items-end gap-3 pt-2 sm:flex-row sm:justify-end">
+        <a href="{{ route('modulos-educativos.lecciones.index', $modulo) }}"
+           class="inline-flex items-center justify-center rounded-xl border border-white/5 bg-white/[0.03] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.05]">
+            <span>Cancelar</span>
+        </a>
+
         <button type="submit"
-                class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-500 px-5 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
-            <i class="bi bi-check2-circle"></i>
+                class="inline-flex items-center justify-center rounded-xl bg-green-500 px-5 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
             <span>{{ $textoBoton }}</span>
         </button>
-
-        <a href="{{ route('modulos-educativos.lecciones.index', $modulo) }}"
-           class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-white/[0.03] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.05]">
-            <i class="bi bi-arrow-left"></i>
-            <span>Volver</span>
-        </a>
     </div>
 </div>

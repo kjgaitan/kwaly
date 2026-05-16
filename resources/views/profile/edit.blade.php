@@ -61,15 +61,16 @@
                         </div>
                     </div>
 
-                    <div class="profile-actions">
-                        <button type="submit" class="config-btn-primary">
-                            Guardar cambios
-                        </button>
+                <div class="profile-actions mt-8 flex items-center justify-end gap-3 pr-2 pb-2">
+                    <a href="{{ route('dashboard') }}" class="profile-btn-cancel">
+                        Cancelar
+                    </a>
 
-                        <a href="{{ route('dashboard') }}" class="profile-btn-cancel">
-                            Cancelar
-                        </a>
-                    </div>
+                    <button type="submit" class="config-btn-primary">
+                        Guardar cambios
+                    </button>
+
+                </div>
                 </form>
             </div>
 
