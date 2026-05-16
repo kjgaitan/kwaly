@@ -8,6 +8,7 @@ use App\Http\Requests\Presupuesto\UpdatePresupuestoRequest;
 use App\Models\PresupuestoMensual;
 use App\Services\PresupuestoService;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PresupuestoDetalleCategoria;
 
 /**
  * Controlador encargado de gestionar los presupuestos mensuales.
@@ -89,6 +90,8 @@ class PresupuestoController extends Controller
     public function destroy(int $id)
     {
         $presupuesto = $this->obtenerPresupuestoUsuario($id);
+
+        PresupuestoDetalleCategoria::where('id_presupuesto', $presupuesto->id_presupuesto)->delete();
 
         $presupuesto->delete();
 

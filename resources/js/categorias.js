@@ -1,86 +1,140 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('categoriaForm');
+    const methodInput = document.getElementById('categoria_method');
 
     const nombreInput = document.getElementById('categoria_nombre');
     const iconoInput = document.getElementById('icono');
     const colorInput = document.getElementById('color_hex');
 
     const previewIconBox = document.getElementById('previewCategoriaIcono');
+    const previewIcon = previewIconBox?.querySelector('i');
     const previewNombre = document.getElementById('previewCategoriaNombre');
 
-    const previewIcon = previewIconBox?.querySelector('i');
+    const formTitle = document.getElementById('categoriaFormTitle');
+    const submitBtn = document.getElementById('categoriaSubmitBtn');
+    const cancelBtn = document.getElementById('cancelarEdicionCategoria');
 
     if (
+        !form ||
+        !methodInput ||
         !nombreInput ||
         !iconoInput ||
         !colorInput ||
         !previewIconBox ||
-        !previewNombre
+        !previewNombre ||
+        !formTitle ||
+        !submitBtn
     ) {
         return;
     }
 
+    const textoPlaceholder = 'Vista previa de categoría';
 
-    document.querySelectorAll('.category-icon-option')
-        .forEach(button => {
+    function actualizarPreview() {
+        previewNombre.textContent = nombreInput.value || textoPlaceholder;
 
-            button.addEventListener('click', () => {
+        if (previewIcon) {
+            previewIcon.className = `bi ${iconoInput.value}`;
+        }
 
-                document.querySelectorAll('.category-icon-option')
-                    .forEach(btn => btn.classList.remove('active'));
+        previewIconBox.style.backgroundColor = colorInput.value;
+        previewIconBox.style.boxShadow = `0 0 18px ${colorInput.value}`;
+    }
 
-                button.classList.add('active');
-
-                const icono = button.dataset.icon;
-
-                iconoInput.value = icono;
-
-                if (previewIcon) {
-                    previewIcon.className = `bi ${icono}`;
-                }
-
-            });
-
+    function marcarIconoActivo(icono) {
+        document.querySelectorAll('.category-icon-option').forEach((button) => {
+            button.classList.toggle('active', button.dataset.icon === icono);
         });
+    }
 
-
-    document.querySelectorAll('.category-color-option')
-        .forEach(button => {
-
-            button.addEventListener('click', () => {
-
-                document.querySelectorAll('.category-color-option')
-                    .forEach(btn => btn.classList.remove('active'));
-
-                button.classList.add('active');
-
-                const color = button.dataset.color;
-
-                colorInput.value = color;
-
-                previewIconBox.style.backgroundColor = color;
-                previewIconBox.style.boxShadow = `0 0 18px ${color}`;
-
-            });
-
+    function marcarColorActivo(color) {
+        document.querySelectorAll('.category-color-option').forEach((button) => {
+            button.classList.toggle('active', button.dataset.color === color);
         });
+    }
 
+    function modoCrear() {
+        form.action = form.dataset.storeUrl;
 
-    previewNombre.textContent =
-        nombreInput.value || 'Vista previa de categoría';
+        methodInput.disabled = true;
+        methodInput.value = 'POST';
 
+        nombreInput.value = '';
+        iconoInput.value = 'bi-tag';
+        colorInput.value = '#72f59a';
 
-    nombreInput.addEventListener('input', () => {
+        formTitle.textContent = 'Crear nueva categoría';
+        submitBtn.textContent = 'Guardar categoría';
 
-        previewNombre.textContent =
-            nombreInput.value || 'Vista previa de categoría';
+        if (cancelBtn) {
+            cancelBtn.classList.add('hidden');
+        }
 
+        marcarIconoActivo(iconoInput.value);
+        marcarColorActivo(colorInput.value);
+        actualizarPreview();
+    }
+
+    function modoEditar(button) {
+        form.action = button.dataset.updateUrl;
+
+        methodInput.disabled = false;
+        methodInput.value = 'PUT';
+
+        nombreInput.value = button.dataset.nombre || '';
+        iconoInput.value = button.dataset.icono || 'bi-tag';
+        colorInput.value = button.dataset.color || '#72f59a';
+
+        formTitle.textContent = 'Editar categoría';
+        submitBtn.textContent = 'Actualizar categoría';
+
+        if (cancelBtn) {
+            cancelBtn.classList.remove('hidden');
+        }
+
+        marcarIconoActivo(iconoInput.value);
+        marcarColorActivo(colorInput.value);
+        actualizarPreview();
+
+        form.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+        });
+    }
+
+    document.querySelectorAll('.category-icon-option').forEach((button) => {
+        button.addEventListener('click', () => {
+            iconoInput.value = button.dataset.icon;
+
+            marcarIconoActivo(iconoInput.value);
+            actualizarPreview();
+        });
     });
 
+    document.querySelectorAll('.category-color-option').forEach((button) => {
+        button.addEventListener('click', () => {
+            colorInput.value = button.dataset.color;
 
-    previewIconBox.style.backgroundColor =
-        colorInput.value;
+            marcarColorActivo(colorInput.value);
+            actualizarPreview();
+        });
+    });
 
-    previewIconBox.style.boxShadow =
-        `0 0 18px ${colorInput.value}`;
+    document.querySelectorAll('.categoria-edit-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+            modoEditar(button);
+        });
+    });
 
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            modoCrear();
+        });
+    }
+
+    nombreInput.addEventListener('input', actualizarPreview);
+
+    marcarIconoActivo(iconoInput.value);
+    marcarColorActivo(colorInput.value);
+    actualizarPreview();
 });

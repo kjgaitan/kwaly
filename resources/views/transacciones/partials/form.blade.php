@@ -23,6 +23,7 @@
             step="0.01"
             name="monto"
             value="{{ old('monto', $transaccion->monto ?? '') }}"
+            placeholder="50.00"
             class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a] {{ $errors->has('monto') ? 'border-red-500' : '' }}"
         >
         @if($errors->has('monto'))
@@ -72,26 +73,7 @@
         @endif
     </div>
 
-    {{-- CUENTA --}}
-    <div>
-        <label class="mb-2 block text-sm text-gray-300">Cuenta</label>
-        <select
-            name="id_cuenta"
-            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a] {{ $errors->has('id_cuenta') ? 'border-red-500' : '' }}"
-        >
-            <option value="">Selecciona</option>
-            @foreach ($cuentas as $cuenta)
-                <option value="{{ $cuenta->id_cuenta }}"
-                    {{ old('id_cuenta', $transaccion->id_cuenta ?? '') == $cuenta->id_cuenta ? 'selected' : '' }}>
-                    {{ $cuenta->nombre }}
-                </option>
-            @endforeach
-        </select>
-        @if($errors->has('id_cuenta'))
-            <p class="mt-2 text-xs text-red-400">{{ $errors->first('id_cuenta') }}</p>
-        @endif
-    </div>
-
+  
     {{-- FECHA --}}
     <div>
         <label class="mb-2 block text-sm text-gray-300">Fecha</label>
@@ -107,7 +89,7 @@
     </div>
 
     {{-- METODO PAGO --}}
-    <div class="md:col-span-2">
+    <div>
         <label class="mb-2 block text-sm text-gray-300">Método de pago</label>
         <input
             type="text"
@@ -128,8 +110,53 @@
         <textarea
             name="descripcion"
             rows="3"
+            placeholder="Detalles adicionales sobre la transacción..."
             class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a]"
         >{{ old('descripcion', $transaccion->descripcion ?? '') }}</textarea>
+  
+    </div>{{-- CUENTA - FUNCIONALIDAD PRÓXIMAMENTE --}}
+<div class="col-span-2 rounded-xl border border-[#4a3f1f] bg-[#2a2415] px-4 py-4">
+
+    <div>
+        <label class="mb-2 block text-sm text-yellow-100">
+            Cuenta
+        </label>
+
+        <select
+            name="id_cuenta"
+            disabled
+            class="w-full rounded-xl border border-[#4a3f1f] bg-[#111613] px-4 py-3 text-gray-500 opacity-60 cursor-not-allowed"
+        >
+            <option value="">
+                Selecciona
+            </option>
+
+            @foreach ($cuentas as $cuenta)
+                <option
+                    value="{{ $cuenta->id_cuenta }}"
+                    {{ old('id_cuenta', $transaccion->id_cuenta ?? '') == $cuenta->id_cuenta ? 'selected' : '' }}
+                >
+                    {{ $cuenta->nombre }}
+                </option>
+            @endforeach
+        </select>
+
+        @if($errors->has('id_cuenta'))
+            <p class="mt-2 text-xs text-red-400">
+                {{ $errors->first('id_cuenta') }}
+            </p>
+        @endif
     </div>
 
+    <div class="mt-3 flex items-start gap-3 text-sm text-yellow-200">
+        <div class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#3a3218]">
+            <i class="bi bi-info-circle text-sm text-yellow-400"></i>
+        </div>
+
+        <p class="leading-tight">
+            Próximamente se implementará la funcionalidad de cuentas para que puedas asociar esta transacción a una cuenta específica.
+        </p>
+    </div>
+
+</div>
 </div>
