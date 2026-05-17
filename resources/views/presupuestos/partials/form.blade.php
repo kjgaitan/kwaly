@@ -44,7 +44,7 @@
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
                 <option value="" disabled
                     {{ old('mes', isset($presupuesto) ? $presupuesto->mes : '') == '' ? 'selected' : '' }}>
-                    Selecciona
+                    Seleccione
                 </option>
 
                 @php

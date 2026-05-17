@@ -102,7 +102,7 @@
         <select name="id_cuenta" disabled
             class="w-full rounded-xl border border-[#4a3f1f] bg-[#111613] px-4 py-3 text-gray-500 opacity-60 cursor-not-allowed">
             <option value="">
-                Selecciona
+                Seleccione
             </option>
 
             @foreach ($cuentas as $cuenta)

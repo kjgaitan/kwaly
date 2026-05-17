@@ -28,7 +28,7 @@ class ModuloEducativoController extends Controller
 
         return redirect()
             ->route('modulos-educativos.index')
-            ->with('success', 'Modulo educativo registrado correctamente.');
+            ->with('success', 'Módulo educativo registrado correctamente.');
     }
 
     public function edit(ModuloEducativo $modulo_educativo)
@@ -44,21 +44,17 @@ class ModuloEducativoController extends Controller
 
         return redirect()
             ->route('modulos-educativos.index')
-            ->with('success', 'Modulo educativo actualizado correctamente.');
+            ->with('success', 'Módulo educativo actualizado correctamente.');
     }
 
     public function destroy(ModuloEducativo $modulo_educativo)
     {
-        if ($modulo_educativo->lecciones()->exists()) {
-            return redirect()
-                ->route('modulos-educativos.index')
-                ->with('error', 'No se puede eliminar el modulo porque tiene lecciones asociadas.');
-        }
+        $modulo_educativo->lecciones()->delete();
 
         $modulo_educativo->delete();
 
         return redirect()
             ->route('modulos-educativos.index')
-            ->with('success', 'Modulo educativo eliminado correctamente.');
+            ->with('success', 'Módulo educativo eliminado correctamente.');
     }
 }

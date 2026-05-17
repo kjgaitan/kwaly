@@ -39,7 +39,7 @@ class LeccionEducativaController extends Controller
 
     public function edit(ModuloEducativo $modulo_educativo, LeccionEducativa $leccion_educativa)
     {
-        if ($leccion_educativa->id_modulo !== $modulo_educativo->id_modulo) {
+        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
             abort(404);
         }
 
@@ -54,7 +54,7 @@ class LeccionEducativaController extends Controller
         ModuloEducativo $modulo_educativo,
         LeccionEducativa $leccion_educativa
     ) {
-        if ($leccion_educativa->id_modulo !== $modulo_educativo->id_modulo) {
+        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
             abort(404);
         }
 
@@ -67,7 +67,7 @@ class LeccionEducativaController extends Controller
 
     public function destroy(ModuloEducativo $modulo_educativo, LeccionEducativa $leccion_educativa)
     {
-        if ($leccion_educativa->id_modulo !== $modulo_educativo->id_modulo) {
+        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
             abort(404);
         }
 
