@@ -12,3 +12,48 @@
 @tailwind utilities;
 
 @plugin "daisyui";
+
+[x-cloak] {
+    display: none !important;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+.kwaly-sidebar {
+    width: 5rem;
+    overflow-x: hidden;
+    transition: width 0.3s ease;
+}
+
+.kwaly-main {
+    margin-left: 5rem;
+    transition: margin-left 0.3s ease;
+}
+
+.kwaly-sidebar-text,
+.kwaly-sidebar-subtitle {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+@media (min-width: 768px) {
+    html.sidebar-open .kwaly-sidebar {
+        width: 16rem;
+    }
+
+    html.sidebar-open .kwaly-main {
+        margin-left: 16rem;
+    }
+
+    html.sidebar-open .kwaly-sidebar-text,
+    html.sidebar-open .kwaly-sidebar-subtitle {
+        opacity: 1;
+        width: auto;
+    }
+}
