@@ -43,7 +43,7 @@ class UpdatePresupuestoRequest extends FormRequest
                         ->where('anio', $this->anio);
                 })->ignore($idPresupuesto, 'id_presupuesto'),
             ],
-            'ingreso_estimado' => 'nullable|numeric|min:0',
+            'ingreso_estimado' => 'required|numeric|min:0',
             'porcentaje_necesidades' => 'required|numeric|min:0|max:100',
             'porcentaje_deseos' => 'required|numeric|min:0|max:100',
             'porcentaje_ahorro' => 'required|numeric|min:0|max:100',
@@ -90,6 +90,7 @@ class UpdatePresupuestoRequest extends FormRequest
             'mes.min' => 'El mes debe estar entre 1 y 12.',
             'mes.max' => 'El mes debe estar entre 1 y 12.',
             'mes.unique' => 'Ya existe un presupuesto para ese mes y año.',
+            'ingreso_estimado.required' => 'El ingreso estimado es obligatorio.',
             'ingreso_estimado.numeric' => 'El ingreso estimado debe ser un número válido.',
             'ingreso_estimado.min' => 'El ingreso estimado no puede ser negativo.',
             'porcentaje_necesidades.required' => 'El porcentaje de necesidades es obligatorio.',

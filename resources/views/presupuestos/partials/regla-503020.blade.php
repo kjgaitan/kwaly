@@ -1,12 +1,15 @@
 @php
-    use App\Helpers\PresupuestoHelper;
+use App\Helpers\PresupuestoHelper;
 @endphp
 
 <div class="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
 
     <div class="budget-panel">
         <div class="mb-5 flex items-start justify-between">
-            <div class="budget-card-icon">🏠</div>
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#2e5a40] bg-[#1f2b24] text-[#72f59a]">
+                <i class="bi bi-house-door text-xl"></i>
+            </div>
         </div>
 
         <h3 class="text-xl font-semibold text-white">Necesidades</h3>
@@ -15,7 +18,8 @@
         <div class="mt-6">
             <div class="mb-2 flex items-center justify-between text-sm text-gray-400">
                 <span>Gastado</span>
-                <span>{{ number_format($gastadoNecesidades, 2, ',', '.') }}€ / {{ number_format($montoNecesidades, 2, ',', '.') }}€</span>
+                <span>{{ number_format($gastadoNecesidades, 2, ',', '.') }}€ /
+                    {{ number_format($montoNecesidades, 2, ',', '.') }}€</span>
             </div>
 
             <div class="budget-progress-track">
@@ -35,7 +39,10 @@
 
     <div class="budget-panel">
         <div class="mb-5 flex items-start justify-between">
-            <div class="budget-card-icon">🛍</div>
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-500/20 bg-blue-500/10 text-blue-300">
+                <i class="bi bi-bag text-xl"></i>
+            </div>
         </div>
 
         <h3 class="text-xl font-semibold text-white">Deseos</h3>
@@ -44,7 +51,8 @@
         <div class="mt-6">
             <div class="mb-2 flex items-center justify-between text-sm text-gray-400">
                 <span>Gastado</span>
-                <span>{{ number_format($gastadoDeseos, 2, ',', '.') }}€ / {{ number_format($montoDeseos, 2, ',', '.') }}€</span>
+                <span>{{ number_format($gastadoDeseos, 2, ',', '.') }}€ /
+                    {{ number_format($montoDeseos, 2, ',', '.') }}€</span>
             </div>
 
             <div class="budget-progress-track">
@@ -64,12 +72,16 @@
 
     <div class="budget-panel">
         <div class="mb-5 flex items-start justify-between">
-            <div class="budget-card-icon">☆</div>
+            <div
+                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-300">
+                <i class="bi bi-piggy-bank text-xl"></i>
+            </div>
 
             @if($porcentajeUsoAhorro >= 100)
-                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-400">
-                    ⚠
-                </div>
+            <div
+                class="flex h-8 w-8 items-center justify-center rounded-full border border-yellow-500/20 bg-yellow-500/10 text-yellow-300">
+                <i class="bi bi-exclamation-triangle text-sm"></i>
+            </div>
             @endif
         </div>
 
@@ -79,12 +91,13 @@
         <div class="mt-6">
             <div class="mb-2 flex items-center justify-between text-sm text-gray-400">
                 <span>Gastado</span>
-                <span>{{ number_format($gastadoAhorro, 2, ',', '.') }}€ / {{ number_format($montoAhorro, 2, ',', '.') }}€</span>
+                <span>{{ number_format($gastadoAhorro, 2, ',', '.') }}€ /
+                    {{ number_format($montoAhorro, 2, ',', '.') }}€</span>
             </div>
 
             <div class="budget-progress-track">
                 <div class="h-full rounded-full {{ PresupuestoHelper::colorBarraAhorro($porcentajeUsoAhorro) }}"
-                     style="width: {{ $porcentajeUsoAhorro }}%"></div>
+                    style="width: {{ $porcentajeUsoAhorro }}%"></div>
             </div>
         </div>
 
@@ -97,4 +110,5 @@
             </div>
         </div>
     </div>
+
 </div>
