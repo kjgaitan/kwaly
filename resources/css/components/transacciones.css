@@ -1,0 +1,194 @@
+.transaction-wrapper {
+    min-height: 100vh;
+    background: #060b08;
+    padding: 1rem;
+    color: #ffffff;
+}
+
+.transaction-content {
+    width: 100%;
+    border: 1px solid #26352d;
+    border-radius: 24px;
+    background: #0b100d;
+    padding: 1.5rem;
+    box-shadow: 0 0 18px rgba(114, 245, 154, 0.05);
+}
+
+.transaction-panel {
+    border: 1px solid #26352d;
+    border-radius: 22px;
+    background: #111714;
+    padding: 1.25rem;
+    box-shadow: 0 0 30px rgba(35, 190, 110, 0.08);
+}
+
+.transaction-card {
+    border: 1px solid #214d32;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #111714, #142119);
+    padding: 1.5rem;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.transaction-card:hover {
+    border-color: rgba(114, 245, 154, 0.35);
+    background: linear-gradient(135deg, #131a16, #17281d);
+    transform: translateY(-1px);
+}
+
+.transaction-input,
+.transaction-select,
+.transaction-textarea {
+    width: 100%;
+    border: 1px solid #26352d;
+    border-radius: 14px;
+    background: #111613;
+    padding: 0.85rem 1rem;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.transaction-input::placeholder,
+.transaction-textarea::placeholder {
+    color: #6b7280;
+}
+
+.transaction-input:focus,
+.transaction-select:focus,
+.transaction-textarea:focus {
+    border-color: #72f59a;
+    background: #121a15;
+    box-shadow: 0 0 0 3px rgba(114, 245, 154, 0.16);
+}
+
+.transaction-select {
+    appearance: none;
+    cursor: pointer;
+}
+
+.transaction-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 14px;
+    background: #72f59a;
+    padding: 0.8rem 1.15rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #04110a;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.transaction-btn-primary:hover {
+    background: #4ade80;
+    transform: translateY(-1px);
+}
+
+.transaction-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.8rem 1.15rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.transaction-btn-secondary:hover {
+    border-color: rgba(114, 245, 154, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.transaction-btn-edit {
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.12);
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #72f59a;
+    transition: background 0.2s ease;
+}
+
+.transaction-btn-edit:hover {
+    background: rgba(34, 197, 94, 0.22);
+}
+
+.transaction-btn-delete {
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.12);
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ff6b6b;
+    transition: background 0.2s ease;
+}
+
+.transaction-btn-delete:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+.transaction-badge-income {
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    padding: 0.4rem 0.85rem;
+    color: #72f59a;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.transaction-badge-expense {
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 999px;
+    background: rgba(239, 68, 68, 0.12);
+    padding: 0.4rem 0.85rem;
+    color: #ff6b6b;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.transaction-disabled-box {
+    border: 1px solid #4a3f1f;
+    border-radius: 16px;
+    background: #2a2415;
+    padding: 1rem;
+}
+
+.transaction-disabled-select {
+    width: 100%;
+    cursor: not-allowed;
+    border: 1px solid #4a3f1f;
+    border-radius: 14px;
+    background: #111613;
+    padding: 0.85rem 1rem;
+    color: #6b7280;
+    opacity: 0.6;
+}
+
+.transaction-warning {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: #fde68a;
+    font-size: 0.875rem;
+}
+
+.transaction-error {
+    margin-top: 0.5rem;
+    color: #f87171;
+    font-size: 0.75rem;
+}
+
+input[type="date"].transaction-input::-webkit-calendar-picker-indicator {
+    filter: invert(76%) sepia(73%) saturate(407%) hue-rotate(82deg) brightness(101%) contrast(93%);
+    cursor: pointer;
+}

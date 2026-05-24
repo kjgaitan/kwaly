@@ -527,3 +527,31 @@
     color: #ffffff;
     margin-bottom: 0.75rem;
 }
+/* =========================
+   FECHAS - COMPARTIDO
+   ========================= */
+
+.dark-date-input,
+.dark-date-input::-webkit-calendar-picker-indicator {
+    color-scheme: dark;
+}
+
+.dark-date-input {
+    accent-color: #72f59a;
+}
+
+.dark-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(27%) sepia(74%) saturate(642%)
+            hue-rotate(87deg)
+            brightness(1.1)
+            contrast(0.95);
+
+    cursor: pointer;
+}
+
+.dark-date-input::-webkit-calendar-picker-indicator:hover {
+    filter: invert(27%) sepia(74%) saturate(842%)
+            hue-rotate(87deg)
+            brightness(1.2)
+            contrast(1);
+}

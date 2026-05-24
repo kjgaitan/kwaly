@@ -64,12 +64,16 @@
 
     {{-- FECHA --}}
     <div>
-        <label class="mb-2 block text-sm text-gray-300">Fecha</label>
+        <label class="mb-2 block text-sm text-gray-300">
+            Fecha
+        </label>
         <input type="date" name="fecha_transaccion"
             value="{{ old('fecha_transaccion', isset($transaccion) ? \Carbon\Carbon::parse($transaccion->fecha_transaccion)->format('Y-m-d') : '') }}"
-            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white focus:ring-2 focus:ring-[#72f59a] {{ $errors->has('fecha_transaccion') ? 'border-red-500' : '' }}">
+            class="transaction-input {{ $errors->has('fecha_transaccion') ? 'border-red-500' : '' }}">
         @if($errors->has('fecha_transaccion'))
-        <p class="mt-2 text-xs text-red-400">{{ $errors->first('fecha_transaccion') }}</p>
+        <p class="transaction-error">
+            {{ $errors->first('fecha_transaccion') }}
+        </p>
         @endif
     </div>
 
