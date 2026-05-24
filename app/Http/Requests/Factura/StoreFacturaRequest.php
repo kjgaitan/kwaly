@@ -19,8 +19,8 @@ class StoreFacturaRequest extends FormRequest
             'descripcion' => 'nullable|string|max:1000',
             'monto_total' => 'required|numeric|min:0.01|max:999999.99',
             'fecha_vencimiento' => 'required|date',
-            'estado' => 'nullable|in:pendiente,pagada,vencida',
-            'frecuencia' => 'nullable|in:unica,mensual,anual',
+            'estado' => 'required|in:pendiente,pagada,vencida',
+            'frecuencia' => 'required|in:unica,mensual,anual',
         ];
     }
 
@@ -43,7 +43,9 @@ class StoreFacturaRequest extends FormRequest
             'fecha_vencimiento.required' => 'La fecha de vencimiento es obligatoria.',
             'fecha_vencimiento.date' => 'La fecha de vencimiento no es válida.',
 
+            'estado.required' => 'El estado es obligatorio.',
             'estado.in' => 'El estado seleccionado no es válido.',
+            'frecuencia.required' => 'La frecuencia es obligatoria.',
             'frecuencia.in' => 'La frecuencia seleccionada no es válida.',
         ];
     }

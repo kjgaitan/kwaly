@@ -1,0 +1,142 @@
+.facturas-panel {
+    background: #0d1411;
+    border: 1px solid #1c2a24;
+    border-radius: 24px;
+    box-shadow: 0 0 0 1px rgba(114, 245, 154, 0.03);
+    padding: 0.75rem;
+}
+
+.facturas-input,
+.facturas-textarea,
+.facturas-select,
+.facturas-date {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid #24332c;
+    background-color: #0b100e;
+    color: #ffffff;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.facturas-input::placeholder,
+.facturas-textarea::placeholder {
+    color: #6b7280;
+}
+
+.facturas-input:focus,
+.facturas-textarea:focus,
+.facturas-select:focus,
+.facturas-date:focus {
+    border-color: #72f59a;
+    box-shadow: 0 0 0 1px rgba(114, 245, 154, 0.3);
+}
+
+.facturas-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.facturas-select,
+.facturas-date,
+.facturas-date::-webkit-calendar-picker-indicator {
+    color-scheme: dark;
+}
+
+.facturas-select option {
+    background-color: #0b100e;
+    color: #ffffff;
+}
+
+.facturas-select option[disabled] {
+    color: #9ca3af;
+}
+
+.facturas-date {
+    accent-color: #72f59a;
+}
+
+.facturas-date::-webkit-calendar-picker-indicator {
+    filter: invert(27%) sepia(74%) saturate(642%) hue-rotate(87deg) brightness(1.1) contrast(0.95);
+    cursor: pointer;
+}
+
+.facturas-date::-webkit-calendar-picker-indicator:hover {
+    filter: invert(27%) sepia(74%) saturate(842%) hue-rotate(87deg) brightness(1.2) contrast(1.0);
+}
+
+.facturas-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 16px;
+    background: #72f59a;
+    color: #0b120f;
+    padding: 0.85rem 1.3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.facturas-btn-primary:hover {
+    filter: brightness(1.05);
+}
+
+.facturas-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #d1d5db;
+    padding: 0.85rem 1.3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.facturas-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.facturas-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    padding: 0.85rem 1.3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.facturas-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.18);
+}
+
+.facturas-alert-error {
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(127, 29, 29, 0.25);
+    border-radius: 16px;
+    padding: 1rem;
+}
+
+input.facturas-input:-webkit-autofill,
+input.facturas-input:-webkit-autofill:hover,
+input.facturas-input:-webkit-autofill:focus,
+textarea.facturas-textarea:-webkit-autofill,
+select.facturas-select:-webkit-autofill {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0 1000px #0b100e inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
