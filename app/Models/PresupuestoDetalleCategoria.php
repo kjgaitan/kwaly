@@ -16,11 +16,12 @@ class PresupuestoDetalleCategoria extends Model
     protected $primaryKey = 'id_detalle';
     public $timestamps = false;
 
-    protected $fillable = [
-        'id_presupuesto',
-        'id_categoria',
-        'limite_monto',
-        'monto_gastado',
+   protected $fillable = [
+    'id_presupuesto',
+    'id_categoria',
+    'tipo_presupuesto',
+    'limite_monto',
+    'monto_gastado'
     ];
 
     protected function casts(): array
