@@ -12,12 +12,11 @@
             <i class="bi bi-exclamation-circle text-yellow-400 text-sm"></i>
         </div>
         <p class="leading-tight">
-            Para guardar, el presupuesto debe ser 50% necesidades, 30% deseos y 20% ahorro.
+            El presupuesto se distribuye en 50% necesidades, 30% deseos y 20% ahorro.
         </p>
     </div>
 
     <x-input-error :messages="$errors->get('porcentajes')" />
-
 
     <div id="budget-percent-warning"
         class="hidden rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
@@ -76,21 +75,20 @@
 
         </div>
 
-        <!-- Ingreso estimado -->
+        <!-- Ingreso -->
         <div>
-            <label class="block text-sm font-medium text-white mb-2">Ingreso estimado</label>
+            <label class="block text-sm font-medium text-white mb-2">Ingreso</label>
 
             <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">€</span>
 
-                <input type="text" name="ingreso_estimado" id="ingreso_estimado"
-                    value="{{ old('ingreso_estimado', isset($presupuesto) ? number_format((float)$presupuesto->ingreso_estimado, 2, ',', '.') : '') }}"
+                <input type="text" name="ingreso" id="ingreso"
+                    value="{{ old('ingreso', isset($presupuesto) ? number_format((float)$presupuesto->ingreso_estimado, 2, ',', '.') : '') }}"
                     placeholder="3.500,00" inputmode="decimal"
                     class="w-full pl-8 rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
             </div>
 
-            <x-input-error :messages="$errors->get('ingreso_estimado')" />
-
+            <x-input-error :messages="$errors->get('ingreso')" />
         </div>
 
         <!-- Porcentaje necesidades -->
@@ -98,8 +96,10 @@
             <label class="block text-sm font-medium text-white mb-2">Porcentaje necesidades</label>
             <input type="number" step="0.01" name="porcentaje_necesidades"
                 value="{{ old('porcentaje_necesidades', isset($presupuesto) ? $presupuesto->porcentaje_necesidades : 50) }}"
-                placeholder="50"
+                placeholder="50" disabled
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
+            <input type="hidden" name="porcentaje_necesidades"
+                value="{{ old('porcentaje_necesidades', isset($presupuesto) ? $presupuesto->porcentaje_necesidades : 50) }}">
 
             <x-input-error :messages="$errors->get('porcentaje_necesidades')" />
 
@@ -110,8 +110,10 @@
             <label class="block text-sm font-medium text-white mb-2">Porcentaje deseos</label>
             <input type="number" step="0.01" name="porcentaje_deseos"
                 value="{{ old('porcentaje_deseos', isset($presupuesto) ? $presupuesto->porcentaje_deseos : 30) }}"
-                placeholder="30"
+                placeholder="30" disabled
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
+            <input type="hidden" name="porcentaje_deseos"
+                value="{{ old('porcentaje_deseos', isset($presupuesto) ? $presupuesto->porcentaje_deseos : 30) }}">
 
             <x-input-error :messages="$errors->get('porcentaje_deseos')" />
 
@@ -122,8 +124,10 @@
             <label class="block text-sm font-medium text-white mb-2">Porcentaje ahorro</label>
             <input type="number" step="0.01" name="porcentaje_ahorro"
                 value="{{ old('porcentaje_ahorro', isset($presupuesto) ? $presupuesto->porcentaje_ahorro : 20) }}"
-                placeholder="20"
+                placeholder="20" disabled
                 class="w-full rounded-lg border border-[#2f3e36] bg-[#171c19] text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-lime-400">
+            <input type="hidden" name="porcentaje_ahorro"
+                value="{{ old('porcentaje_ahorro', isset($presupuesto) ? $presupuesto->porcentaje_ahorro : 20) }}">
 
             <x-input-error :messages="$errors->get('porcentaje_ahorro')" />
 
@@ -152,13 +156,14 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 input[type=number] {
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const input = document.getElementById('ingreso_estimado');
+    const input = document.getElementById('ingreso');
     const warning = document.getElementById('budget-percent-warning');
     const submitButton = document.getElementById('budget-submit-button');
     const necesidades = document.querySelector('[name="porcentaje_necesidades"]');

@@ -22,14 +22,20 @@ class PresupuestoDetalleCategoriaController extends Controller
             ->orderBy('nombre')
             ->get();
 
-        return view('sobres.create', compact('presupuesto', 'categorias'));
+        $presupuestos = PresupuestoMensual::where('id_usuario', $usuarioId)
+            ->orderByDesc('anio')
+            ->orderByDesc('mes')
+            ->get();
+
+        return view('sobres.create', compact('presupuesto', 'presupuestos', 'categorias'));
     }
 
     public function store(StorePresupuestoDetalleCategoriaRequest $request, $presupuesto)
     {
         $usuarioId = Auth::user()->id_usuario;
 
-        $presupuesto = $this->obtenerPresupuestoUsuario($presupuesto, $usuarioId);
+        $presupuestoId = $request->input('id_presupuesto', $presupuesto);
+        $presupuesto = $this->obtenerPresupuestoUsuario($presupuestoId, $usuarioId);
         $categoria = $this->obtenerCategoriaUsuario($request->id_categoria, $usuarioId);
 
         $existe = PresupuestoDetalleCategoria::where('id_presupuesto', $presupuesto->id_presupuesto)
@@ -47,11 +53,15 @@ class PresupuestoDetalleCategoriaController extends Controller
         $detalle = PresupuestoDetalleCategoria::create([
             'id_presupuesto' => $presupuesto->id_presupuesto,
             'id_categoria' => $categoria->id_categoria,
+            'tipo_presupuesto' => $request->tipo_presupuesto,
             'limite_monto' => $request->limite_monto,
-            'monto_gastado' => 0,
+            'monto_gastado' => $request->input('monto_gastado', 0),
         ]);
 
-        $detalle->recalcularMontoGastado();
+        if (!$request->filled('monto_gastado')) {
+            // Sólo recalcular si el usuario no proporcionó un valor explícito
+            $detalle->recalcularMontoGastado();
+        }
 
         return redirect()
             ->route('presupuestos.index')
@@ -70,7 +80,12 @@ class PresupuestoDetalleCategoriaController extends Controller
             ->orderBy('nombre')
             ->get();
 
-        return view('sobres.edit', compact('detalle', 'presupuesto', 'categorias'));
+        $presupuestos = PresupuestoMensual::where('id_usuario', $usuarioId)
+            ->orderByDesc('anio')
+            ->orderByDesc('mes')
+            ->get();
+
+        return view('sobres.edit', compact('detalle', 'presupuesto', 'presupuestos', 'categorias'));
     }
 
     public function update(UpdatePresupuestoDetalleCategoriaRequest $request, $detalle)
@@ -80,7 +95,10 @@ class PresupuestoDetalleCategoriaController extends Controller
         $detalle = $this->obtenerDetalleUsuario($detalle, $usuarioId);
         $categoria = $this->obtenerCategoriaUsuario($request->id_categoria, $usuarioId);
 
-        $existe = PresupuestoDetalleCategoria::where('id_presupuesto', $detalle->id_presupuesto)
+        $presupuestoId = $request->input('id_presupuesto', $detalle->id_presupuesto);
+        $presupuesto = $this->obtenerPresupuestoUsuario($presupuestoId, $usuarioId);
+
+        $existe = PresupuestoDetalleCategoria::where('id_presupuesto', $presupuesto->id_presupuesto)
             ->where('id_categoria', $categoria->id_categoria)
             ->where('id_detalle', '!=', $detalle->id_detalle)
             ->exists();
@@ -94,11 +112,17 @@ class PresupuestoDetalleCategoriaController extends Controller
         }
 
         $detalle->update([
+            'id_presupuesto' => $presupuesto->id_presupuesto,
             'id_categoria' => $categoria->id_categoria,
+            'tipo_presupuesto' => $request->tipo_presupuesto,
             'limite_monto' => $request->limite_monto,
+            'monto_gastado' => $request->input('monto_gastado', $detalle->monto_gastado),
         ]);
 
-        $detalle->recalcularMontoGastado();
+        if (!$request->filled('monto_gastado')) {
+            // Sólo recalcular si el usuario no proporcionó un valor explícito
+            $detalle->recalcularMontoGastado();
+        }
 
         return redirect()
             ->route('presupuestos.index')

@@ -11,7 +11,7 @@ class PresupuestoService
     /**
      * Obtiene todos los datos necesarios para la vista principal de presupuestos.
      */
-    public function obtenerDatosIndex(int $usuarioId): array
+    public function obtenerDatosIndex(int $usuarioId, ?int $presupuestoActivoId = null): array
     {
         $presupuestos = PresupuestoMensual::with(['detalles.categoria'])
             ->where('id_usuario', $usuarioId)
@@ -25,9 +25,18 @@ class PresupuestoService
                 ->whereYear('fecha_transaccion', $presupuesto->anio)
                 ->whereMonth('fecha_transaccion', $presupuesto->mes)
                 ->sum('monto');
+            $presupuesto->ingreso = (float) $presupuesto->ingreso_estimado;
         });
 
-        $presupuestoActual = $presupuestos->first();
+        $presupuestoActual = null;
+
+        if ($presupuestoActivoId) {
+            $presupuestoActual = $presupuestos->firstWhere('id_presupuesto', $presupuestoActivoId);
+        }
+
+        if (!$presupuestoActual) {
+            $presupuestoActual = $presupuestos->first();
+        }
 
         $datosBase = $this->obtenerValoresPorDefecto();
 
@@ -35,22 +44,33 @@ class PresupuestoService
             return array_merge([
                 'presupuestos' => $presupuestos,
                 'presupuestoActual' => null,
+                'presupuestoActivoId' => null,
             ], $datosBase);
         }
 
         $detalles = $presupuestoActual->detalles;
 
-        $montoNecesidades = $this->sumarPorTipo($detalles, 'necesidad', 'limite_monto');
-        $montoDeseos = $this->sumarPorTipo($detalles, 'deseo', 'limite_monto');
-        $montoAhorro = $this->sumarPorTipo($detalles, 'ahorro', 'limite_monto');
+        $montoNecesidades = $this->calcularMontoPorcentaje(
+            (float) $presupuestoActual->ingreso_estimado,
+            (float) $presupuestoActual->porcentaje_necesidades
+        );
+        $montoDeseos = $this->calcularMontoPorcentaje(
+            (float) $presupuestoActual->ingreso_estimado,
+            (float) $presupuestoActual->porcentaje_deseos
+        );
+        $montoAhorro = $this->calcularMontoPorcentaje(
+            (float) $presupuestoActual->ingreso_estimado,
+            (float) $presupuestoActual->porcentaje_ahorro
+        );
 
-        $gastadoNecesidades = $this->sumarPorTipo($detalles, 'necesidad', 'monto_gastado');
-        $gastadoDeseos = $this->sumarPorTipo($detalles, 'deseo', 'monto_gastado');
+        $gastadoNecesidades = $this->sumarPorTipo($detalles, 'necesidades', 'monto_gastado');
+        $gastadoDeseos = $this->sumarPorTipo($detalles, 'deseos', 'monto_gastado');
         $gastadoAhorro = $this->sumarPorTipo($detalles, 'ahorro', 'monto_gastado');
 
         return [
             'presupuestos' => $presupuestos,
             'presupuestoActual' => $presupuestoActual,
+            'presupuestoActivoId' => $presupuestoActual->id_presupuesto,
             'ingresoMensual' => (float) $presupuestoActual->ingreso_estimado,
             'ingresoReal' => (float) ($presupuestoActual->ingreso_real ?? 0),
             'porcNecesidades' => (float) $presupuestoActual->porcentaje_necesidades,
@@ -105,7 +125,17 @@ class PresupuestoService
     private function sumarPorTipo(Collection $detalles, string $tipoCategoria, string $campo): float
     {
         return (float) $detalles
+            ->where('tipo_presupuesto', $tipoCategoria)
             ->sum($campo);
+    }
+
+    private function calcularMontoPorcentaje(float $ingreso, float $porcentaje): float
+    {
+        if ($ingreso <= 0 || $porcentaje <= 0) {
+            return 0;
+        }
+
+        return ($ingreso * $porcentaje) / 100;
     }
 
     /**

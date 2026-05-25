@@ -39,7 +39,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Presupuestos
     Route::resource('presupuestos', PresupuestoController::class);
-
+    
+    Route::post('/presupuestos/select', [PresupuestoController::class, 'select'])->name('presupuestos.select');
+    
     // Sobres personalizados
     Route::get('/presupuestos/{presupuesto}/sobres/create', [PresupuestoDetalleCategoriaController::class, 'create'])
         ->name('presupuestos.sobres.create');

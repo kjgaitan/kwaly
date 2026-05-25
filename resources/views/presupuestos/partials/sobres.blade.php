@@ -80,6 +80,21 @@
         ⚠ Has alcanzado o superado el límite del presupuesto de {{ strtolower($categoriaNombre) }}.
     </div>
     @endif
+    <div class="mt-3 flex justify-end gap-2">
+        <a href="{{ route('sobres.edit', $detalle->id_detalle) }}"
+            class="rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2 text-xs text-white transition hover:bg-[#1a211d]">
+            Editar
+        </a>
+
+        <button type="button" onclick="openDeleteModal('deleteModal-sobre-{{ $detalle->id_detalle }}')"
+            class="rounded-xl bg-[#ff6b6b] px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90">
+            Eliminar
+        </button>
+
+        <x-delete-modal id="deleteModal-sobre-{{ $detalle->id_detalle }}" title="¿Eliminar sobre?"
+            message="Este sobre se eliminará permanentemente. Esta operación es irreversible."
+            :action="route('sobres.destroy', $detalle->id_detalle)" method="DELETE" />
+    </div>
 </div>
 @empty
 <div class="xl:col-span-2 budget-empty">

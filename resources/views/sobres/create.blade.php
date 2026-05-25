@@ -3,12 +3,20 @@
     <div class="w-full rounded-[24px] border border-[#26352d] bg-[#171c19] shadow-[0_0_18px_rgba(114,245,154,0.05)]">
         <div class="px-4 py-4 md:px-5 lg:px-6 lg:py-5">
 
-            <div class="mb-6 flex items-center justify-between">
+            <div class="mb-6 flex flex-col gap-4">
                 <div>
                     <h2 class="text-3xl font-bold tracking-tight text-white">Crear Sobre</h2>
                     <p class="mt-1 text-sm text-gray-400">
                         Presupuesto de {{ $presupuesto->mes }}/{{ $presupuesto->anio }}
                     </p>
+                </div>
+
+                <div id="budget-summary-card" class="rounded-2xl border border-[#2d6f4f] bg-[#152c23] p-4 text-white">
+                    <p class="text-xs uppercase tracking-wide text-[#94f3bb]">Presupuesto seleccionado</p>
+                    <p id="budget-summary-month-year" class="mt-1 text-lg font-semibold">
+                        {{ $presupuesto->mes }}/{{ $presupuesto->anio }}</p>
+                    <p id="budget-summary-income" class="mt-1 text-sm text-gray-300">Ingreso:
+                        {{ number_format($presupuesto->ingreso_estimado, 2, ',', '.') }} €</p>
                 </div>
             </div>
 
@@ -17,39 +25,7 @@
                 class="space-y-6" novalidate>
                 @csrf
 
-                <div class="grid gap-5 md:grid-cols-2">
-                    <div>
-                        <label for="id_categoria" class="mb-2 block text-sm font-medium text-white">Categoría</label>
-                        <select name="id_categoria" id="id_categoria"
-                            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white">
-                            @if($categorias->isEmpty())
-                            <option value="">No tienes categorías creadas</option>
-                            @else
-                            <option value="">Seleccione</option>
-                            @foreach($categorias as $categoria)
-                            <option value="{{ $categoria->id_categoria }}"
-                                {{ old('id_categoria') == $categoria->id_categoria ? 'selected' : '' }}>
-                                {{ $categoria->nombre }}
-                            </option>
-                            @endforeach
-                            @endif
-                        </select>
-
-                        @if($categorias->isEmpty())
-                        <p class="mt-2 text-sm text-yellow-400">
-                            No tienes categorías. Debes crear al menos una antes de continuar.
-                        </p>
-                        @endif
-                    </div>
-
-                    <div>
-                        <label for="limite_monto" class="mb-2 block text-sm font-medium text-white">Límite de
-                            monto</label>
-                        <input type="number" step="0.01" name="limite_monto" id="limite_monto"
-                            value="{{ old('limite_monto') }}"
-                            class="w-full rounded-xl border border-[#26352d] bg-[#111613] px-4 py-3 text-white">
-                    </div>
-                </div>
+                @include('sobres.partials.form')
 
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('presupuestos.index') }}"

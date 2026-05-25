@@ -7,6 +7,7 @@ use App\Http\Requests\Presupuesto\StorePresupuestoRequest;
 use App\Http\Requests\Presupuesto\UpdatePresupuestoRequest;
 use App\Models\PresupuestoMensual;
 use App\Services\PresupuestoService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PresupuestoDetalleCategoria;
 
@@ -21,10 +22,27 @@ class PresupuestoController extends Controller
     public function index(PresupuestoService $presupuestoService)
     {
         $usuarioId = Auth::user()->id_usuario;
+        $presupuestoActivoId = session('presupuesto_activo_id');
 
-        $datos = $presupuestoService->obtenerDatosIndex($usuarioId);
+        $datos = $presupuestoService->obtenerDatosIndex($usuarioId, $presupuestoActivoId);
 
         return view('presupuestos.index', $datos);
+    }
+
+    /**
+     * Selecciona el presupuesto activo para mostrar sus datos en el índice.
+     */
+    public function select(Request $request)
+    {
+        $request->validate([
+            'id_presupuesto' => 'required|integer',
+        ]);
+
+        $presupuesto = $this->obtenerPresupuestoUsuario($request->input('id_presupuesto'));
+
+        session(['presupuesto_activo_id' => $presupuesto->id_presupuesto]);
+
+        return redirect()->route('presupuestos.index');
     }
 
     /**
