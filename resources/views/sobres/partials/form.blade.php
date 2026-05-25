@@ -1,7 +1,11 @@
+@php
+    $fixedPresupuestoId = session('presupuesto_activo_id') ?? ($presupuesto->id_presupuesto ?? null);
+@endphp
+
 <div class="grid gap-6 md:grid-cols-2">
-    <div>
+    <div class="md:col-span-2">
         <label class="mb-2 block text-sm text-gray-300">Presupuesto</label>
-        <select name="id_presupuesto" id="id_presupuesto" class="budget-input">
+        <select name="id_presupuesto" id="id_presupuesto" class="budget-input" {{ $fixedPresupuestoId ? 'disabled' : '' }}>
             <option value="">Selecciona un presupuesto</option>
             @foreach($presupuestos as $itemPresupuesto)
             <option value="{{ $itemPresupuesto->id_presupuesto }}" data-mes="{{ $itemPresupuesto->mes }}"
@@ -13,6 +17,11 @@
             </option>
             @endforeach
         </select>
+
+        @if($fixedPresupuestoId)
+            <input type="hidden" name="id_presupuesto" value="{{ $fixedPresupuestoId }}">
+        @endif
+
         <x-input-error :messages="$errors->get('id_presupuesto')" />
     </div>
 
