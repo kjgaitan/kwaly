@@ -10,8 +10,13 @@
 }
 
 .compartido-container {
-    max-width: 1280px;
+    width: 100%;
+    max-width: none;
     margin: 0 auto;
+}
+
+.compartido-container-narrow {
+    max-width: 960px;
 }
 
 .compartido-header {
@@ -21,6 +26,15 @@
     gap: 1rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
+}
+
+.compartido-header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    width: 100%;
 }
 
 .compartido-title {
@@ -50,8 +64,34 @@
     box-shadow: 0 0 25px rgba(114, 245, 154, 0.30);
 }
 
+.compartido-btn-primary,
+.compartido-btn-secondary-inline,
+.compartido-icon-button {
+    border: 0;
+    cursor: pointer;
+}
+
 .compartido-btn-primary:hover {
     filter: brightness(1.08);
+}
+
+.compartido-btn-secondary-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.85rem 1.3rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: 0.2s ease;
+}
+
+.compartido-btn-secondary-inline:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(114, 245, 154, 0.25);
 }
 
 .compartido-btn-secondary {
@@ -82,6 +122,12 @@
 
 .compartido-btn-submit:hover {
     filter: brightness(1.08);
+}
+
+.compartido-btn-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    filter: grayscale(0.35);
 }
 
 .compartido-alert {
@@ -121,7 +167,7 @@
 .compartido-grid-resumen {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin-bottom: 2rem;
 }
 
@@ -140,7 +186,7 @@
 
 @media (min-width: 768px) {
     .compartido-grid-resumen {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .compartido-grid-miembros {
@@ -149,6 +195,10 @@
 }
 
 @media (min-width: 1280px) {
+    .compartido-grid-resumen {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .compartido-grid-miembros {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -331,6 +381,44 @@
     color: #ff6b6b;
 }
 
+.compartido-text-neutral {
+    color: #d1d5db;
+}
+
+.compartido-member-card-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.compartido-member-balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 1rem;
+    background: #1b211e;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    padding: 1rem;
+    color: #9ca3af;
+}
+
+.compartido-member-balance-row strong {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.compartido-member-mini-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.compartido-member-mini-stats strong {
+    color: #ffffff;
+}
+
 .compartido-gastos-list {
     display: flex;
     flex-direction: column;
@@ -384,6 +472,112 @@
     font-size: 0.75rem;
     color: #6b7280;
     margin-top: 0.25rem;
+}
+
+.compartido-gasto-description {
+    margin-top: 0.65rem;
+    color: #d1d5db;
+    font-size: 0.875rem;
+}
+
+.compartido-gasto-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.compartido-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.55rem 0.8rem;
+    transition: 0.2s ease;
+}
+
+.compartido-action-button:hover {
+    border-color: rgba(114, 245, 154, 0.30);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.compartido-action-danger {
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.24);
+}
+
+.compartido-action-danger:hover {
+    border-color: rgba(239, 68, 68, 0.42);
+    background: rgba(239, 68, 68, 0.10);
+}
+
+.compartido-gasto-detail {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1rem;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.compartido-gasto-detail strong {
+    color: #ffffff;
+}
+
+.compartido-form-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.compartido-share-card {
+    background: #171c19;
+    border: 1px solid rgba(34, 197, 94, 0.20);
+    border-radius: 1.5rem;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.16);
+    padding: 1.5rem;
+}
+
+.compartido-share-lines {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.compartido-share-lines div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.9rem;
+    background: #1b211e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #9ca3af;
+    padding: 0.8rem 0.9rem;
+}
+
+.compartido-share-lines strong {
+    color: #ffffff;
+}
+
+.compartido-share-result {
+    margin-top: 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(114, 245, 154, 0.16);
+    background: rgba(114, 245, 154, 0.06);
+    color: #d1d5db;
+    padding: 1rem;
+    font-size: 0.875rem;
+}
+
+.compartido-share-result strong {
+    color: #72f59a;
 }
 
 .compartido-form-card {
@@ -526,6 +720,113 @@
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 0.75rem;
+}
+
+.compartido-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(2, 8, 6, 0.78);
+    backdrop-filter: blur(10px);
+}
+
+.compartido-modal-panel {
+    width: min(100%, 520px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(34, 197, 94, 0.24);
+    background: #171c19;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42), 0 0 40px rgba(52, 211, 153, 0.18);
+    padding: 1.5rem;
+}
+
+.compartido-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.compartido-modal-subtitle {
+    margin-top: -0.75rem;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.compartido-icon-button {
+    display: inline-flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
+.compartido-icon-button:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.compartido-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #72f59a;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.compartido-back-link:hover {
+    color: #a7f3d0;
+}
+
+@media (max-width: 640px) {
+    .compartido-header-actions,
+    .compartido-btn-primary,
+    .compartido-btn-secondary-inline {
+        width: 100%;
+    }
+
+    .compartido-btn-primary,
+    .compartido-btn-secondary-inline {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 640px) {
+    .compartido-header-actions {
+        flex-direction: row;
+        width: auto;
+    }
+
+    .compartido-btn-primary,
+    .compartido-btn-secondary-inline {
+        width: auto;
+    }
+}
+
+@media (min-width: 1280px) {
+    .compartido-form-layout {
+        grid-template-columns: minmax(0, 1fr) 380px;
+        align-items: start;
+    }
+}
+
+@media (max-width: 767px) {
+    .compartido-gasto-right {
+        text-align: left;
+    }
+
+    .compartido-gasto-actions {
+        justify-content: flex-start;
+    }
 }
 /* =========================
    FECHAS - COMPARTIDO

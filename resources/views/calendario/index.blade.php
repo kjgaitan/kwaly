@@ -90,7 +90,7 @@
 
                     <div class="relative w-full max-w-md rounded-2xl border border-[#26352d] bg-[#111613] p-4 shadow-[0_0_24px_rgba(0,0,0,0.35)]">
                         <div class="mb-3 flex items-center justify-between">
-                            <h4 class="text-base font-semibold text-white">Ir a mes</h4>
+                            <h4 class="text-base font-semibold text-white">Ir a mes y año</h4>
                             <button type="button"
                                     class="flex h-9 w-9 items-center justify-center rounded-lg border border-[#26352d] bg-[#0b0f0d] text-gray-300 transition hover:border-green-500/40 hover:text-white"
                                     @click="pickerOpen = false"

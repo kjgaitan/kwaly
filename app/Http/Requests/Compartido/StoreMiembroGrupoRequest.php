@@ -15,7 +15,7 @@ class StoreMiembroGrupoRequest extends FormRequest
     {
         return [
             'id_grupo' => ['required', 'integer', 'exists:grupos_compartidos,id_grupo'],
-            'email' => ['required', 'email'],
+            'id_usuario' => ['required', 'integer', 'exists:usuarios,id_usuario'],
             'rol' => ['required', 'in:admin,miembro'],
         ];
     }
@@ -25,10 +25,10 @@ class StoreMiembroGrupoRequest extends FormRequest
         return [
             'id_grupo.required' => 'El grupo es obligatorio.',
             'id_grupo.exists' => 'El grupo seleccionado no existe.',
-            'email.required' => 'El correo electrónico es obligatorio.',
-            'email.email' => 'Debes introducir un correo electrónico válido.',
+            'id_usuario.required' => 'Selecciona un usuario valido para anadirlo al grupo.',
+            'id_usuario.exists' => 'Selecciona un usuario valido para anadirlo al grupo.',
             'rol.required' => 'Debes seleccionar un rol.',
-            'rol.in' => 'El rol seleccionado no es válido.',
+            'rol.in' => 'El rol seleccionado no es valido.',
         ];
     }
 
@@ -36,7 +36,7 @@ class StoreMiembroGrupoRequest extends FormRequest
     {
         return [
             'id_grupo' => 'grupo',
-            'email' => 'correo electrónico',
+            'id_usuario' => 'usuario',
             'rol' => 'rol',
         ];
     }

@@ -8,19 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('presupuesto_detalle_categoria', function (Blueprint $table) {
-            $table->enum('tipo_presupuesto', [
-                'necesidades',
-                'deseos',
-                'ahorro'
-            ])->after('id_categoria');
-        });
+        if (Schema::hasTable('presupuesto_detalle_categoria') && !Schema::hasColumn('presupuesto_detalle_categoria', 'tipo_presupuesto')) {
+            Schema::table('presupuesto_detalle_categoria', function (Blueprint $table) {
+                $table->enum('tipo_presupuesto', [
+                    'necesidades',
+                    'deseos',
+                    'ahorro'
+                ])->after('id_categoria');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('presupuesto_detalle_categoria', function (Blueprint $table) {
-            $table->dropColumn('tipo_presupuesto');
-        });
+        if (Schema::hasTable('presupuesto_detalle_categoria') && Schema::hasColumn('presupuesto_detalle_categoria', 'tipo_presupuesto')) {
+            Schema::table('presupuesto_detalle_categoria', function (Blueprint $table) {
+                $table->dropColumn('tipo_presupuesto');
+            });
+        }
     }
 };

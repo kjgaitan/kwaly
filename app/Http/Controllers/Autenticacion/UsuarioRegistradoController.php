@@ -53,7 +53,7 @@ class UsuarioRegistradoController extends Controller
                 'max:150',
                 'email',
                 'unique:usuarios,email',
-                'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|icloud\.com|proton\.me|hotmail\.es|outlook\.es|yahoo\.es|[a-zA-Z0-9-]+\.edu|[a-zA-Z0-9-]+\.es)$/',
+                'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|icloud\.com|proton\.me|hotmail\.es|outlook\.es|yahoo\.es|[a-zA-Z0-9-]+\.edu|[a-zA-Z0-9-]+\.es|[a-zA-Z0-9-]+\.com)$/',
             ],
             'telefono' => [
                 'required',

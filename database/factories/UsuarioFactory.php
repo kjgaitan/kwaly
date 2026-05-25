@@ -30,6 +30,7 @@ class UsuarioFactory extends Factory
             'moneda_preferida' => 'EUR',
             'idioma_preferido' => 'es',
             'estado_cuenta' => 'activo',
+            'isadmin' => false,
             'fecha_registro' => now(),
             'ultimo_acceso' => now(),
         ];

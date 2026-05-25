@@ -51,6 +51,7 @@ class Usuario extends Authenticatable
         'moneda_preferida',
         'idioma_preferido',
         'estado_cuenta',
+        'isadmin',
         'fecha_registro',
         'ultimo_acceso',
     ];
@@ -74,6 +75,7 @@ class Usuario extends Authenticatable
         return [
             'fecha_registro' => 'datetime',
             'ultimo_acceso' => 'datetime',
+            'isadmin' => 'boolean',
         ];
     }
 
@@ -98,6 +100,11 @@ class Usuario extends Authenticatable
     public function getPasswordAttribute()
     {
         return $this->password_hash;
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->isadmin;
     }
 
     public function hasVerifiedEmail()
