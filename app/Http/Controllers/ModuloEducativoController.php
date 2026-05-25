@@ -16,22 +16,28 @@ class ModuloEducativoController extends Controller
 
     public function create()
     {
+        $this->authorizeAdmin();
+
         return view('modulos-educativos.create');
     }
 
     public function store(StoreModuloEducativoRequest $request)
     {
+        $this->authorizeAdmin();
+
         ModuloEducativo::create($request->validated() + [
             'duracion_minutos' => 0,
         ]);
 
         return redirect()
             ->route('educacion.index')
-            ->with('success', 'Módulo educativo registrado correctamente.');
+            ->with('success', 'Modulo educativo registrado correctamente.');
     }
 
     public function edit(ModuloEducativo $modulo)
     {
+        $this->authorizeAdmin();
+
         return view('modulos-educativos.edit', [
             'modulo' => $modulo,
         ]);
@@ -39,17 +45,28 @@ class ModuloEducativoController extends Controller
 
     public function update(UpdateModuloEducativoRequest $request, ModuloEducativo $modulo)
     {
+        $this->authorizeAdmin();
+
+        $leccionIds = $modulo->lecciones()->pluck('id_leccion');
+
         $modulo->update($request->validated() + [
             'duracion_minutos' => 0,
         ]);
 
+        if ($leccionIds->isNotEmpty()) {
+            ProgresoLeccion::whereIn('id_leccion', $leccionIds)->delete();
+            $modulo->lecciones()->delete();
+        }
+
         return redirect()
             ->route('educacion.index')
-            ->with('success', 'Módulo educativo actualizado correctamente.');
+            ->with('success', 'Modulo educativo actualizado correctamente. Sus lecciones anteriores se vaciaron para crear contenido nuevo.');
     }
 
     public function destroy(ModuloEducativo $modulo)
     {
+        $this->authorizeAdmin();
+
         $leccionIds = $modulo->lecciones()->pluck('id_leccion');
 
         ProgresoLeccion::whereIn('id_leccion', $leccionIds)->delete();
@@ -58,6 +75,11 @@ class ModuloEducativoController extends Controller
 
         return redirect()
             ->route('educacion.index')
-            ->with('success', 'Módulo educativo eliminado correctamente.');
+            ->with('success', 'Modulo educativo eliminado correctamente.');
+    }
+
+    private function authorizeAdmin(): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
     }
 }

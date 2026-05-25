@@ -16,7 +16,7 @@ class UpdateLeccionEducativaRequest extends FormRequest
         return [
             'titulo' => ['required', 'string', 'max:150'],
             'contenido' => ['required', 'string'],
-            'duracion_minutos' => ['required', 'integer', 'min:1', 'max:180'],
+            'duracion_minutos' => ['required', 'integer', 'min:1'],
         ];
     }
 
@@ -31,7 +31,6 @@ class UpdateLeccionEducativaRequest extends FormRequest
             'duracion_minutos.required' => 'La duración es obligatoria.',
             'duracion_minutos.integer' => 'La duración debe ser un número entero.',
             'duracion_minutos.min' => 'La duración debe ser mayor que 0.',
-            'duracion_minutos.max' => 'La duración de una lección no puede superar los 180 minutos.',
         ];
     }
 }

@@ -10,7 +10,9 @@ class EducacionController extends Controller
 {
     public function index()
     {
-        $idUsuario = Auth::user()->id_usuario;
+        $usuario = Auth::user();
+        $idUsuario = $usuario->id_usuario;
+        $esAdmin = $usuario->isAdmin();
 
         $modulos = ModuloEducativo::with(['lecciones' => function ($query) {
             $query->orderBy('id_leccion');
@@ -37,7 +39,8 @@ class EducacionController extends Controller
             'progreso',
             'totalLecciones',
             'leccionesCompletadas',
-            'porcentajeProgreso'
+            'porcentajeProgreso',
+            'esAdmin'
         ));
     }
 
@@ -56,6 +59,12 @@ class EducacionController extends Controller
             ]
         );
 
-        return back()->with('success', 'Lección completada correctamente.');
+        if (request('volver') === 'educacion') {
+            return redirect()
+                ->route('educacion.index')
+                ->with('success', 'Modulo finalizado correctamente.');
+        }
+
+        return back()->with('success', 'Leccion completada correctamente.');
     }
 }

@@ -56,16 +56,13 @@ $plantillasModulo = [
             <option value="personalizado">Personalizado</option>
         </select>
 
-        <p class="mt-2 text-xs text-gray-500">
-            La duración del módulo se calculará automáticamente sumando la duración de sus lecciones.
-        </p>
     </div>
 
     <div>
         <label for="titulo" class="mb-2 block text-sm font-medium text-gray-300">Título</label>
         <input type="text" id="titulo" name="titulo" value="{{ old('titulo', $modulo->titulo ?? '') }}" required
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
-            placeholder="Ejemplo: Presupuestos mensuales">
+            placeholder="Presupuestos mensuales">
 
         <x-input-error :messages="$errors->get('titulo')" />
     </div>

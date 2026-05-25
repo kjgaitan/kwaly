@@ -2,7 +2,7 @@
     @php
         $duracionLeccionTexto = $leccion->duracion_minutos >= 1 && $leccion->duracion_minutos <= 180
             ? $leccion->duracion_minutos . ' min'
-            : 'Duración por revisar';
+            : 'Duracion por revisar';
     @endphp
 
     <div class="min-h-screen bg-[#060b08] px-3 py-4 text-white md:px-4 lg:px-5">
@@ -18,7 +18,7 @@
                             </a>
 
                             <p class="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-green-300/80">
-                                Lección {{ $posicionActual }} de {{ $totalLeccionesModulo }}
+                                Leccion {{ $posicionActual }} de {{ $totalLeccionesModulo }}
                             </p>
 
                             <h1 class="mt-2 max-w-3xl text-3xl font-bold leading-tight text-white md:text-4xl">
@@ -26,13 +26,13 @@
                             </h1>
 
                             <p class="mt-4 max-w-2xl text-sm leading-6 text-gray-300">
-                                Lee el contenido a tu ritmo. Cuando termines, guarda tu avance para actualizar el progreso del módulo.
+                                Lee el contenido a tu ritmo. Cuando termines, guarda tu avance para actualizar el progreso del modulo.
                             </p>
                         </div>
 
                         <div class="rounded-2xl border border-white/10 bg-black/15 p-4">
                             <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold text-gray-300">Progreso del módulo</span>
+                                <span class="text-xs font-semibold text-gray-300">Progreso del modulo</span>
                                 <span class="text-sm font-bold text-green-300">{{ $porcentajeModulo }}%</span>
                             </div>
 
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="mt-2 rounded-xl border {{ $completada ? 'border-green-500/20 bg-green-500/10 text-green-300' : 'border-yellow-500/20 bg-yellow-500/10 text-yellow-200' }} px-3 py-2 text-xs font-semibold">
-                                {{ $completada ? 'Lección completada' : 'Lección pendiente' }}
+                                {{ $completada ? 'Leccion completada' : 'Leccion pendiente' }}
                             </div>
                         </div>
                     </div>
@@ -70,9 +70,9 @@
                                         <i class="bi bi-check2-circle text-xl"></i>
                                     </div>
                                     <div>
-                                        <h2 class="text-base font-semibold text-white">Ya completaste esta lección</h2>
+                                        <h2 class="text-base font-semibold text-white">Ya completaste esta leccion</h2>
                                         <p class="mt-2 text-sm leading-6 text-gray-400">
-                                            Puedes repasarla cuando quieras. El progreso no se duplicará.
+                                            Puedes repasarla cuando quieras. El progreso no se duplicara.
                                         </p>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
                                     <div>
                                         <h2 class="text-base font-semibold text-white">Pendiente de completar</h2>
                                         <p class="mt-2 text-sm leading-6 text-gray-400">
-                                            Cuando termines de estudiar esta lección, guarda tu avance.
+                                            Cuando termines de estudiar esta leccion, guarda tu avance.
                                         </p>
                                     </div>
                                 </div>
@@ -94,18 +94,20 @@
                                     <button type="submit"
                                         class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                                         <i class="bi bi-check2-all"></i>
-                                        <span>Completar lección</span>
+                                        <span>Completar leccion</span>
                                     </button>
                                 </form>
                             @endif
                         </div>
 
                         <div class="grid grid-cols-1 gap-3">
+                            @if($esAdmin)
                             <a href="{{ route('modulos-educativos.lecciones.edit', ['modulo' => $modulo->id_modulo, 'leccion' => $leccion->id_leccion]) }}"
                                 class="flex w-full items-center justify-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 transition hover:bg-green-500/20">
                                 <i class="bi bi-pencil-square"></i>
-                                <span>Editar lección</span>
+                                <span>Editar leccion</span>
                             </a>
+                            @endif
 
                             <a href="{{ route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo]) }}"
                                 class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.06]">
@@ -121,7 +123,7 @@
                         <a href="{{ route('modulos-educativos.lecciones.show', ['modulo' => $modulo->id_modulo, 'leccion' => $leccionAnterior->id_leccion]) }}"
                             class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.06]">
                             <i class="bi bi-chevron-left"></i>
-                            <span>Lección anterior</span>
+                            <span>Leccion anterior</span>
                         </a>
                     @else
                         <div class="hidden md:block"></div>
@@ -130,15 +132,25 @@
                     @if($leccionSiguiente)
                         <a href="{{ route('modulos-educativos.lecciones.show', ['modulo' => $modulo->id_modulo, 'leccion' => $leccionSiguiente->id_leccion]) }}"
                             class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
-                            <span>Siguiente lección</span>
+                            <span>Siguiente leccion</span>
                             <i class="bi bi-chevron-right"></i>
                         </a>
-                    @else
+                    @elseif($completada)
                         <a href="{{ route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo]) }}"
                             class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                             <span>Terminar repaso</span>
                             <i class="bi bi-check2"></i>
                         </a>
+                    @else
+                        <form action="{{ route('educacion.completar', $leccion->id_leccion) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="volver" value="educacion">
+                            <button type="submit"
+                                class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
+                                <span>Finalizar modulo</span>
+                                <i class="bi bi-check2-all"></i>
+                            </button>
+                        </form>
                     @endif
                 </div>
             </div>

@@ -4,7 +4,7 @@
         $duracionesPorRevisar = $lecciones->count() - $leccionesConDuracionValida->count();
         $duracionTotalLecciones = $leccionesConDuracionValida->sum('duracion_minutos');
         $duracionModuloTexto = $lecciones->isNotEmpty()
-            ? ($duracionesPorRevisar > 0 ? 'Duración por revisar' : $duracionTotalLecciones . ' min')
+            ? ($duracionesPorRevisar > 0 ? 'Duracion por revisar' : $duracionTotalLecciones . ' min')
             : 'Sin lecciones';
     @endphp
     <div class="min-h-screen bg-[#060b08] px-3 py-4 text-white md:px-4 lg:px-5">
@@ -15,7 +15,7 @@
                 <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                         <p class="text-sm font-semibold text-green-400">
-                            Módulo educativo
+                            Modulo educativo
                         </p>
 
                         <h1 class="mt-1 text-3xl font-bold tracking-tight text-white">
@@ -23,12 +23,16 @@
                         </h1>
 
                         <p class="mt-1 text-sm text-gray-400">
-                            Gestiona las lecciones asociadas a este módulo. La duración se calcula con la suma de sus lecciones.
+                            @if($esAdmin)
+                                Gestiona las lecciones asociadas a este modulo. La duracion se calcula con la suma de sus lecciones.
+                            @else
+                                Revisa las lecciones disponibles y continua aprendiendo a tu ritmo.
+                            @endif
                         </p>
 
-                        @if($duracionesPorRevisar > 0)
+                        @if($esAdmin && $duracionesPorRevisar > 0)
                         <p class="mt-2 text-sm text-yellow-300">
-                            Hay {{ $duracionesPorRevisar }} lección{{ $duracionesPorRevisar === 1 ? '' : 'es' }} con duración fuera del rango permitido. Edítala para corregir el total.
+                            Hay {{ $duracionesPorRevisar }} leccion{{ $duracionesPorRevisar === 1 ? '' : 'es' }} con duracion fuera del rango permitido. Editala para corregir el total.
                         </p>
                         @endif
 
@@ -57,11 +61,13 @@
                             <span>Volver</span>
                         </a>
 
+                        @if($esAdmin)
                         <a href="{{ route('modulos-educativos.lecciones.create', ['modulo' => $modulo->id_modulo]) }}"
                             class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#72f59a] px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                             <i class="bi bi-plus-lg"></i>
-                            <span>Nueva lección</span>
+                            <span>Nueva leccion</span>
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -74,20 +80,20 @@
                 </div>
 
                 <h2 class="mt-4 text-xl font-semibold text-white">
-                    No hay lecciones registradas
+                    @if($esAdmin)
+                        No hay lecciones registradas
+                    @else
+                        Este modulo aun no tiene lecciones
+                    @endif
                 </h2>
 
                 <p class="mt-2 text-sm text-gray-400">
-                    Añade la primera lección para que este módulo tenga contenido.
+                    @if($esAdmin)
+                        Anade la primera leccion para que este modulo tenga contenido.
+                    @else
+                        Vuelve mas tarde para continuar con este contenido.
+                    @endif
                 </p>
-
-                <div class="mt-6">
-                    <a href="{{ route('modulos-educativos.lecciones.create', ['modulo' => $modulo->id_modulo]) }}"
-                        class="mx-auto flex w-full max-w-xs items-center justify-center gap-2 rounded-xl bg-[#72f59a] px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
-                        <i class="bi bi-plus-lg"></i>
-                        <span>Crear lección</span>
-                    </a>
-                </div>
             </div>
             @else
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
@@ -101,7 +107,7 @@
                         </div>
 
                         <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">
-                            {{ $leccion->duracion_minutos >= 1 && $leccion->duracion_minutos <= 180 ? $leccion->duracion_minutos . ' min' : 'Duración por revisar' }}
+                            {{ $leccion->duracion_minutos >= 1 && $leccion->duracion_minutos <= 180 ? $leccion->duracion_minutos . ' min' : 'Duracion por revisar' }}
                         </span>
                     </div>
 
@@ -121,6 +127,7 @@
                             <span>Ver / repasar</span>
                         </a>
 
+                        @if($esAdmin)
                         <a href="{{ route('modulos-educativos.lecciones.edit', ['modulo' => $modulo->id_modulo, 'leccion' => $leccion->id_leccion]) }}"
                             class="flex w-full items-center justify-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 transition hover:bg-green-500/20">
                             <i class="bi bi-pencil-square"></i>
@@ -133,12 +140,15 @@
                             <i class="bi bi-trash3"></i>
                             <span>Eliminar</span>
                         </button>
+                        @endif
                     </div>
 
-                    <x-delete-modal id="deleteModal-leccion-{{ $leccion->id_leccion }}" title="¿Eliminar lección?"
-                        message="Esta lección se eliminará permanentemente. Esta operación es irreversible."
+                    @if($esAdmin)
+                    <x-delete-modal id="deleteModal-leccion-{{ $leccion->id_leccion }}" title="Eliminar leccion?"
+                        message="Esta leccion se eliminara permanentemente. Esta operacion es irreversible."
                         :action="route('modulos-educativos.lecciones.destroy', ['modulo' => $modulo->id_modulo, 'leccion' => $leccion->id_leccion])"
                         method="DELETE" />
+                    @endif
                 </div>
                 @endforeach
             </div>

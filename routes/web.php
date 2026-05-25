@@ -115,6 +115,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/compartido', [CompartidoController::class, 'index'])
         ->name('compartido.index');
 
+    Route::get('/compartido/gastos/create', [CompartidoController::class, 'createGasto'])
+        ->name('compartido.gastos.create');
+
     Route::post('/compartido/grupo', [CompartidoController::class, 'storeGrupo'])
         ->name('compartido.grupo.store');
 
@@ -132,6 +135,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::put('/compartido/gasto/{id}', [CompartidoController::class, 'updateGasto'])
         ->name('compartido.gasto.update');
+
+    Route::delete('/compartido/gasto/{id}', [CompartidoController::class, 'destroyGasto'])
+        ->name('compartido.gasto.destroy');
 
     // Configuración 
 

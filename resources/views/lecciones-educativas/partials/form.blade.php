@@ -170,7 +170,7 @@ $plantillasLeccion = $claveModulo ? $plantillasPorModulo[$claveModulo] : [];
         <label for="titulo" class="mb-2 block text-sm font-medium text-gray-300">Título</label>
         <input type="text" id="titulo" name="titulo" value="{{ old('titulo', $leccion->titulo ?? '') }}" required
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
-            placeholder="Ejemplo: Método 50/30/20">
+            placeholder="Método 50/30/20">
 
         <x-input-error :messages="$errors->get('titulo')" />
     </div>
@@ -191,12 +191,7 @@ $plantillasLeccion = $claveModulo ? $plantillasPorModulo[$claveModulo] : [];
         <input type="number" id="duracion_minutos" name="duracion_minutos" min="1"
             value="{{ old('duracion_minutos', $leccion->duracion_minutos ?? '') }}" required
             class="w-full rounded-xl border border-[#26352d] bg-[#111714] px-4 py-3 text-white placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
-            placeholder="Ejemplo: 8">
-
-        <p class="mt-2 text-xs text-gray-500">
-            Usa una duración realista para una lección individual. Máximo permitido: 180 minutos.
-        </p>
-
+            placeholder="8">
         <x-input-error :messages="$errors->get('duracion_minutos')" />
     </div>
 

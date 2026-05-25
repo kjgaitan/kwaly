@@ -19,11 +19,14 @@ class LeccionEducativaController extends Controller
         return view('lecciones-educativas.index', [
             'modulo' => $modulo,
             'lecciones' => $lecciones,
+            'esAdmin' => auth()->user()->isAdmin(),
         ]);
     }
 
     public function create(ModuloEducativo $modulo)
     {
+        $this->authorizeAdmin();
+
         return view('lecciones-educativas.create', [
             'modulo' => $modulo,
         ]);
@@ -31,18 +34,19 @@ class LeccionEducativaController extends Controller
 
     public function store(StoreLeccionEducativaRequest $request, ModuloEducativo $modulo)
     {
+        $this->authorizeAdmin();
+
         $modulo->lecciones()->create($request->validated());
 
         return redirect()
             ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
-            ->with('success', 'Lección registrada correctamente.');
+            ->with('success', 'Leccion registrada correctamente.');
     }
 
     public function edit(ModuloEducativo $modulo, LeccionEducativa $leccion)
     {
-        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
-            abort(404);
-        }
+        $this->authorizeAdmin();
+        $this->ensureLessonBelongsToModule($modulo, $leccion);
 
         return view('lecciones-educativas.edit', [
             'modulo' => $modulo,
@@ -52,9 +56,7 @@ class LeccionEducativaController extends Controller
 
     public function show(ModuloEducativo $modulo, LeccionEducativa $leccion)
     {
-        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
-            abort(404);
-        }
+        $this->ensureLessonBelongsToModule($modulo, $leccion);
 
         $idUsuario = auth()->user()->id_usuario;
         $completada = ProgresoLeccion::where('id_usuario', $idUsuario)
@@ -91,6 +93,7 @@ class LeccionEducativaController extends Controller
             'modulo' => $modulo,
             'leccion' => $leccion,
             'completada' => $completada,
+            'esAdmin' => auth()->user()->isAdmin(),
             'leccionAnterior' => $leccionAnterior,
             'leccionSiguiente' => $leccionSiguiente,
             'posicionActual' => $posicionActual === false ? 1 : $posicionActual + 1,
@@ -105,28 +108,38 @@ class LeccionEducativaController extends Controller
         ModuloEducativo $modulo,
         LeccionEducativa $leccion
     ) {
-        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
-            abort(404);
-        }
+        $this->authorizeAdmin();
+        $this->ensureLessonBelongsToModule($modulo, $leccion);
 
         $leccion->update($request->validated());
 
         return redirect()
             ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
-            ->with('success', 'Lección actualizada correctamente.');
+            ->with('success', 'Leccion actualizada correctamente.');
     }
 
     public function destroy(ModuloEducativo $modulo, LeccionEducativa $leccion)
     {
-        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
-            abort(404);
-        }
+        $this->authorizeAdmin();
+        $this->ensureLessonBelongsToModule($modulo, $leccion);
 
         ProgresoLeccion::where('id_leccion', $leccion->id_leccion)->delete();
         $leccion->delete();
 
         return redirect()
             ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
-            ->with('success', 'Lección eliminada correctamente.');
+            ->with('success', 'Leccion eliminada correctamente.');
+    }
+
+    private function ensureLessonBelongsToModule(ModuloEducativo $modulo, LeccionEducativa $leccion): void
+    {
+        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
+            abort(404);
+        }
+    }
+
+    private function authorizeAdmin(): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
     }
 }

@@ -5,18 +5,20 @@
         <i class="bi bi-journal-bookmark text-2xl"></i>
     </div>
 
-    <h2 class="mt-4 text-lg font-semibold text-white">No hay módulos educativos</h2>
+    <h2 class="mt-4 text-lg font-semibold text-white">
+        @if($esAdmin)
+            No hay modulos educativos
+        @else
+            El contenido educativo aun no esta disponible
+        @endif
+    </h2>
     <p class="mt-2 text-sm text-gray-400">
-        Crea el primer módulo para poder añadir lecciones y mostrar contenido al usuario.
+        @if($esAdmin)
+            Crea el primer modulo para poder anadir lecciones y mostrar contenido al usuario.
+        @else
+            Pronto encontraras aqui lecciones guiadas para mejorar tus habitos financieros.
+        @endif
     </p>
-
-    <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-        <a href="{{ route('modulos-educativos.create') }}"
-            class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-500 px-6 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
-            <i class="bi bi-plus-circle"></i>
-            Crear módulo
-        </a>
-    </div>
 </div>
 @else
 <div class="grid gap-4 lg:grid-cols-2">
@@ -33,12 +35,12 @@
     $modulo->lecciones->every(fn($leccion) => in_array($leccion->id_leccion, $progreso));
 
     $duracionTexto = $cantidadLecciones > 0
-    ? ($duracionesPorRevisar > 0 ? 'Duración por revisar' : $duracionRealMinutos . ' min')
+    ? ($duracionesPorRevisar > 0 ? 'Duracion por revisar' : $duracionRealMinutos . ' min')
     : 'Sin lecciones';
 
     $nivelTexto = $modulo->nivel
     ? ucfirst($modulo->nivel)
-    : 'Básico';
+    : 'Basico';
     @endphp
 
     <div
@@ -72,12 +74,20 @@
         <p class="mt-2 text-xs leading-5 text-gray-500">
             @if($cantidadLecciones > 0)
                 @if($duracionesPorRevisar > 0)
-                    Hay lecciones con una duración fuera del rango permitido. Edita esas lecciones para corregir el cálculo.
+                    @if($esAdmin)
+                        Hay lecciones con una duracion fuera del rango permitido. Edita esas lecciones para corregir el calculo.
+                    @else
+                        Algunas duraciones estan en revision.
+                    @endif
                 @else
-                    La duración muestra la suma real de las lecciones creadas en este módulo.
+                    La duracion muestra la suma real de las lecciones creadas en este modulo.
                 @endif
             @else
-                El módulo todavía no tiene duración porque la duración se calcula desde sus lecciones.
+                @if($esAdmin)
+                    El modulo todavia no tiene duracion porque la duracion se calcula desde sus lecciones.
+                @else
+                    Este modulo todavia no tiene lecciones disponibles.
+                @endif
             @endif
         </p>
 
@@ -94,7 +104,11 @@
             {{ \Illuminate\Support\Str::limit($primeraLeccion->contenido, 170) }}
             @else
             <span class="text-gray-500">
-                Este módulo todavía no tiene lecciones. Crea la primera para que los usuarios puedan empezar.
+                @if($esAdmin)
+                    Este modulo todavia no tiene lecciones. Crea la primera para que los usuarios puedan empezar.
+                @else
+                    Este modulo todavia no tiene lecciones disponibles.
+                @endif
             </span>
             @endif
         </div>
@@ -105,7 +119,7 @@
             <a href="{{ route('modulos-educativos.lecciones.show', ['modulo' => $modulo->id_modulo, 'leccion' => $primeraLeccion->id_leccion]) }}"
                 class="flex w-full items-center justify-center gap-2 rounded-xl {{ $primeraLeccionCompletada ? 'border border-white/5 bg-[#161d19] text-white hover:border-green-500/20 hover:bg-[#1a221d]' : 'bg-green-500 text-black hover:bg-green-400' }} px-4 py-3 text-sm font-medium transition">
                 <span>
-                    {{ $primeraLeccionCompletada ? 'Repasar lección' : 'Comenzar lección' }}
+                    {{ $primeraLeccionCompletada ? 'Repasar leccion' : 'Comenzar leccion' }}
                 </span>
                 <i class="bi bi-chevron-right text-xs"></i>
             </a>
@@ -115,31 +129,36 @@
                 <i class="bi bi-collection-play"></i>
                 <span>Ver lecciones</span>
             </a>
-            @else
+            @elseif($esAdmin)
             <a href="{{ route('modulos-educativos.lecciones.create', ['modulo' => $modulo->id_modulo]) }}"
                 class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-medium text-black transition hover:bg-green-400">
                 <i class="bi bi-plus-circle"></i>
-                <span>Crear lección</span>
+                <span>Crear leccion</span>
             </a>
             @endif
 
+            @if($esAdmin)
             <a href="{{ route('modulos-educativos.edit', ['modulo' => $modulo->id_modulo]) }}"
                 class="flex w-full items-center justify-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 transition hover:bg-green-500/20">
                 <i class="bi bi-pencil-square"></i>
-                <span>Editar módulo</span>
+                <span>Editar modulo</span>
             </a>
 
             <button type="button" onclick="openDeleteModal('deleteModal-modulo-{{ $modulo->id_modulo }}')"
                 class="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-red-500/20">
                 <i class="bi bi-trash3"></i>
-                <span>Eliminar módulo</span>
+                <span>Eliminar modulo</span>
             </button>
+            @endif
 
         </div>
-        <x-delete-modal id="deleteModal-modulo-{{ $modulo->id_modulo }}" title="¿Eliminar módulo educativo?"
-            message="Este módulo y sus lecciones asociadas se eliminarán permanentemente. Esta operación es irreversible."
+
+        @if($esAdmin)
+        <x-delete-modal id="deleteModal-modulo-{{ $modulo->id_modulo }}" title="Eliminar modulo educativo?"
+            message="Este modulo y sus lecciones asociadas se eliminaran permanentemente. Esta operacion es irreversible."
             :action="route('modulos-educativos.destroy', ['modulo' => $modulo->id_modulo])"
             method="DELETE" />
+        @endif
     </div>
     @endforeach
 </div>
