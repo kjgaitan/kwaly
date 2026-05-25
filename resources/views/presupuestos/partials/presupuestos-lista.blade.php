@@ -121,9 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const seleccionForm = document.getElementById('presupuestoSeleccionForm');
     const presupuestoSeleccionId = document.getElementById('presupuestoSeleccionId');
 
-    const presupuestos = @json($presupuestos - > map - > only(['id_presupuesto', 'mes', 'anio']));
-
-    function selectBudget(presupuestoId) {
+   const presupuestos = @json($presupuestos->map->only(['id_presupuesto', 'mes', 'anio']));
+    
+   function selectBudget(presupuestoId) {
         presupuestoSeleccionId.value = presupuestoId;
         seleccionForm.submit();
     }
