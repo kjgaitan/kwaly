@@ -75,7 +75,8 @@ Route::middleware(['auth'])->group(function () {
     ->name('educacion.completar');
 
     Route::resource('modulos-educativos', ModuloEducativoController::class)
-    ->except(['show']);
+        ->parameters(['modulos-educativos' => 'modulo'])
+        ->except(['show', 'index']);
 
       // Leccion Educativa
     Route::get('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'index'])
@@ -86,6 +87,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'store'])
         ->name('modulos-educativos.lecciones.store');
+
+    Route::get('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'show'])
+        ->name('modulos-educativos.lecciones.show');
 
     Route::get('/modulos-educativos/{modulo}/lecciones/{leccion}/edit', [LeccionEducativaController::class, 'edit'])
         ->name('modulos-educativos.lecciones.edit');

@@ -5,16 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModuloEducativo\StoreModuloEducativoRequest;
 use App\Http\Requests\ModuloEducativo\UpdateModuloEducativoRequest;
 use App\Models\ModuloEducativo;
+use App\Models\ProgresoLeccion;
 
 class ModuloEducativoController extends Controller
 {
     public function index()
     {
-        $modulos = ModuloEducativo::withCount('lecciones')
-            ->orderBy('id_modulo', 'desc')
-            ->get();
-
-        return view('modulos-educativos.index', compact('modulos'));
+        return redirect()->route('educacion.index');
     }
 
     public function create()
@@ -24,37 +21,43 @@ class ModuloEducativoController extends Controller
 
     public function store(StoreModuloEducativoRequest $request)
     {
-        ModuloEducativo::create($request->validated());
+        ModuloEducativo::create($request->validated() + [
+            'duracion_minutos' => 0,
+        ]);
 
         return redirect()
-            ->route('modulos-educativos.index')
+            ->route('educacion.index')
             ->with('success', 'Módulo educativo registrado correctamente.');
     }
 
-    public function edit(ModuloEducativo $modulo_educativo)
+    public function edit(ModuloEducativo $modulo)
     {
         return view('modulos-educativos.edit', [
-            'modulo' => $modulo_educativo,
+            'modulo' => $modulo,
         ]);
     }
 
-    public function update(UpdateModuloEducativoRequest $request, ModuloEducativo $modulo_educativo)
+    public function update(UpdateModuloEducativoRequest $request, ModuloEducativo $modulo)
     {
-        $modulo_educativo->update($request->validated());
+        $modulo->update($request->validated() + [
+            'duracion_minutos' => 0,
+        ]);
 
         return redirect()
-            ->route('modulos-educativos.index')
+            ->route('educacion.index')
             ->with('success', 'Módulo educativo actualizado correctamente.');
     }
 
-    public function destroy(ModuloEducativo $modulo_educativo)
+    public function destroy(ModuloEducativo $modulo)
     {
-        $modulo_educativo->lecciones()->delete();
+        $leccionIds = $modulo->lecciones()->pluck('id_leccion');
 
-        $modulo_educativo->delete();
+        ProgresoLeccion::whereIn('id_leccion', $leccionIds)->delete();
+        $modulo->lecciones()->delete();
+        $modulo->delete();
 
         return redirect()
-            ->route('modulos-educativos.index')
+            ->route('educacion.index')
             ->with('success', 'Módulo educativo eliminado correctamente.');
     }
 }

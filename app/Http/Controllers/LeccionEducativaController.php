@@ -6,75 +6,127 @@ use App\Http\Requests\LeccionEducativa\StoreLeccionEducativaRequest;
 use App\Http\Requests\LeccionEducativa\UpdateLeccionEducativaRequest;
 use App\Models\LeccionEducativa;
 use App\Models\ModuloEducativo;
+use App\Models\ProgresoLeccion;
 
 class LeccionEducativaController extends Controller
 {
-    public function index(ModuloEducativo $modulo_educativo)
+    public function index(ModuloEducativo $modulo)
     {
-        $lecciones = $modulo_educativo->lecciones()
+        $lecciones = $modulo->lecciones()
             ->orderBy('id_leccion', 'desc')
             ->get();
 
         return view('lecciones-educativas.index', [
-            'modulo' => $modulo_educativo,
+            'modulo' => $modulo,
             'lecciones' => $lecciones,
         ]);
     }
 
-    public function create(ModuloEducativo $modulo_educativo)
+    public function create(ModuloEducativo $modulo)
     {
         return view('lecciones-educativas.create', [
-            'modulo' => $modulo_educativo,
+            'modulo' => $modulo,
         ]);
     }
 
-    public function store(StoreLeccionEducativaRequest $request, ModuloEducativo $modulo_educativo)
+    public function store(StoreLeccionEducativaRequest $request, ModuloEducativo $modulo)
     {
-        $modulo_educativo->lecciones()->create($request->validated());
+        $modulo->lecciones()->create($request->validated());
 
         return redirect()
-            ->route('modulos-educativos.lecciones.index', $modulo_educativo)
+            ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
             ->with('success', 'Lección registrada correctamente.');
     }
 
-    public function edit(ModuloEducativo $modulo_educativo, LeccionEducativa $leccion_educativa)
+    public function edit(ModuloEducativo $modulo, LeccionEducativa $leccion)
     {
-        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
+        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
             abort(404);
         }
 
         return view('lecciones-educativas.edit', [
-            'modulo' => $modulo_educativo,
-            'leccion' => $leccion_educativa,
+            'modulo' => $modulo,
+            'leccion' => $leccion,
+        ]);
+    }
+
+    public function show(ModuloEducativo $modulo, LeccionEducativa $leccion)
+    {
+        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
+            abort(404);
+        }
+
+        $idUsuario = auth()->user()->id_usuario;
+        $completada = ProgresoLeccion::where('id_usuario', $idUsuario)
+            ->where('id_leccion', $leccion->id_leccion)
+            ->where('completada', 1)
+            ->exists();
+
+        $leccionesModulo = $modulo->lecciones()
+            ->orderBy('id_leccion')
+            ->get();
+
+        $leccionIds = $leccionesModulo->pluck('id_leccion')->values();
+        $posicionActual = $leccionIds->search($leccion->id_leccion);
+
+        $leccionAnterior = $posicionActual !== false && $posicionActual > 0
+            ? $leccionesModulo[$posicionActual - 1]
+            : null;
+
+        $leccionSiguiente = $posicionActual !== false && $posicionActual < $leccionesModulo->count() - 1
+            ? $leccionesModulo[$posicionActual + 1]
+            : null;
+
+        $leccionesCompletadasModulo = ProgresoLeccion::where('id_usuario', $idUsuario)
+            ->whereIn('id_leccion', $leccionIds)
+            ->where('completada', 1)
+            ->count();
+
+        $totalLeccionesModulo = $leccionesModulo->count();
+        $porcentajeModulo = $totalLeccionesModulo > 0
+            ? round(($leccionesCompletadasModulo / $totalLeccionesModulo) * 100)
+            : 0;
+
+        return view('lecciones-educativas.show', [
+            'modulo' => $modulo,
+            'leccion' => $leccion,
+            'completada' => $completada,
+            'leccionAnterior' => $leccionAnterior,
+            'leccionSiguiente' => $leccionSiguiente,
+            'posicionActual' => $posicionActual === false ? 1 : $posicionActual + 1,
+            'totalLeccionesModulo' => $totalLeccionesModulo,
+            'leccionesCompletadasModulo' => $leccionesCompletadasModulo,
+            'porcentajeModulo' => $porcentajeModulo,
         ]);
     }
 
     public function update(
         UpdateLeccionEducativaRequest $request,
-        ModuloEducativo $modulo_educativo,
-        LeccionEducativa $leccion_educativa
+        ModuloEducativo $modulo,
+        LeccionEducativa $leccion
     ) {
-        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
+        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
             abort(404);
         }
 
-        $leccion_educativa->update($request->validated());
+        $leccion->update($request->validated());
 
         return redirect()
-            ->route('modulos-educativos.lecciones.index', $modulo_educativo)
+            ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
             ->with('success', 'Lección actualizada correctamente.');
     }
 
-    public function destroy(ModuloEducativo $modulo_educativo, LeccionEducativa $leccion_educativa)
+    public function destroy(ModuloEducativo $modulo, LeccionEducativa $leccion)
     {
-        if ((int) $leccion_educativa->id_modulo !== (int) $modulo_educativo->id_modulo) {
+        if ((int) $leccion->id_modulo !== (int) $modulo->id_modulo) {
             abort(404);
         }
 
-        $leccion_educativa->delete();
+        ProgresoLeccion::where('id_leccion', $leccion->id_leccion)->delete();
+        $leccion->delete();
 
         return redirect()
-            ->route('modulos-educativos.lecciones.index', $modulo_educativo)
+            ->route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo])
             ->with('success', 'Lección eliminada correctamente.');
     }
 }

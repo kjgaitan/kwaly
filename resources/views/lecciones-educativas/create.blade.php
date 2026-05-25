@@ -4,14 +4,14 @@
             <div class="mb-6">
                 <p class="text-sm text-green-400">Módulo: {{ $modulo->titulo }}</p>
                 <h1 class="text-2xl font-bold tracking-tight text-white md:text-3xl">
-                    Nueva lección
+                    Crear lección para el módulo: {{ $modulo->titulo }}
                 </h1>
                 <p class="mt-1 text-sm text-gray-400">
-                    Completa la información para registrar una nueva lección.
+                    Elige una plantilla relacionada con este módulo o crea una lección personalizada.
                 </p>
             </div>
 
-            <form action="{{ route('modulos-educativos.lecciones.store', $modulo) }}" method="POST" novalidate>
+            <form action="{{ route('modulos-educativos.lecciones.store', ['modulo' => $modulo->id_modulo]) }}" method="POST" novalidate>
                 @csrf
                 @include('lecciones-educativas.partials.form', ['textoBoton' => 'Guardar lección'])
             </form>

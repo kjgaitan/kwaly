@@ -7,11 +7,11 @@
                     Editar lección
                 </h1>
                 <p class="mt-1 text-sm text-gray-400">
-                    Modifica la información de la lección seleccionada.
+                    Modifica la información de la lección asociada a este módulo.
                 </p>
             </div>
 
-            <form action="{{ route('modulos-educativos.lecciones.update', [$modulo, $leccion]) }}" method="POST" novalidate>
+            <form action="{{ route('modulos-educativos.lecciones.update', ['modulo' => $modulo->id_modulo, 'leccion' => $leccion->id_leccion]) }}" method="POST" novalidate>
                 @csrf
                 @method('PUT')
                 @include('lecciones-educativas.partials.form', ['textoBoton' => 'Actualizar lección'])

@@ -78,7 +78,7 @@
                         </span>
 
                         <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">
-                            {{ $modulo->duracion_minutos }} min
+                            Duración por lecciones
                         </span>
 
                         <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300">
@@ -104,13 +104,13 @@
                     </div>
 
                     <div class="mt-4 grid grid-cols-1 gap-2 md:grid-cols-3">
-                        <a href="{{ route('modulos-educativos.lecciones.index', $modulo->id_modulo) }}"
+                        <a href="{{ route('modulos-educativos.lecciones.index', ['modulo' => $modulo->id_modulo]) }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#72f59a] px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                             <i class="bi bi-collection-play"></i>
                             <span>Lecciones</span>
                         </a>
 
-                        <a href="{{ route('modulos-educativos.edit', $modulo->id_modulo) }}"
+                        <a href="{{ route('modulos-educativos.edit', ['modulo' => $modulo->id_modulo]) }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-400 transition hover:bg-green-500/20">
                             <i class="bi bi-pencil-square"></i>
                             <span>Editar</span>
@@ -125,7 +125,7 @@
 
                     <x-delete-modal id="deleteModal-modulo-{{ $modulo->id_modulo }}" title="¿Eliminar módulo educativo?"
                         message="Este módulo y sus lecciones asociadas se eliminarán permanentemente. Esta operación es irreversible."
-                        :action="route('modulos-educativos.destroy', $modulo->id_modulo)" method="DELETE" />
+                        :action="route('modulos-educativos.destroy', ['modulo' => $modulo->id_modulo])" method="DELETE" />
                 </div>
                 @empty
                 <div class="xl:col-span-2 rounded-[22px] border border-[#26352d] bg-[#111714] p-8 text-center">

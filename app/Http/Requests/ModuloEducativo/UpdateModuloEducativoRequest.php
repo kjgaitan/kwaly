@@ -15,9 +15,8 @@ class UpdateModuloEducativoRequest extends FormRequest
     {
         return [
             'titulo' => ['required', 'string', 'max:150'],
-            'descripcion' => ['required', 'string'],
+            'descripcion' => ['required', 'string', 'max:1000'],
             'nivel' => ['required', 'in:basico,intermedio,avanzado'],
-            'duracion_minutos' => ['required', 'integer', 'min:1'],
         ];
     }
 
@@ -25,16 +24,16 @@ class UpdateModuloEducativoRequest extends FormRequest
     {
         return [
             'titulo.required' => 'El título es obligatorio.',
+            'titulo.string' => 'El título debe ser texto.',
             'titulo.max' => 'El título no puede superar los 150 caracteres.',
 
             'descripcion.required' => 'La descripción es obligatoria.',
+            'descripcion.string' => 'La descripción debe ser texto.',
+            'descripcion.max' => 'La descripción no puede superar los 1000 caracteres.',
 
             'nivel.required' => 'El nivel es obligatorio.',
             'nivel.in' => 'El nivel seleccionado no es válido.',
 
-            'duracion_minutos.required' => 'La duración es obligatoria.',
-            'duracion_minutos.integer' => 'La duración debe ser un número entero.',
-            'duracion_minutos.min' => 'La duración debe ser mayor que 0.',
         ];
     }
 }

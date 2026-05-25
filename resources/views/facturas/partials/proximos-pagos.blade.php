@@ -1,24 +1,24 @@
 @php
 function badgeEstado($estado) {
 return match($estado) {
-'pagado' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
-'vencido' => 'bg-red-500/15 text-red-300 border border-red-500/20',
+'pagada' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
+'vencida' => 'bg-red-500/15 text-red-300 border border-red-500/20',
 default => 'bg-yellow-500/15 text-yellow-300 border border-yellow-500/20',
 };
 }
 
 function iconoEstado($estado) {
 return match($estado) {
-'pagado' => 'bi-check-circle',
-'vencido' => 'bi-exclamation-circle',
+'pagada' => 'bi-check-circle',
+'vencida' => 'bi-exclamation-circle',
 default => 'bi-clock',
 };
 }
 
 function cardIconBg($estado) {
 return match($estado) {
-'pagado' => 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20',
-'vencido' => 'bg-red-500/10 text-red-300 border border-red-500/20',
+'pagada' => 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20',
+'vencida' => 'bg-red-500/10 text-red-300 border border-red-500/20',
 default => 'bg-yellow-500/10 text-yellow-300 border border-yellow-500/20',
 };
 }
@@ -85,14 +85,14 @@ return 'bi-receipt';
                         <span>•</span>
                         <span>Vence: {{ \Carbon\Carbon::parse($factura->fecha_vencimiento)->format('d/m/Y') }}</span>
 
-                        @if($factura->estado_visual === 'vencido')
+                        @if($factura->estado_visual === 'vencida')
                         <span>•</span>
-                        <span class="font-medium text-red-400">Vencido</span>
+                        <span class="font-medium text-red-400">Vencida</span>
                         @endif
 
                         @if($factura->fecha_pago)
                         <span>•</span>
-                        <span>Pagado: {{ \Carbon\Carbon::parse($factura->fecha_pago)->format('d/m/Y') }}</span>
+                        <span>Pagada: {{ \Carbon\Carbon::parse($factura->fecha_pago)->format('d/m/Y') }}</span>
                         @endif
                     </div>
                 </div>
@@ -111,13 +111,13 @@ return 'bi-receipt';
                         {{ ucfirst($factura->estado_visual) }}
                     </span>
 
-                    @if($factura->estado_visual !== 'pagado')
+                    @if($factura->estado_visual !== 'pagada')
                     <form action="{{ route('facturas.pagar', $factura->id_factura) }}" method="POST">
                         @csrf
                         @method('PATCH')
                         <button type="submit"
                             class="rounded-full bg-[#72f59a] px-3 py-1.5 text-[11px] font-semibold text-[#0d1510] transition hover:brightness-110">
-                            Marcar pagado
+                            Marcar pagada
                         </button>
                     </form>
                     @endif

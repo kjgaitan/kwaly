@@ -16,7 +16,7 @@ class StoreLeccionEducativaRequest extends FormRequest
         return [
             'titulo' => ['required', 'string', 'max:150'],
             'contenido' => ['required', 'string'],
-            'duracion_minutos' => ['required', 'integer', 'min:1'],
+            'duracion_minutos' => ['required', 'integer', 'min:1', 'max:180'],
         ];
     }
 
@@ -24,11 +24,14 @@ class StoreLeccionEducativaRequest extends FormRequest
     {
         return [
             'titulo.required' => 'El título es obligatorio.',
+            'titulo.string' => 'El título debe ser texto.',
             'titulo.max' => 'El título no puede superar los 150 caracteres.',
             'contenido.required' => 'El contenido es obligatorio.',
+            'contenido.string' => 'El contenido debe ser texto.',
             'duracion_minutos.required' => 'La duración es obligatoria.',
             'duracion_minutos.integer' => 'La duración debe ser un número entero.',
             'duracion_minutos.min' => 'La duración debe ser mayor que 0.',
+            'duracion_minutos.max' => 'La duración de una lección no puede superar los 180 minutos.',
         ];
     }
 }

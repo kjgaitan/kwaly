@@ -12,12 +12,12 @@
                         </h1>
 
                         <p class="mt-1 text-sm text-gray-400">
-                            Aprende a gestionar mejor tu dinero
+                            Crea módulos y lecciones guiadas para que el aprendizaje sea claro y medible.
                         </p>
 
                         <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400">
                             <i class="bi bi-stars"></i>
-                            <span>{{ $leccionesCompletadas }} de {{ $totalLecciones }} completadas</span>
+                            <span>{{ $leccionesCompletadas }} de {{ $totalLecciones }} lecciones completadas</span>
                         </div>
                     </div>
 
@@ -25,19 +25,8 @@
                         <a href="{{ route('modulos-educativos.create') }}"
                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-400">
                             <i class="bi bi-plus-lg"></i>
-                            <span>Crear Módulo</span>
+                            <span>Crear módulo</span>
                         </a>
-
-                        @auth
-                            @if(auth()->user()->tipo_usuario === 'admin')
-                                <a href="{{ route('modulos-educativos.index') }}"
-                                   class="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-gray-300 transition hover:bg-white/10 hover:text-white">
-
-                                    <i class="bi bi-gear-fill"></i>
-                                    <span>Gestionar</span>
-                                </a>
-                            @endif
-                        @endauth
                     </div>
 
                 </div>

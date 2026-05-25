@@ -2,13 +2,13 @@
     @php
         $estadoVisual = $factura->estado;
 
-        if ($factura->estado !== 'pagado' && $factura->fecha_vencimiento < now()->toDateString()) {
-            $estadoVisual = 'vencido';
+        if ($factura->estado !== 'pagada' && $factura->fecha_vencimiento < now()->toDateString()) {
+            $estadoVisual = 'vencida';
         }
 
         $claseEstado = match($estadoVisual) {
-            'pagado' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
-            'vencido' => 'bg-red-500/15 text-red-300 border border-red-500/20',
+            'pagada' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
+            'vencida' => 'bg-red-500/15 text-red-300 border border-red-500/20',
             default => 'bg-yellow-500/15 text-yellow-300 border border-yellow-500/20',
         };
     @endphp

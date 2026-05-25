@@ -12,15 +12,21 @@ class EducacionController extends Controller
     {
         $idUsuario = Auth::user()->id_usuario;
 
-        $modulos = ModuloEducativo::with('lecciones')->get();
+        $modulos = ModuloEducativo::with(['lecciones' => function ($query) {
+            $query->orderBy('id_leccion');
+        }])->get();
 
         $progreso = ProgresoLeccion::where('id_usuario', $idUsuario)
             ->where('completada', 1)
             ->pluck('id_leccion')
             ->toArray();
 
-        $totalLecciones = $modulos->sum(fn($modulo) => $modulo->lecciones->count());
-        $leccionesCompletadas = count($progreso);
+        $leccionIdsDisponibles = $modulos
+            ->flatMap(fn($modulo) => $modulo->lecciones->pluck('id_leccion'))
+            ->all();
+
+        $totalLecciones = count($leccionIdsDisponibles);
+        $leccionesCompletadas = count(array_intersect($progreso, $leccionIdsDisponibles));
 
         $porcentajeProgreso = $totalLecciones > 0
             ? round(($leccionesCompletadas / $totalLecciones) * 100)
@@ -50,6 +56,6 @@ class EducacionController extends Controller
             ]
         );
 
-        return redirect()->route('educacion.index')->with('success', 'Lección completada correctamente.');
+        return back()->with('success', 'Lección completada correctamente.');
     }
 }

@@ -17,7 +17,6 @@
                 </div>
                 <p class="text-sm text-gray-300">Paga primero tus ahorros, luego tus gastos</p>
             </div>
-            <i class="bi bi-chevron-right text-xs text-gray-500"></i>
         </div>
 
         <div class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition hover:border-green-500/15 hover:bg-white/[0.04]">
@@ -27,7 +26,6 @@
                 </div>
                 <p class="text-sm text-gray-300">Evita las compras impulsivas esperando 24 horas</p>
             </div>
-            <i class="bi bi-chevron-right text-xs text-gray-500"></i>
         </div>
 
         <div class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition hover:border-green-500/15 hover:bg-white/[0.04]">
@@ -37,7 +35,6 @@
                 </div>
                 <p class="text-sm text-gray-300">Revisa tus suscripciones cada 3 meses</p>
             </div>
-            <i class="bi bi-chevron-right text-xs text-gray-500"></i>
         </div>
 
         <div class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition hover:border-green-500/15 hover:bg-white/[0.04]">
@@ -47,7 +44,6 @@
                 </div>
                 <p class="text-sm text-gray-300">Usa la regla de los 30 días para compras grandes</p>
             </div>
-            <i class="bi bi-chevron-right text-xs text-gray-500"></i>
         </div>
 
         <div class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3 transition hover:border-green-500/15 hover:bg-white/[0.04]">
@@ -57,7 +53,6 @@
                 </div>
                 <p class="text-sm text-gray-300">Negocia tus facturas recurrentes anualmente</p>
             </div>
-            <i class="bi bi-chevron-right text-xs text-gray-500"></i>
         </div>
     </div>
 </div>
