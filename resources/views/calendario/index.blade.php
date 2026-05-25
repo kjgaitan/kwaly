@@ -24,21 +24,52 @@
                     </p>
                 </div>
 
-                <div class="rounded-2xl border border-emerald-500/30 bg-[#1c221f] p-4">
+                <div class="rounded-2xl border bg-[#1c221f] p-4 {{ $balancePrevisto < 0 ? 'border-red-500/30' : ($balancePrevisto == 0 ? 'border-gray-500/30' : 'border-emerald-500/30') }}">
                     <p class="text-sm text-gray-400">Balance previsto</p>
-                    <p class="mt-2 text-2xl font-bold text-emerald-400">
+                    <p class="mt-2 text-2xl font-bold {{ $balancePrevisto < 0 ? 'text-red-400' : ($balancePrevisto == 0 ? 'text-gray-400' : 'text-emerald-400') }}">
                         {{ number_format($balancePrevisto, 2, ',', '.') }} €
                     </p>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4">
+            @php
+                $monthOptions = [
+                    '01' => 'Enero',
+                    '02' => 'Febrero',
+                    '03' => 'Marzo',
+                    '04' => 'Abril',
+                    '05' => 'Mayo',
+                    '06' => 'Junio',
+                    '07' => 'Julio',
+                    '08' => 'Agosto',
+                    '09' => 'Septiembre',
+                    '10' => 'Octubre',
+                    '11' => 'Noviembre',
+                    '12' => 'Diciembre',
+                ];
+                $yearOptions = range($fecha->year - 8, $fecha->year + 8);
+            @endphp
+
+            <div class="rounded-2xl border border-[#26352d] bg-[#1a1f1c] p-4"
+                 x-data="{
+                    pickerOpen: false,
+                    month: '{{ $fecha->format('m') }}',
+                    year: '{{ $fecha->format('Y') }}'
+                 }"
+                 @keydown.escape.window="pickerOpen = false">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-white">
                         {{ ucfirst($fecha->translatedFormat('F \d\e Y')) }}
                     </h3>
 
                     <div class="flex items-center gap-2">
+                        <button type="button"
+                                class="flex h-9 items-center justify-center gap-2 rounded-lg border border-[#2d3a33] bg-[#171c19] px-3 text-sm text-gray-300 transition hover:border-green-500/40 hover:text-white"
+                                @click="pickerOpen = true"
+                                title="Saltar a mes y año">
+                            <i class="bi bi-calendar3"></i>
+                        </button>
+
                         <a href="{{ route('calendario.index', ['mes' => $fecha->copy()->subMonth()->format('Y-m')]) }}"
                            class="flex h-9 w-9 items-center justify-center rounded-lg border border-[#2d3a33] bg-[#171c19] text-gray-300 transition hover:border-green-500/40 hover:text-white">
                             ‹
@@ -48,6 +79,63 @@
                            class="flex h-9 w-9 items-center justify-center rounded-lg border border-[#2d3a33] bg-[#171c19] text-gray-300 transition hover:border-green-500/40 hover:text-white">
                             ›
                         </a>
+                    </div>
+                </div>
+
+                <div x-show="pickerOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <button type="button"
+                            class="absolute inset-0 bg-black/60"
+                            @click="pickerOpen = false"
+                            aria-label="Cerrar"></button>
+
+                    <div class="relative w-full max-w-md rounded-2xl border border-[#26352d] bg-[#111613] p-4 shadow-[0_0_24px_rgba(0,0,0,0.35)]">
+                        <div class="mb-3 flex items-center justify-between">
+                            <h4 class="text-base font-semibold text-white">Ir a mes</h4>
+                            <button type="button"
+                                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-[#26352d] bg-[#0b0f0d] text-gray-300 transition hover:border-green-500/40 hover:text-white"
+                                    @click="pickerOpen = false"
+                                    aria-label="Cerrar">
+                                <i class="bi bi-x-lg text-sm"></i>
+                            </button>
+                        </div>
+
+                        <form method="GET" action="{{ route('calendario.index') }}" class="space-y-3">
+                            <input type="hidden" name="mes" :value="`${year}-${month}`">
+
+                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <div>
+                                    <label class="mb-1 block text-xs font-medium text-gray-400">Mes</label>
+                                    <select x-model="month"
+                                            class="w-full rounded-xl border border-[#26352d] bg-[#0b0f0d] px-3 py-2 text-sm text-white focus:border-green-500/40 focus:outline-none">
+                                        @foreach($monthOptions as $value => $label)
+                                            <option value="{{ $value }}">{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="mb-1 block text-xs font-medium text-gray-400">Año</label>
+                                    <select x-model="year"
+                                            class="w-full rounded-xl border border-[#26352d] bg-[#0b0f0d] px-3 py-2 text-sm text-white focus:border-green-500/40 focus:outline-none">
+                                        @foreach($yearOptions as $y)
+                                            <option value="{{ $y }}">{{ $y }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end gap-2 pt-1">
+                                <button type="button"
+                                        class="rounded-xl border border-[#26352d] bg-[#0b0f0d] px-4 py-2 text-sm text-gray-300 transition hover:border-green-500/40 hover:text-white"
+                                        @click="pickerOpen = false">
+                                    Cancelar
+                                </button>
+                                <button type="submit"
+                                        class="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-2 text-sm font-semibold text-green-300 transition hover:bg-green-500/15">
+                                    Ir
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
