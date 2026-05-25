@@ -30,7 +30,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-[#020806] text-white overflow-x-hidden" x-data="{
+<body class="font-sans antialiased bg-[#020806] text-white" x-data="{
         sidebarOpen: document.documentElement.classList.contains('sidebar-open'),
 
         toggleSidebar() {
@@ -59,13 +59,13 @@
             }
         }
     }" x-init="window.addEventListener('resize', () => checkScreen())">
-    <div class="min-h-screen overflow-x-hidden">
+    <div class="min-h-screen">
         @include('layouts.navigation')
 
         <main class="kwaly-main min-h-screen bg-[#020806]">
 
             <div
-                class="flex items-center justify-between gap-4 border-b border-[#26352d] bg-[#020806] px-3 py-2 lg:px-6">
+                class="kwaly-topbar fixed top-0 right-0 z-50 flex items-center justify-between gap-4 border-b border-[#26352d] bg-[#020806]/95 px-3 py-2 backdrop-blur lg:px-6">
 
                 <button type="button" @click="toggleSidebar()"
                     class="hidden md:flex h-10 w-10 items-center justify-center rounded-xl border border-[#26352d] bg-[#111613] text-white transition hover:border-[#72f59a]/40 hover:bg-[#182019]"
@@ -83,23 +83,46 @@
                         <span class="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-[#72f59a]"></span>
                     </button>
 
-                    <a href="{{ route('profile.edit') }}"
-                        class="flex items-center gap-3 rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2 transition hover:border-[#72f59a]/40 hover:bg-[#182019]">
-                        <div
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#72f59a] font-bold text-black">
-                            {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->nombre ?? 'U', 0, 1)) }}
-                        </div>
+                    <x-dropdown align="right" width="48" contentClasses="py-1 bg-[#111613]">
+                        <x-slot name="trigger">
+                            <button type="button"
+                                class="flex items-center gap-3 rounded-xl border border-[#26352d] bg-[#111613] px-3 py-2 transition hover:border-[#72f59a]/40 hover:bg-[#182019]">
+                                <div
+                                    class="flex h-8 w-8 items-center justify-center rounded-full bg-[#72f59a] font-bold text-black">
+                                    {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->nombre ?? 'U', 0, 1)) }}
+                                </div>
 
-                        <div class="hidden sm:block">
-                            <p class="text-sm font-medium text-white">
-                                {{ Auth::user()->name ?? Auth::user()->nombre ?? 'Usuario' }}
-                            </p>
-                        </div>
-                    </a>
+                                <div class="hidden sm:block">
+                                    <p class="text-sm font-medium text-white">
+                                        {{ Auth::user()->name ?? Auth::user()->nombre ?? 'Usuario' }}
+                                    </p>
+                                </div>
+
+                                <i class="bi bi-chevron-down text-sm text-white/80"></i>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <a href="{{ route('profile.edit') }}"
+                                class="flex w-full items-center gap-2 px-4 py-2 text-start text-sm text-white transition hover:bg-[#182019]">
+                                <i class="bi bi-person"></i>
+                                <span>Perfil</span>
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="flex w-full items-center gap-2 px-4 py-2 text-start text-sm text-white transition hover:bg-[#182019]">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar sesión</span>
+                                </button>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
             </div>
 
-            <div class="px-2 py-2 sm:px-3 lg:px-4">
+            <div class="px-2 py-2 pt-16 sm:px-3 lg:px-4">
                 <x-flash-messages />
                 {{ $slot }}
             </div>
