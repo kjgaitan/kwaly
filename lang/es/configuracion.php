@@ -2,14 +2,14 @@
 
 return [
 
-    'title' => 'Configuración',
+    'title' => 'Configuracion',
     'subtitle' => 'Personaliza tu experiencia en KWALY',
 
     'perfil' => [
         'title' => 'Perfil',
         'nombre' => 'Nombre',
-        'email' => 'Correo electrónico',
-        'telefono' => 'Teléfono',
+        'email' => 'Correo electronico',
+        'telefono' => 'Telefono',
         'guardar' => 'Guardar cambios',
     ],
 
@@ -22,45 +22,40 @@ return [
     'notificaciones' => [
         'title' => 'Notificaciones',
         'email' => 'Notificaciones por email',
-        'push' => 'Notificaciones push',
         'alerta' => 'Alertas de presupuesto',
         'recordatorio' => 'Recordatorios de pagos',
-        'guardar' => 'Guardar configuración',
+        'guardar' => 'Guardar configuracion',
     ],
 
     'seguridad' => [
-        'title' => 'Seguridad',
-        'password_actual' => 'Contraseña actual',
-        'password_nueva' => 'Nueva contraseña',
-        'password_confirmacion' => 'Confirmar nueva contraseña',
-        'cambiar_password' => 'Cambiar contraseña',
-        '2fa' => 'Autenticación de dos factores',
-        '2fa_description' => 'Activa una capa extra de protección para tu cuenta.',
-        'guardar' => 'Guardar seguridad',
+        'password_actual' => 'Contrasena actual',
+        'password_nueva' => 'Nueva contrasena',
+        'password_confirmacion' => 'Confirmar nueva contrasena',
+        'cambiar_password' => 'Cambiar contrasena',
     ],
 
     'categorias' => [
-        'title' => 'Categorías',
-        'editar' => 'Editar categoría',
-        'eliminar' => 'Eliminar categoría',
-        'confirmar_eliminar' => '¿Estás seguro de que quieres eliminar esta categoría?',
+        'title' => 'Categorias',
+        'editar' => 'Editar categoria',
+        'eliminar' => 'Eliminar categoria',
+        'confirmar_eliminar' => 'Estas seguro de que quieres eliminar esta categoria?',
         'global' => 'Global',
-        'vacia' => 'No tienes categorías personalizadas',
+        'vacia' => 'No tienes categorias personalizadas',
         'nueva' => [
-            'title' => 'Crear nueva categoría',
-            'nombre' => 'Nombre de la categoría',
+            'title' => 'Crear nueva categoria',
+            'nombre' => 'Nombre de la categoria',
             'icono' => 'Icono',
             'icono_hint' => 'Usa clases de Bootstrap Icons (ej: bi bi-tag)',
             'color' => 'Color',
-            'guardar' => 'Crear categoría',
+            'guardar' => 'Crear categoria',
         ],
     ],
 
     'peligro' => [
         'title' => 'Zona de peligro',
         'exportar' => 'Exportar todos los datos',
-        'confirmar_password' => 'Confirma tu contraseña para eliminar la cuenta',
+        'confirmar_password' => 'Confirma tu contrasena para eliminar la cuenta',
         'eliminar' => 'Eliminar cuenta',
     ],
 
-]; 
+];

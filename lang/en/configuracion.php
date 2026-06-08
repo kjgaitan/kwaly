@@ -22,21 +22,16 @@ return [
     'notificaciones' => [
         'title' => 'Notifications',
         'email' => 'Email notifications',
-        'push' => 'Push notifications',
         'alerta' => 'Budget alerts',
         'recordatorio' => 'Payment reminders',
         'guardar' => 'Save settings',
     ],
 
     'seguridad' => [
-        'title' => 'Security',
         'password_actual' => 'Current password',
         'password_nueva' => 'New password',
         'password_confirmacion' => 'Confirm new password',
         'cambiar_password' => 'Change password',
-        '2fa' => 'Two-factor authentication',
-        '2fa_description' => 'Enable an extra layer of protection for your account.',
-        'guardar' => 'Save security',
     ],
 
     'categorias' => [
@@ -63,4 +58,4 @@ return [
         'eliminar' => 'Delete account',
     ],
 
-]; 
+];

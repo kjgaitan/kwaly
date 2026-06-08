@@ -8,9 +8,9 @@
 
     if ($status) {
         if ($status === 'verification-link-sent') {
-            $statusMessage = __('Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste durante el registro.');
+            $statusMessage = __('messages.auth.verification_link_sent');
         } elseif ($status === 'profile-updated' || $status === 'password-updated') {
-            $statusMessage = __('Saved.');
+            $statusMessage = __('messages.common.saved');
         } elseif (is_string($status)) {
             $statusMessage = $status;
         }

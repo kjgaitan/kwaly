@@ -31,10 +31,8 @@ class ConfiguracionUsuario extends Model
     protected $fillable = [
         'id_usuario',
         'notificacion_email',
-        'notificacion_push',
         'alerta_presupuesto',
         'recordatorio_pagos',
-        'autenticacion_2fa',
     ];
 
     /**
@@ -42,10 +40,8 @@ class ConfiguracionUsuario extends Model
      */
     protected $casts = [
         'notificacion_email' => 'boolean',
-        'notificacion_push' => 'boolean',
         'alerta_presupuesto' => 'boolean',
         'recordatorio_pagos' => 'boolean',
-        'autenticacion_2fa' => 'boolean',
     ];
 
     /**

@@ -65,14 +65,6 @@
 
                     </div>
 
-                    <div class="flex justify-end text-[11px] pt-1">
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-green-400 hover:text-green-300 transition">
-                                {{ __('login.forgot') }}
-                            </a>
-                        @endif
-                    </div>
-
                     <button
                         type="submit"
                         class="w-full rounded-xl bg-green-500 hover:bg-green-400 text-black font-semibold py-3 text-sm transition"

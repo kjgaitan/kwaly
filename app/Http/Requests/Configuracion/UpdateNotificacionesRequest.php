@@ -24,10 +24,8 @@ class UpdateNotificacionesRequest extends FormRequest
     {
         return [
             'notificacion_email' => ['nullable', 'boolean'],
-            'notificacion_push' => ['nullable', 'boolean'],
             'alerta_presupuesto' => ['nullable', 'boolean'],
             'recordatorio_pagos' => ['nullable', 'boolean'],
-            'autenticacion_2fa' => ['nullable', 'boolean'],
         ];
     }
 }

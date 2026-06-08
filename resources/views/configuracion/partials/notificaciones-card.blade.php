@@ -20,13 +20,6 @@
 
             <label class="config-switch-item">
                 <div>
-                    <span>{{ __('configuracion.notificaciones.push') }}</span>
-                </div>
-                <input type="checkbox" name="notificacion_push" value="1" {{ old('notificacion_push', $configuracion->notificacion_push) ? 'checked' : '' }}>
-            </label>
-
-            <label class="config-switch-item">
-                <div>
                     <span>{{ __('configuracion.notificaciones.alerta') }}</span>
                 </div>
                 <input type="checkbox" name="alerta_presupuesto" value="1" {{ old('alerta_presupuesto', $configuracion->alerta_presupuesto) ? 'checked' : '' }}>

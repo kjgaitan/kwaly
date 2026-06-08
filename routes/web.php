@@ -19,7 +19,7 @@ use App\Http\Controllers\CategoriaController;
 
 // Ruta principal
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route(auth()->check() ? 'dashboard' : 'login');
 });
 
 // Rutas protegidas
@@ -144,7 +144,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/configuracion/perfil', [ConfiguracionController::class, 'updatePerfil'])->name('configuracion.perfil.update');
     Route::put('/configuracion/moneda', [ConfiguracionController::class, 'updateMoneda'])->name('configuracion.moneda.update');
     Route::put('/configuracion/notificaciones', [ConfiguracionController::class, 'updateNotificaciones'])->name('configuracion.notificaciones.update');
-    Route::put('/configuracion/seguridad', [ConfiguracionController::class, 'updateSeguridad'])->name('configuracion.seguridad.update');
     Route::put('/configuracion/password', [ConfiguracionController::class, 'updatePassword'])->name('configuracion.password.update');
     Route::get('/configuracion/exportar-datos', [ConfiguracionController::class, 'exportarDatos'])->name('configuracion.exportar');
     Route::delete('/configuracion/eliminar-cuenta', [ConfiguracionController::class, 'destroyCuenta'])->name('configuracion.destroy');

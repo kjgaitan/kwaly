@@ -143,10 +143,8 @@ return new class extends Migration
                 $table->id('id_configuracion');
                 $table->unsignedBigInteger('id_usuario');
                 $table->boolean('notificacion_email')->default(true);
-                $table->boolean('notificacion_push')->default(true);
                 $table->boolean('alerta_presupuesto')->default(true);
                 $table->boolean('recordatorio_pagos')->default(true);
-                $table->boolean('autenticacion_2fa')->default(false);
             });
         }
 
@@ -183,31 +181,11 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('chat_asistente')) {
-            Schema::create('chat_asistente', function (Blueprint $table) {
-                $table->id('id_chat');
-                $table->unsignedBigInteger('id_usuario');
-                $table->string('titulo_chat', 150);
-                $table->dateTime('fecha_creacion');
-            });
-        }
-
-        if (!Schema::hasTable('mensajes_asistente')) {
-            Schema::create('mensajes_asistente', function (Blueprint $table) {
-                $table->id('id_mensaje');
-                $table->unsignedBigInteger('id_chat');
-                $table->enum('emisor', ['usuario', 'asistente']);
-                $table->text('mensaje');
-                $table->dateTime('fecha_envio');
-            });
-        }
     }
 
     public function down(): void
     {
         foreach ([
-            'mensajes_asistente',
-            'chat_asistente',
             'gastos_compartidos',
             'grupo_miembros',
             'grupos_compartidos',

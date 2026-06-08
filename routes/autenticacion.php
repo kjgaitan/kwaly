@@ -4,9 +4,7 @@ use App\Http\Controllers\Autenticacion\SesionAutenticadaController;
 use App\Http\Controllers\Autenticacion\ConfirmacionContrasenaController;
 use App\Http\Controllers\Autenticacion\NotificacionVerificacionEmailController;
 use App\Http\Controllers\Autenticacion\SolicitudVerificacionEmailController;
-use App\Http\Controllers\Autenticacion\NuevaContrasenaController;
 use App\Http\Controllers\Autenticacion\ContrasenaController;
-use App\Http\Controllers\Autenticacion\EnlaceRestablecerContrasenaController;
 use App\Http\Controllers\Autenticacion\UsuarioRegistradoController;
 use App\Http\Controllers\Autenticacion\VerificarEmailController;
 use Illuminate\Support\Facades\Route;
@@ -22,21 +20,6 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [SesionAutenticadaController::class, 'store']);
 
-    Route::get('olvide-contrasena', [EnlaceRestablecerContrasenaController::class, 'create'])
-        ->name('password.request');
-    Route::get('forgot-password', [EnlaceRestablecerContrasenaController::class, 'create']);
-
-    Route::post('olvide-contrasena', [EnlaceRestablecerContrasenaController::class, 'store'])
-        ->name('password.email');
-    Route::post('forgot-password', [EnlaceRestablecerContrasenaController::class, 'store']);
-
-    Route::get('restablecer-contrasena/{token}', [NuevaContrasenaController::class, 'create'])
-        ->name('password.reset');
-    Route::get('reset-password/{token}', [NuevaContrasenaController::class, 'create']);
-
-    Route::post('restablecer-contrasena', [NuevaContrasenaController::class, 'store'])
-        ->name('password.store');
-    Route::post('reset-password', [NuevaContrasenaController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {

@@ -8,31 +8,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Servicio encargado de la lógica de configuración del usuario.
- */
 class ConfiguracionService
 {
-    /**
-     * Obtiene la configuración del usuario o la crea si no existe.
-     */
     public function obtenerConfiguracion(int $idUsuario): ConfiguracionUsuario
     {
         return ConfiguracionUsuario::firstOrCreate(
             ['id_usuario' => $idUsuario],
             [
                 'notificacion_email' => true,
-                'notificacion_push' => true,
                 'alerta_presupuesto' => true,
                 'recordatorio_pagos' => true,
-                'autenticacion_2fa' => false,
             ]
         );
     }
 
-    /**
-     * Actualiza los datos básicos del perfil.
-     */
     public function actualizarPerfil(Usuario $usuario, array $datos): void
     {
         $usuario->update([
@@ -42,9 +31,6 @@ class ConfiguracionService
         ]);
     }
 
-    /**
-     * Actualiza la moneda preferida del usuario.
-     */
     public function actualizarMoneda(Usuario $usuario, array $datos): void
     {
         $usuario->update([
@@ -52,32 +38,15 @@ class ConfiguracionService
         ]);
     }
 
-    /**
-     * Actualiza únicamente las notificaciones.
-     */
     public function actualizarNotificaciones(ConfiguracionUsuario $configuracion, array $datos): void
     {
         $configuracion->update([
             'notificacion_email' => (bool) ($datos['notificacion_email'] ?? false),
-            'notificacion_push' => (bool) ($datos['notificacion_push'] ?? false),
             'alerta_presupuesto' => (bool) ($datos['alerta_presupuesto'] ?? false),
             'recordatorio_pagos' => (bool) ($datos['recordatorio_pagos'] ?? false),
         ]);
     }
 
-    /**
-     * Actualiza únicamente la seguridad del usuario.
-     */
-    public function actualizarSeguridad(ConfiguracionUsuario $configuracion, array $datos): void
-    {
-        $configuracion->update([
-            'autenticacion_2fa' => (bool) ($datos['autenticacion_2fa'] ?? false),
-        ]);
-    }
-
-    /**
-     * Actualiza la contraseña del usuario.
-     */
     public function actualizarPassword(Usuario $usuario, array $datos): void
     {
         if (!Hash::check($datos['password_actual'], $usuario->password_hash)) {
@@ -91,9 +60,6 @@ class ConfiguracionService
         ]);
     }
 
-    /**
-     * Obtiene todos los datos principales del usuario para exportación.
-     */
     public function obtenerDatosExportacion(Usuario $usuario): array
     {
         $usuario->load([
@@ -136,9 +102,6 @@ class ConfiguracionService
         ];
     }
 
-    /**
-     * Elimina por completo la cuenta del usuario y sus datos asociados.
-     */
     public function eliminarCuentaUsuario(Usuario $usuario, string $passwordConfirmacion): void
     {
         if (!Hash::check($passwordConfirmacion, $usuario->password_hash)) {
