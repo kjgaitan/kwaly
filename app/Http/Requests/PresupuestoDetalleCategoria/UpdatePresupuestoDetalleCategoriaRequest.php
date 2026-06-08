@@ -5,6 +5,8 @@ namespace App\Http\Requests\PresupuestoDetalleCategoria;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\PresupuestoMensual;
 use App\Models\PresupuestoDetalleCategoria;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdatePresupuestoDetalleCategoriaRequest extends FormRequest
 {
@@ -16,8 +18,14 @@ class UpdatePresupuestoDetalleCategoriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_presupuesto' => 'required|exists:presupuestos_mensuales,id_presupuesto',
-            'id_categoria' => 'required|exists:categorias,id_categoria',
+            'id_presupuesto' => [
+                'required',
+                Rule::exists('presupuestos_mensuales', 'id_presupuesto')->where('id_usuario', Auth::id()),
+            ],
+            'id_categoria' => [
+                'required',
+                Rule::exists('categorias', 'id_categoria')->where('id_usuario', Auth::id()),
+            ],
             'tipo_presupuesto' => 'required|in:necesidades,deseos,ahorro',
             'limite_monto' => 'required|numeric|min:0',
             'monto_gastado' => 'nullable|numeric|min:0',

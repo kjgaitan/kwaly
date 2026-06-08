@@ -2,6 +2,8 @@
 namespace App\Http\Requests\Transaccion;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreTransaccionRequest extends FormRequest
 {
@@ -13,8 +15,14 @@ class StoreTransaccionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_cuenta' => 'nullable|exists:cuentas_financieras,id_cuenta',
-            'id_categoria' => 'required|exists:categorias,id_categoria',
+            'id_cuenta' => [
+                'nullable',
+                Rule::exists('cuentas_financieras', 'id_cuenta')->where('id_usuario', Auth::id()),
+            ],
+            'id_categoria' => [
+                'required',
+                Rule::exists('categorias', 'id_categoria')->where('id_usuario', Auth::id()),
+            ],
             'tipo_movimiento' => 'required|in:ingreso,gasto',
             'titulo' => 'required|string|max:150',
             'descripcion' => 'nullable|string',
