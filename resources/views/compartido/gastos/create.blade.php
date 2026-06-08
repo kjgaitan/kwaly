@@ -4,6 +4,9 @@
             'id' => $miembro->id_usuario,
             'nombre' => $miembro->usuario?->nombre ?? 'Usuario sin nombre',
         ])->values();
+        $participantesOld = collect(old('id_usuarios_participantes', $miembrosResumenFormulario->pluck('id')->all()))
+            ->map(fn($id) => (string) $id)
+            ->values();
     @endphp
 
     <div class="compartido-page"
@@ -11,12 +14,17 @@
             monto: '{{ old('monto_total', '') }}',
             pagador: '{{ old('id_usuario_pagador', auth()->user()->id_usuario) }}',
             miembros: {{ \Illuminate\Support\Js::from($miembrosResumenFormulario) }},
+            participantesModalOpen: {{ $errors->has('id_usuarios_participantes') || $errors->has('id_usuarios_participantes.*') ? 'true' : 'false' }},
+            participantes: {{ \Illuminate\Support\Js::from($participantesOld) }},
             get total() {
                 const value = Number.parseFloat(String(this.monto).replace(',', '.'));
                 return Number.isFinite(value) && value > 0 ? value : 0;
             },
+            get miembrosParticipantes() {
+                return this.miembros.filter((miembro) => this.participantes.map(String).includes(String(miembro.id)));
+            },
             get cantidadMiembros() {
-                return this.miembros.length;
+                return this.miembrosParticipantes.length;
             },
             get cuota() {
                 return this.cantidadMiembros > 0 ? this.total / this.cantidadMiembros : 0;
@@ -26,6 +34,17 @@
             },
             format(value) {
                 return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value || 0);
+            },
+            toggleParticipante(id) {
+                const value = String(id);
+                this.participantes = this.participantes.map(String);
+
+                if (this.participantes.includes(value)) {
+                    this.participantes = this.participantes.filter((actual) => actual !== value);
+                    return;
+                }
+
+                this.participantes.push(value);
             }
         }">
         <div class="compartido-container">
@@ -44,7 +63,7 @@
             </div>
 
             <div class="compartido-form-layout">
-                @include('compartido.partials.form-gasto', ['grupo' => $grupo, 'miembros' => $miembros])
+                @include('compartido.partials.form-gasto', ['grupo' => $grupo, 'miembros' => $miembros, 'categorias' => $categorias])
 
                 <aside class="compartido-share-card">
                     <h2 class="compartido-form-title">Resumen del reparto</h2>
@@ -75,7 +94,7 @@
 
                         <template x-if="total > 0">
                             <div class="space-y-2">
-                                <template x-for="miembro in miembros" :key="miembro.id">
+                                <template x-for="miembro in miembrosParticipantes" :key="miembro.id">
                                     <p>
                                         <template x-if="String(miembro.id) === String(pagador)">
                                             <span>

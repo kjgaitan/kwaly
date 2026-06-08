@@ -3,8 +3,10 @@
 <div class="compartido-gastos-list">
     @forelse($gastos as $gasto)
         @php
-            $porPersona = $resumen['numero_miembros'] > 0 ? $gasto->monto_total / $resumen['numero_miembros'] : 0;
+            $numeroParticipantes = $gasto->participantes->count();
+            $porPersona = $numeroParticipantes > 0 ? $gasto->monto_total / $numeroParticipantes : 0;
             $puedeEliminarGasto = ($esAdminGrupo ?? false) || (int) $gasto->id_usuario_pagador === (int) auth()->user()->id_usuario;
+            $categoria = $gasto->categoriaRelacion;
         @endphp
 
         <div class="compartido-gasto-item" x-data="{ detailOpen: false }">
@@ -14,7 +16,7 @@
                         <h3>{{ $gasto->titulo }}</h3>
 
                         <span class="compartido-badge compartido-badge-admin">
-                            {{ $gasto->categoria ?: 'Compartido' }}
+                            {{ $categoria?->nombre ?? $gasto->categoria ?? 'Compartido' }}
                         </span>
                     </div>
 
@@ -31,10 +33,10 @@
 
                 <div class="compartido-gasto-right">
                     <p class="compartido-gasto-total">
-                        {{ number_format($gasto->monto_total, 0, ',', '.') }}€
+                        {{ number_format($gasto->monto_total, 0, ',', '.') }} EUR
                     </p>
                     <p class="compartido-gasto-extra">
-                        {{ number_format($porPersona, 2, ',', '.') }}€ por persona
+                        {{ number_format($porPersona, 2, ',', '.') }} EUR por persona
                     </p>
 
                     <div class="compartido-gasto-actions">
@@ -56,10 +58,16 @@
             </div>
 
             <div x-cloak x-show="detailOpen" x-transition class="compartido-gasto-detail">
-                <p>Total: <strong>{{ number_format($gasto->monto_total, 2, ',', '.') }}€</strong></p>
-                <p>Miembros: <strong>{{ $resumen['numero_miembros'] }}</strong></p>
-                <p>Cada persona paga: <strong>{{ number_format($porPersona, 2, ',', '.') }}€</strong></p>
-                <p>{{ $gasto->pagador?->nombre ?? 'El pagador' }} adelantó <strong>{{ number_format(max($gasto->monto_total - $porPersona, 0), 2, ',', '.') }}€</strong></p>
+                <p>Total: <strong>{{ number_format($gasto->monto_total, 2, ',', '.') }} EUR</strong></p>
+                <p>Participantes: <strong>{{ $numeroParticipantes }}</strong></p>
+                <p>Cada persona paga: <strong>{{ number_format($porPersona, 2, ',', '.') }} EUR</strong></p>
+                <p>{{ $gasto->pagador?->nombre ?? 'El pagador' }} adelanto <strong>{{ number_format(max($gasto->monto_total - $porPersona, 0), 2, ',', '.') }} EUR</strong></p>
+                @if($numeroParticipantes > 0)
+                    <p>
+                        Repartido entre:
+                        <strong>{{ $gasto->participantes->map(fn($participante) => $participante->usuario?->nombre)->filter()->join(', ') }}</strong>
+                    </p>
+                @endif
             </div>
         </div>
     @empty

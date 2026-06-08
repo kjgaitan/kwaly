@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="compartido-page" x-data="{
-        inviteOpen: {{ $errors->has('id_usuario') || $errors->has('rol') ? 'true' : 'false' }},
-        showInviteErrors: {{ $errors->has('id_usuario') || $errors->has('rol') ? 'true' : 'false' }},
+        inviteOpen: {{ $errors->has('id_usuario') ? 'true' : 'false' }},
+        showInviteErrors: {{ $errors->has('id_usuario') ? 'true' : 'false' }},
         closeInviteModal() {
             this.inviteOpen = false;
             this.showInviteErrors = false;
@@ -9,10 +9,6 @@
             this.$nextTick(() => {
                 if (this.$refs.inviteUser) {
                     this.$refs.inviteUser.value = '';
-                }
-
-                if (this.$refs.inviteRol) {
-                    this.$refs.inviteRol.value = 'miembro';
                 }
             });
         }

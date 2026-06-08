@@ -130,6 +130,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/compartido/miembro/{id}', [CompartidoController::class, 'updateMiembro'])
         ->name('compartido.miembro.update');
 
+    Route::delete('/compartido/miembro/{id}', [CompartidoController::class, 'destroyMiembro'])
+        ->name('compartido.miembro.destroy');
+
     Route::post('/compartido/gasto', [CompartidoController::class, 'storeGasto'])
         ->name('compartido.gasto.store');
 

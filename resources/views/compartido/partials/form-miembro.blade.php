@@ -2,6 +2,7 @@
     <form action="{{ route('compartido.miembro.store') }}" method="POST" novalidate>
         @csrf
         <input type="hidden" name="id_grupo" value="{{ $grupo->id_grupo }}">
+        <input type="hidden" name="rol" value="miembro">
 
         <div class="compartido-form-group">
             <label for="id_usuario" class="compartido-label">Usuario</label>
@@ -26,17 +27,9 @@
             @endif
         </div>
 
-        <div class="compartido-form-group">
-            <label for="rol" class="compartido-label">Rol</label>
-            <select name="rol" id="rol" x-ref="inviteRol" class="compartido-select dark-select"
-                :class="showInviteErrors ? '{{ $errors->has('rol') ? 'border-red-500' : '' }}' : ''">
-                <option value="" disabled {{ old('rol') === '' ? 'selected' : '' }}>Seleccione un rol</option>
-                <option value="miembro" {{ old('rol', 'miembro') === 'miembro' ? 'selected' : '' }}>Miembro</option>
-                <option value="admin" {{ old('rol') === 'admin' ? 'selected' : '' }}>Admin</option>
-            </select>
-            @if($errors->has('rol'))
-                <p class="mt-2 text-xs text-red-400" x-show="showInviteErrors">{{ $errors->first('rol') }}</p>
-            @endif
+        <div class="compartido-role-note">
+            <i class="bi bi-shield-check"></i>
+            <span>Los nuevos usuarios entran como miembros. Solo un administrador puede gestionar permisos y miembros.</span>
         </div>
 
         <button type="submit" class="compartido-btn-submit" {{ $usuariosDisponibles->isEmpty() ? 'disabled' : '' }}>

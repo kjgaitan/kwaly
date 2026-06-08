@@ -8,11 +8,14 @@ use App\Http\Requests\Compartido\StoreMiembroGrupoRequest;
 use App\Http\Requests\Compartido\UpdateGastoCompartidoRequest;
 use App\Http\Requests\Compartido\UpdateGrupoCompartidoRequest;
 use App\Http\Requests\Compartido\UpdateMiembroGrupoRequest;
+use App\Models\Categoria;
 use App\Models\GastoCompartido;
+use App\Models\GastoCompartidoParticipante;
 use App\Models\GrupoCompartido;
 use App\Models\GrupoMiembro;
 use App\Models\Usuario;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -52,6 +55,8 @@ class CompartidoController extends Controller
             $grupo = GrupoCompartido::with([
                 'miembros.usuario',
                 'gastos.pagador',
+                'gastos.categoriaRelacion',
+                'gastos.participantes.usuario',
             ])->find($grupoMiembro->id_grupo);
 
             if ($grupo) {
@@ -60,17 +65,27 @@ class CompartidoController extends Controller
                     ->values();
 
                 $miembros = $grupo->miembros;
-                $numeroMiembros = $miembros->count();
-
                 $totalGastado = $gastos->sum('monto_total');
-                $partePorPersona = $numeroMiembros > 0 ? $totalGastado / $numeroMiembros : 0;
 
-                $miembrosResumen = $miembros->map(function ($miembro) use ($gastos, $partePorPersona) {
+                $miembrosResumen = $miembros->map(function ($miembro) use ($gastos) {
                     $aportado = $gastos
                         ->where('id_usuario_pagador', $miembro->id_usuario)
                         ->sum('monto_total');
 
-                    $balance = $aportado - $partePorPersona;
+                    $gastado = $gastos->sum(function ($gasto) use ($miembro) {
+                        $participantes = $gasto->participantes;
+                        $numeroParticipantes = $participantes->count();
+
+                        if ($numeroParticipantes === 0) {
+                            return 0;
+                        }
+
+                        return $participantes->contains('id_usuario', $miembro->id_usuario)
+                            ? $gasto->monto_total / $numeroParticipantes
+                            : 0;
+                    });
+
+                    $balance = $aportado - $gastado;
 
                     return [
                         'id_miembro' => $miembro->id_miembro,
@@ -79,7 +94,7 @@ class CompartidoController extends Controller
                         'email' => $miembro->usuario?->email ?? '',
                         'rol' => $miembro->rol,
                         'aportado' => $aportado,
-                        'gastado' => $partePorPersona,
+                        'gastado' => $gastado,
                         'balance' => $balance,
                     ];
                 })->values();
@@ -88,7 +103,7 @@ class CompartidoController extends Controller
                     'total_aportado' => $miembrosResumen->sum('aportado'),
                     'total_gastado' => $totalGastado,
                     'balance_general' => $miembrosResumen->sum('balance'),
-                    'numero_miembros' => $numeroMiembros,
+                    'numero_miembros' => $miembros->count(),
                 ];
 
                 if ($esAdminGrupo) {
@@ -133,6 +148,7 @@ class CompartidoController extends Controller
         return view('compartido.gastos.create', [
             'grupo' => $grupoMiembro->grupo,
             'miembros' => $grupoMiembro->grupo->miembros,
+            'categorias' => $this->obtenerCategoriasDisponibles($usuario->id_usuario),
         ]);
     }
 
@@ -249,13 +265,51 @@ class CompartidoController extends Controller
         GrupoMiembro::create([
             'id_grupo' => $idGrupo,
             'id_usuario' => $usuarioInvitado->id_usuario,
-            'rol' => $request->validated('rol'),
+            'rol' => 'miembro',
             'fecha_union' => now(),
         ]);
 
         return redirect()
             ->route('compartido.index')
             ->with('success', 'Miembro agregado correctamente.');
+    }
+
+    /**
+     * Elimina un miembro del grupo si el usuario actual es administrador.
+     */
+    public function destroyMiembro(int $id): RedirectResponse
+    {
+        $miembro = GrupoMiembro::findOrFail($id);
+        $usuarioActual = Auth::user();
+
+        $esAdmin = GrupoMiembro::where('id_grupo', $miembro->id_grupo)
+            ->where('id_usuario', $usuarioActual->id_usuario)
+            ->where('rol', 'admin')
+            ->exists();
+
+        if (!$esAdmin) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'No tienes permisos para eliminar miembros.');
+        }
+
+        if ((int) $miembro->id_usuario === (int) $usuarioActual->id_usuario) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'No puedes eliminarte a ti mismo desde aqui.');
+        }
+
+        DB::transaction(function () use ($miembro) {
+            GastoCompartidoParticipante::where('id_usuario', $miembro->id_usuario)
+                ->whereIn('id_gasto', GastoCompartido::where('id_grupo', $miembro->id_grupo)->select('id_gasto'))
+                ->delete();
+
+            $miembro->delete();
+        });
+
+        return redirect()
+            ->route('compartido.index')
+            ->with('success', 'Miembro eliminado correctamente.');
     }
 
     /**
@@ -347,15 +401,24 @@ class CompartidoController extends Controller
                 ->with('error', 'El pagador seleccionado no pertenece a este grupo.');
         }
 
-        GastoCompartido::create([
-            'id_grupo' => $idGrupo,
-            'id_usuario_pagador' => $request->validated('id_usuario_pagador'),
-            'titulo' => $request->validated('titulo'),
-            'categoria' => $request->validated('categoria'),
-            'descripcion' => $request->validated('descripcion'),
-            'monto_total' => $request->validated('monto_total'),
-            'fecha_gasto' => $request->validated('fecha_gasto'),
-        ]);
+        DB::transaction(function () use ($request, $idGrupo) {
+            $gasto = GastoCompartido::create([
+                'id_grupo' => $idGrupo,
+                'id_usuario_pagador' => $request->validated('id_usuario_pagador'),
+                'titulo' => $request->validated('titulo'),
+                'id_categoria' => $request->validated('id_categoria'),
+                'descripcion' => $request->validated('descripcion'),
+                'monto_total' => $request->validated('monto_total'),
+                'fecha_gasto' => $request->validated('fecha_gasto'),
+            ]);
+
+            foreach ($request->validated('id_usuarios_participantes') as $idUsuario) {
+                GastoCompartidoParticipante::create([
+                    'id_gasto' => $gasto->id_gasto,
+                    'id_usuario' => $idUsuario,
+                ]);
+            }
+        });
 
         return redirect()
             ->route('compartido.index')
@@ -384,7 +447,7 @@ class CompartidoController extends Controller
             'id_grupo' => $request->validated('id_grupo'),
             'id_usuario_pagador' => $request->validated('id_usuario_pagador'),
             'titulo' => $request->validated('titulo'),
-            'categoria' => $request->validated('categoria'),
+            'id_categoria' => $request->validated('id_categoria'),
             'descripcion' => $request->validated('descripcion'),
             'monto_total' => $request->validated('monto_total'),
             'fecha_gasto' => $request->validated('fecha_gasto'),
@@ -393,6 +456,17 @@ class CompartidoController extends Controller
         return redirect()
             ->route('compartido.index')
             ->with('success', 'Gasto actualizado correctamente.');
+    }
+
+    private function obtenerCategoriasDisponibles(int $idUsuario)
+    {
+        return Categoria::where(function ($query) use ($idUsuario) {
+            $query->where('id_usuario', $idUsuario)
+                ->orWhereNull('id_usuario');
+        })
+            ->orderByRaw('id_usuario IS NULL DESC')
+            ->orderBy('nombre')
+            ->get();
     }
 
     /**

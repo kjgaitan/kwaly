@@ -8,7 +8,7 @@
         @php
             $miembrosFormulario = $miembros ?? $grupo->miembros ?? collect();
             $pagadorSeleccionado = old('id_usuario_pagador', auth()->user()->id_usuario);
-            $categoriasGasto = ['Supermercado', 'Restaurante', 'Transporte', 'Facturas', 'Ocio', 'Hogar', 'Otros'];
+            $categoriasFormulario = $categorias ?? collect();
         @endphp
 
         <div class="compartido-form-group">
@@ -25,17 +25,20 @@
         </div>
 
         <div class="compartido-form-group">
-            <label for="categoria" class="compartido-label">Categoria</label>
-            <select name="categoria" id="categoria" class="compartido-select dark-select {{ $errors->has('categoria') ? 'border-red-500' : '' }}">
+            <label for="id_categoria" class="compartido-label">Categoria</label>
+            <select name="id_categoria" id="id_categoria" class="compartido-select dark-select {{ $errors->has('id_categoria') ? 'border-red-500' : '' }}">
                 <option value="">Seleccione una categoria</option>
-                @foreach($categoriasGasto as $categoria)
-                    <option value="{{ $categoria }}" {{ old('categoria') === $categoria ? 'selected' : '' }}>
-                        {{ $categoria }}
+                @foreach($categoriasFormulario as $categoria)
+                    <option value="{{ $categoria->id_categoria }}" {{ (string) old('id_categoria') === (string) $categoria->id_categoria ? 'selected' : '' }}>
+                        {{ $categoria->nombre }}
                     </option>
                 @endforeach
             </select>
-            @if($errors->has('categoria'))
-                <p class="mt-2 text-xs text-red-400">{{ $errors->first('categoria') }}</p>
+            @if($errors->has('id_categoria'))
+                <p class="mt-2 text-xs text-red-400">{{ $errors->first('id_categoria') }}</p>
+            @endif
+            @if($categoriasFormulario->isEmpty())
+                <p class="mt-2 text-xs text-red-400">No tienes categorias disponibles. Crea una categoria en configuracion antes de registrar gastos.</p>
             @endif
         </div>
 
@@ -75,6 +78,27 @@
         </div>
 
         <div class="compartido-form-group">
+            <span class="compartido-label">Personas que participan</span>
+            <button type="button" class="compartido-participants-trigger" @click="participantesModalOpen = true">
+                <span>
+                    <strong x-text="cantidadMiembros"></strong>
+                    <span x-text="cantidadMiembros === 1 ? 'persona seleccionada' : 'personas seleccionadas'"></span>
+                </span>
+                <i class="bi bi-people"></i>
+            </button>
+
+            <template x-for="idUsuario in participantes" :key="idUsuario">
+                <input type="hidden" name="id_usuarios_participantes[]" :value="idUsuario">
+            </template>
+
+            @if($errors->has('id_usuarios_participantes') || $errors->has('id_usuarios_participantes.*'))
+                <p class="mt-2 text-xs text-red-400">
+                    {{ $errors->first('id_usuarios_participantes') ?: $errors->first('id_usuarios_participantes.*') }}
+                </p>
+            @endif
+        </div>
+
+        <div class="compartido-form-group">
             <label for="fecha_gasto" class="compartido-label">Fecha del gasto</label>
             <input type="date"
                    name="fecha_gasto"
@@ -98,8 +122,49 @@
             @endif
         </div>
 
-        <button type="submit" class="compartido-btn-submit">
+        <button type="submit" class="compartido-btn-submit" {{ $categoriasFormulario->isEmpty() ? 'disabled' : '' }}>
             Guardar gasto
         </button>
     </form>
+
+    <div x-cloak
+        x-show="participantesModalOpen"
+        x-transition.opacity
+        class="compartido-modal-backdrop"
+        @keydown.escape.window="participantesModalOpen = false">
+        <div class="compartido-modal-panel"
+            x-show="participantesModalOpen"
+            x-transition
+            @click.outside="participantesModalOpen = false">
+            <div class="compartido-modal-header">
+                <div>
+                    <h2 class="compartido-form-title">Elegir personas</h2>
+                    <p class="compartido-modal-subtitle">Marca solo quienes participaron en este gasto.</p>
+                </div>
+
+                <button type="button" class="compartido-icon-button" @click="participantesModalOpen = false">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="compartido-participants-list">
+                @foreach($miembrosFormulario as $miembro)
+                    <label class="compartido-participant-option">
+                        <input type="checkbox"
+                            value="{{ $miembro->id_usuario }}"
+                            :checked="participantes.map(String).includes('{{ $miembro->id_usuario }}')"
+                            @change="toggleParticipante('{{ $miembro->id_usuario }}')">
+                        <span>
+                            <strong>{{ $miembro->usuario?->nombre ?? 'Usuario sin nombre' }}</strong>
+                            <small>{{ $miembro->usuario?->email }}</small>
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+
+            <button type="button" class="compartido-btn-submit mt-4" @click="participantesModalOpen = false" :disabled="cantidadMiembros === 0">
+                Confirmar seleccion
+            </button>
+        </div>
+    </div>
 </div>

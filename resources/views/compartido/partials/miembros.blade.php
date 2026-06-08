@@ -43,6 +43,16 @@
                 <span>Aportado: <strong>{{ number_format($miembro['aportado'], 0, ',', '.') }}€</strong></span>
                 <span>Gastado: <strong>{{ number_format($miembro['gastado'], 0, ',', '.') }}€</strong></span>
             </div>
+            @if(($esAdminGrupo ?? false) && auth()->user()->id_usuario !== $miembro['id_usuario'])
+                <form action="{{ route('compartido.miembro.destroy', $miembro['id_miembro']) }}" method="POST" class="compartido-member-delete-form">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="compartido-action-button compartido-action-danger">
+                        <i class="bi bi-trash"></i>
+                        Borrar miembro
+                    </button>
+                </form>
+            @endif
         </div>
     @endforeach
 </div>

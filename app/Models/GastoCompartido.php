@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GastoCompartido extends Model
 {
@@ -15,6 +16,7 @@ class GastoCompartido extends Model
         'id_grupo',
         'id_usuario_pagador',
         'titulo',
+        'id_categoria',
         'categoria',
         'descripcion',
         'monto_total',
@@ -43,5 +45,15 @@ class GastoCompartido extends Model
     public function pagador(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'id_usuario_pagador', 'id_usuario');
+    }
+
+    public function categoriaRelacion(): BelongsTo
+    {
+        return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
+    }
+
+    public function participantes(): HasMany
+    {
+        return $this->hasMany(GastoCompartidoParticipante::class, 'id_gasto', 'id_gasto');
     }
 }
