@@ -1,12 +1,7 @@
 <?php
 
 use App\Http\Controllers\Autenticacion\SesionAutenticadaController;
-use App\Http\Controllers\Autenticacion\ConfirmacionContrasenaController;
-use App\Http\Controllers\Autenticacion\NotificacionVerificacionEmailController;
-use App\Http\Controllers\Autenticacion\SolicitudVerificacionEmailController;
-use App\Http\Controllers\Autenticacion\ContrasenaController;
 use App\Http\Controllers\Autenticacion\UsuarioRegistradoController;
-use App\Http\Controllers\Autenticacion\VerificarEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -23,28 +18,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('verificar-email', SolicitudVerificacionEmailController::class)
-        ->name('verification.notice');
-    Route::get('verify-email', SolicitudVerificacionEmailController::class);
-
-    Route::get('verificar-email/{id}/{hash}', VerificarEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
-
-    Route::post('email/notificacion-verificacion', [NotificacionVerificacionEmailController::class, 'store'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
-
-    Route::get('confirmar-contrasena', [ConfirmacionContrasenaController::class, 'show'])
-        ->name('password.confirm');
-    Route::get('confirm-password', [ConfirmacionContrasenaController::class, 'show']);
-
-    Route::post('confirmar-contrasena', [ConfirmacionContrasenaController::class, 'store']);
-    Route::post('confirm-password', [ConfirmacionContrasenaController::class, 'store']);
-
-    Route::put('contrasena', [ContrasenaController::class, 'update'])->name('password.update');
-    Route::put('password', [ContrasenaController::class, 'update']);
-
     Route::post('logout', [SesionAutenticadaController::class, 'destroy'])
         ->name('logout');
 });

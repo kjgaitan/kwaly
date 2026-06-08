@@ -1,30 +1,24 @@
 @php
-function badgeEstado($estado) {
-return match($estado) {
-'pagada' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
-'vencida' => 'bg-red-500/15 text-red-300 border border-red-500/20',
-default => 'bg-yellow-500/15 text-yellow-300 border border-yellow-500/20',
-};
-}
+    $badgeEstado = fn ($estado) => match($estado) {
+        'pagada' => 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/20',
+        'vencida' => 'bg-red-500/15 text-red-300 border border-red-500/20',
+        default => 'bg-yellow-500/15 text-yellow-300 border border-yellow-500/20',
+    };
 
-function iconoEstado($estado) {
-return match($estado) {
-'pagada' => 'bi-check-circle',
-'vencida' => 'bi-exclamation-circle',
-default => 'bi-clock',
-};
-}
+    $iconoEstado = fn ($estado) => match($estado) {
+        'pagada' => 'bi-check-circle',
+        'vencida' => 'bi-exclamation-circle',
+        default => 'bi-clock',
+    };
 
-function cardIconBg($estado) {
-return match($estado) {
-'pagada' => 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20',
-'vencida' => 'bg-red-500/10 text-red-300 border border-red-500/20',
-default => 'bg-yellow-500/10 text-yellow-300 border border-yellow-500/20',
-};
-}
+    $cardIconBg = fn ($estado) => match($estado) {
+        'pagada' => 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20',
+        'vencida' => 'bg-red-500/10 text-red-300 border border-red-500/20',
+        default => 'bg-yellow-500/10 text-yellow-300 border border-yellow-500/20',
+    };
 
-function iconoFactura($concepto) {
-$texto = strtolower($concepto);
+    $iconoFactura = function ($concepto) {
+        $texto = strtolower($concepto);
 
 if (str_contains($texto, 'alquiler') || str_contains($texto, 'hipoteca')) {
 return 'bi-house-door';
@@ -42,8 +36,8 @@ if (str_contains($texto, 'netflix') || str_contains($texto, 'spotify') || str_co
 return 'bi-play-circle';
 }
 
-return 'bi-receipt';
-}
+        return 'bi-receipt';
+    };
 @endphp
 
 <div class="space-y-3">
@@ -64,8 +58,8 @@ return 'bi-receipt';
 
             <div class="flex min-w-0 items-start gap-4">
                 <div
-                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl {{ cardIconBg($factura->estado_visual) }}">
-                    <i class="bi {{ iconoFactura($factura->concepto) }}"></i>
+                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl {{ $cardIconBg($factura->estado_visual) }}">
+                    <i class="bi {{ $iconoFactura($factura->concepto) }}"></i>
                 </div>
 
                 <div class="min-w-0">
@@ -106,8 +100,8 @@ return 'bi-receipt';
 
                 <div class="flex flex-wrap items-center gap-2">
                     <span
-                        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-medium {{ badgeEstado($factura->estado_visual) }}">
-                        <i class="bi {{ iconoEstado($factura->estado_visual) }}"></i>
+                        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-medium {{ $badgeEstado($factura->estado_visual) }}">
+                        <i class="bi {{ $iconoEstado($factura->estado_visual) }}"></i>
                         {{ ucfirst($factura->estado_visual) }}
                     </span>
 
