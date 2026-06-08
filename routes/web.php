@@ -74,29 +74,35 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('modulos-educativos', ModuloEducativoController::class)
         ->parameters(['modulos-educativos' => 'modulo'])
-        ->except(['show', 'index']);
+        ->except(['show', 'index'])
+        ->middleware('admin');
 
       // Leccion Educativa
     Route::get('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'index'])
     ->name('modulos-educativos.lecciones.index');
 
     Route::get('/modulos-educativos/{modulo}/lecciones/create', [LeccionEducativaController::class, 'create'])
-        ->name('modulos-educativos.lecciones.create');
+        ->name('modulos-educativos.lecciones.create')
+        ->middleware('admin');
 
     Route::post('/modulos-educativos/{modulo}/lecciones', [LeccionEducativaController::class, 'store'])
-        ->name('modulos-educativos.lecciones.store');
+        ->name('modulos-educativos.lecciones.store')
+        ->middleware('admin');
 
     Route::get('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'show'])
         ->name('modulos-educativos.lecciones.show');
 
     Route::get('/modulos-educativos/{modulo}/lecciones/{leccion}/edit', [LeccionEducativaController::class, 'edit'])
-        ->name('modulos-educativos.lecciones.edit');
+        ->name('modulos-educativos.lecciones.edit')
+        ->middleware('admin');
 
     Route::put('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'update'])
-        ->name('modulos-educativos.lecciones.update');
+        ->name('modulos-educativos.lecciones.update')
+        ->middleware('admin');
 
     Route::delete('/modulos-educativos/{modulo}/lecciones/{leccion}', [LeccionEducativaController::class, 'destroy'])
-        ->name('modulos-educativos.lecciones.destroy');
+        ->name('modulos-educativos.lecciones.destroy')
+        ->middleware('admin');
 
     // Calendario financiero
     Route::get('/calendario', [CalendarioController::class, 'index'])->name('calendario.index');

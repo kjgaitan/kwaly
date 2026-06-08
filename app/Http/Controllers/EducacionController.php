@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ModuloEducativo;
 use App\Models\ProgresoLeccion;
+use App\Models\LeccionEducativa;
 use Illuminate\Support\Facades\Auth;
 
 class EducacionController extends Controller
@@ -46,6 +47,8 @@ class EducacionController extends Controller
 
     public function completar($idLeccion)
     {
+        LeccionEducativa::findOrFail($idLeccion);
+
         $idUsuario = Auth::user()->id_usuario;
 
         ProgresoLeccion::updateOrCreate(

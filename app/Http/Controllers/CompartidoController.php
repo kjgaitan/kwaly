@@ -236,6 +236,7 @@ class CompartidoController extends Controller
 
         $usuarioInvitado = Usuario::where('id_usuario', $request->validated('id_usuario'))
             ->where('estado_cuenta', 'activo')
+            ->where('id_usuario', '!=', $usuarioActual->id_usuario)
             ->first();
 
         if (!$usuarioInvitado) {
@@ -320,6 +321,12 @@ class CompartidoController extends Controller
         $miembro = GrupoMiembro::findOrFail($id);
         $usuarioActual = Auth::user();
 
+        if ((int) $request->validated('id_grupo') !== (int) $miembro->id_grupo) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'No puedes mover miembros a otro grupo.');
+        }
+
         $esAdmin = GrupoMiembro::where('id_grupo', $miembro->id_grupo)
             ->where('id_usuario', $usuarioActual->id_usuario)
             ->where('rol', 'admin')
@@ -331,7 +338,9 @@ class CompartidoController extends Controller
                 ->with('error', 'No tienes permisos para editar miembros.');
         }
 
-        $usuarioInvitado = Usuario::where('email', $request->validated('email'))->first();
+        $usuarioInvitado = Usuario::where('email', $request->validated('email'))
+            ->where('estado_cuenta', 'activo')
+            ->first();
 
         if (!$usuarioInvitado) {
             return redirect()
@@ -390,15 +399,19 @@ class CompartidoController extends Controller
                 ->with('error', 'No perteneces a este grupo.');
         }
 
-        $pagadorPerteneceAlGrupo = GrupoMiembro::where('id_grupo', $idGrupo)
-            ->where('id_usuario', $request->validated('id_usuario_pagador'))
-            ->exists();
-
-        if (!$pagadorPerteneceAlGrupo) {
-            return redirect()
-                ->route('compartido.gastos.create')
+        if (!$this->usuariosPertenecenAlGrupo($idGrupo, [
+            $request->validated('id_usuario_pagador'),
+            ...$request->validated('id_usuarios_participantes'),
+        ])) {
+            return back()
                 ->withInput()
-                ->with('error', 'El pagador seleccionado no pertenece a este grupo.');
+                ->with('error', 'El pagador y participantes deben pertenecer al grupo.');
+        }
+
+        if (!$this->categoriaDisponibleParaUsuario($request->validated('id_categoria'), $usuario->id_usuario)) {
+            return back()
+                ->withInput()
+                ->with('error', 'La categoria seleccionada no esta disponible para tu usuario.');
         }
 
         DB::transaction(function () use ($request, $idGrupo) {
@@ -443,8 +456,28 @@ class CompartidoController extends Controller
                 ->with('error', 'No tienes permisos para editar este gasto.');
         }
 
+        if ((int) $request->validated('id_grupo') !== (int) $gasto->id_grupo) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'No puedes mover gastos a otro grupo.');
+        }
+
+        if (!$this->usuariosPertenecenAlGrupo($gasto->id_grupo, [
+            $request->validated('id_usuario_pagador'),
+            ...$request->validated('id_usuarios_participantes', []),
+        ])) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'El pagador y participantes deben pertenecer al grupo.');
+        }
+
+        if (!$this->categoriaDisponibleParaUsuario($request->validated('id_categoria'), $usuario->id_usuario)) {
+            return redirect()
+                ->route('compartido.index')
+                ->with('error', 'La categoria seleccionada no esta disponible para tu usuario.');
+        }
+
         $gasto->update([
-            'id_grupo' => $request->validated('id_grupo'),
             'id_usuario_pagador' => $request->validated('id_usuario_pagador'),
             'titulo' => $request->validated('titulo'),
             'id_categoria' => $request->validated('id_categoria'),
@@ -452,6 +485,17 @@ class CompartidoController extends Controller
             'monto_total' => $request->validated('monto_total'),
             'fecha_gasto' => $request->validated('fecha_gasto'),
         ]);
+
+        if ($request->has('id_usuarios_participantes')) {
+            $gasto->participantes()->delete();
+
+            foreach ($request->validated('id_usuarios_participantes') as $idUsuario) {
+                GastoCompartidoParticipante::create([
+                    'id_gasto' => $gasto->id_gasto,
+                    'id_usuario' => $idUsuario,
+                ]);
+            }
+        }
 
         return redirect()
             ->route('compartido.index')
@@ -467,6 +511,36 @@ class CompartidoController extends Controller
             ->orderByRaw('id_usuario IS NULL DESC')
             ->orderBy('nombre')
             ->get();
+    }
+
+    private function categoriaDisponibleParaUsuario(int $idCategoria, int $idUsuario): bool
+    {
+        return Categoria::where('id_categoria', $idCategoria)
+            ->where(function ($query) use ($idUsuario) {
+                $query->where('id_usuario', $idUsuario)
+                    ->orWhereNull('id_usuario');
+            })
+            ->exists();
+    }
+
+    private function usuariosPertenecenAlGrupo(int $idGrupo, array $idsUsuario): bool
+    {
+        $idsUsuario = collect($idsUsuario)
+            ->filter()
+            ->map(fn($idUsuario) => (int) $idUsuario)
+            ->unique()
+            ->values();
+
+        if ($idsUsuario->isEmpty()) {
+            return false;
+        }
+
+        $miembrosEncontrados = GrupoMiembro::where('id_grupo', $idGrupo)
+            ->whereIn('id_usuario', $idsUsuario)
+            ->distinct('id_usuario')
+            ->count('id_usuario');
+
+        return $miembrosEncontrados === $idsUsuario->count();
     }
 
     /**
