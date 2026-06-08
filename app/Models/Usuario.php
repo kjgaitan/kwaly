@@ -187,14 +187,6 @@ class Usuario extends Authenticatable
     }
 
     /**
-     * Relación con los chats del asistente.
-     */
-    public function chats()
-    {
-        return $this->hasMany(ChatAsistente::class, 'id_usuario', 'id_usuario');
-    }
-
-    /**
      * Relación con los grupos compartidos creados por el usuario.
      */
     public function gruposCreados()

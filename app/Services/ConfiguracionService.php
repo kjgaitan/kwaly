@@ -105,7 +105,6 @@ class ConfiguracionService
             'facturas',
             'metas.aportaciones',
             'progresosLecciones',
-            'chats.mensajes',
             'gruposCreados.miembros',
             'gruposCreados.gastos',
             'grupoMiembros',
@@ -131,7 +130,6 @@ class ConfiguracionService
             'facturas' => $usuario->facturas,
             'metas' => $usuario->metas,
             'progreso_lecciones' => $usuario->progresosLecciones,
-            'chats' => $usuario->chats,
             'grupos_creados' => $usuario->gruposCreados,
             'grupo_miembros' => $usuario->grupoMiembros,
             'gastos_compartidos_pagados' => $usuario->gastosCompartidosPagados,
@@ -154,7 +152,6 @@ class ConfiguracionService
                 'configuracion',
                 'metas.aportaciones',
                 'presupuestos.detalles',
-                'chats.mensajes',
                 'gruposCreados.miembros',
                 'gruposCreados.gastos',
                 'grupoMiembros',
@@ -179,11 +176,6 @@ class ConfiguracionService
                 $presupuesto->detalles()->delete();
             }
             $usuario->presupuestos()->delete();
-
-            foreach ($usuario->chats as $chat) {
-                $chat->mensajes()->delete();
-            }
-            $usuario->chats()->delete();
 
             foreach ($usuario->gruposCreados as $grupo) {
                 $grupo->miembros()->delete();

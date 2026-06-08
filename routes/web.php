@@ -7,7 +7,6 @@ use App\Http\Controllers\TransaccionController;
 use App\Http\Controllers\MetaFinancieraController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ConfiguracionController;
-use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\EducacionController;
 use App\Http\Controllers\ModuloEducativoController;
 use App\Http\Controllers\LeccionEducativaController;
@@ -35,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [PerfilController::class, 'updatePassword'])->name('profile.password.update');
 
     // Transacciones
-    Route::resource('transacciones', TransaccionController::class);
+    Route::resource('transacciones', TransaccionController::class)->except(['show']);
 
     // Presupuestos
     Route::resource('presupuestos', PresupuestoController::class);
@@ -59,16 +58,13 @@ Route::middleware(['auth'])->group(function () {
         ->name('sobres.destroy');
         
     // Metas financieras
-    Route::resource('metas', MetaFinancieraController::class);
+    Route::resource('metas', MetaFinancieraController::class)->except(['show']);
 
     // Facturas
     Route::resource('facturas', FacturaController::class);
 
     Route::patch('/facturas/{id}/pagar', [FacturaController::class, 'marcarPagada'])
     ->name('facturas.pagar');
-
-    // Asistente financiero
-    Route::get('/asistente', [AsistenteController::class, 'index'])->name('asistente.index');
 
     // Educación financiera
     Route::get('/educacion', [EducacionController::class, 'index'])->name('educacion.index');

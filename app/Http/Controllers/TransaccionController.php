@@ -58,15 +58,6 @@ class TransaccionController extends Controller
             ->with('success', MensajeHelper::creado('Transacción'));
     }
 
-    public function show(string $id)
-    {
-        $transaccion = Transaccion::with(['categoria', 'cuenta'])
-            ->where('id_usuario', Auth::user()->id_usuario)
-            ->findOrFail($id);
-
-        return view('transacciones.show', compact('transaccion'));
-    }
-
     public function edit(string $id)
     {
         $idUsuario = Auth::user()->id_usuario;

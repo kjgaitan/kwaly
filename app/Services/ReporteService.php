@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Transaccion;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ReporteService
 {
@@ -95,12 +94,11 @@ class ReporteService
         return Transaccion::query()
             ->where('id_usuario', $idUsuario)
             ->whereNotNull('fecha_transaccion')
-            ->selectRaw('YEAR(fecha_transaccion) as anio')
-            ->distinct()
-            ->orderByDesc('anio')
-            ->pluck('anio')
-            ->map(fn ($anio) => (int) $anio)
+            ->pluck('fecha_transaccion')
+            ->map(fn ($fecha) => Carbon::parse($fecha)->year)
+            ->unique()
             ->filter(fn ($anio) => $anio >= 2000 && $anio <= 2100)
+            ->sortDesc()
             ->values()
             ->toArray();
     }
@@ -110,34 +108,27 @@ class ReporteService
         $registros = Transaccion::query()
             ->where('id_usuario', $idUsuario)
             ->whereYear('fecha_transaccion', $anio)
-            ->selectRaw('MONTH(fecha_transaccion) as mes')
-            ->selectRaw("
-                SUM(
-                    CASE
-                        WHEN LOWER(tipo_movimiento) = 'ingreso' THEN monto
-                        ELSE 0
-                    END
-                ) as total_ingresos
-            ")
-            ->selectRaw("
-                SUM(
-                    CASE
-                        WHEN LOWER(tipo_movimiento) = 'gasto' THEN monto
-                        ELSE 0
-                    END
-                ) as total_gastos
-            ")
-            ->groupBy(DB::raw('MONTH(fecha_transaccion)'))
-            ->orderBy(DB::raw('MONTH(fecha_transaccion)'))
-            ->get();
+            ->whereNotNull('fecha_transaccion')
+            ->get(['fecha_transaccion', 'tipo_movimiento', 'monto']);
 
         $resultado = [];
 
         foreach ($registros as $registro) {
-            $resultado[(int) $registro->mes] = [
-                'ingresos' => (float) $registro->total_ingresos,
-                'gastos' => (float) $registro->total_gastos,
+            $mes = Carbon::parse($registro->fecha_transaccion)->month;
+            $tipoMovimiento = strtolower($registro->tipo_movimiento);
+
+            $resultado[$mes] ??= [
+                'ingresos' => 0,
+                'gastos' => 0,
             ];
+
+            if ($tipoMovimiento === 'ingreso') {
+                $resultado[$mes]['ingresos'] += (float) $registro->monto;
+            }
+
+            if ($tipoMovimiento === 'gasto') {
+                $resultado[$mes]['gastos'] += (float) $registro->monto;
+            }
         }
 
         return $resultado;
